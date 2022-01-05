@@ -30,6 +30,6 @@ repos:
         args: ['--whitespaces-count', '2']
 
   - repo: https://github.com/editorconfig-checker/editorconfig-checker.python
-    rev: '2.4.0'
+    rev: 2.4.0
     hooks:
       - id: editorconfig-checker
