@@ -2,4 +2,4 @@
 ignore-words = .codespellignore
 check-filenames =
 check-hidden =
-skip = ./.git
+skip = ./.git,.gitignore
