@@ -14,12 +14,12 @@
     argument_var_pattern: "[a-zA-Z0-9_]+",
     keyword_pattern: "[A-Z][0-9A-Z_]+",
     max_conditionals_custom_parser: 2,
-    min_statement_spacing": 1,
-    max_statement_spacing": 2,
-    max_returns": 6,
-    max_branches": 50,
-    max_arguments": 5,
-    max_localvars": 15,
-    max_statements": 100
+    min_statement_spacing: 1,
+    max_statement_spacing: 2,
+    max_returns: 6,
+    max_branches: 50,
+    max_arguments: 5,
+    max_localvars: 15,
+    max_statements: 100
   }
 }
