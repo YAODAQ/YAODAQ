@@ -8,3 +8,22 @@
   [![Codacy Badge](https://app.codacy.com/project/badge/Grade/29328e324e6f4a8bb9d549c08286edf0)](https://www.codacy.com/gh/yaodaq/YAODAQ/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=yaodaq/YAODAQ&amp;utm_campaign=Badge_Grade)
 
 </h1>
+
+## Documentation [![docs](https://github.com/yaodaq/YAODAQ/actions/workflows/Docs.yml/badge.svg)](https://github.com/yaodaq/YAODAQ/actions/workflows/Docs.yml)
+
+<h1 align="center">
+  <a href="https://yaodaq.github.io/YAODAQ/">
+
+  ```markdown
+  🌍 Online
+  ```
+
+  </a>
+  <a href="https://yaodaq.github.io/YAODAQ/YAODAQ_Manual.pdf">
+
+  ```markdown
+  📖 PDF
+  ```
+
+  </a>
+</h1>
