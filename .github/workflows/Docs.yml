@@ -60,6 +60,6 @@ jobs:
         with:
           ACCESS_TOKEN: ${{ secrets.REPOS_ACCESS }}
           REPOSITORY_NAME: yaodaq/yaodaq.github.io
-          BRANCH: master
+          BRANCH: main
           FOLDER: ${{ github.workspace }}/bin/docs/html
           TARGET_FOLDER: YAODAQ
