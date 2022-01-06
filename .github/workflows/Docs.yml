@@ -9,6 +9,11 @@ on:
       - main
 
 env:
+  HOMEBREW_NO_ANALYTICS: "ON"
+  #HOMEBREW_NO_AUTO_UPDATE: "ON"
+  HOMEBREW_NO_BOTTLE_SOURCE_FALLBACK: "ON"
+  HOMEBREW_NO_GITHUB_API: "ON"
+  HOMEBREW_NO_INSTALL_CLEANUP: "ON"
   CMAKE_VERSION: '3.16.x'
   CMAKE_BUILD_TYPE: 'Release'
   CMAKE_BUILD_PREFIX: './build'
@@ -32,7 +37,7 @@ jobs:
           python-version: '3.x'
 
       - name: '🟨 Install required packages with brew'
-        run: brew install doxygen mscgen dia graphviz basictex
+        run: brew install doxygen mscgen dia graphviz basictex inkscape
 
       - name: '🟨 Install required packages with pip'
         run: |
