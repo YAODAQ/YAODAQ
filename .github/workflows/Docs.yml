@@ -56,7 +56,8 @@ jobs:
       - name: '🎉 Deploy'
         uses: JamesIves/github-pages-deploy-action@releases/v3
         with:
-          TOKEN: ${{ secrets.REPOS_ACCESS }}
+          ACCESS_TOKEN: ${{ secrets.REPOS_ACCESS }}
           REPOSITORY_NAME: yaodaq/yaodaq.github.io
           BRANCH: master
-          FOLDER: YAODAQ
+          FOLDER: ${{ github.workspace }}/bin/docs/html
+          TARGET_FOLDER: YAODAQ
