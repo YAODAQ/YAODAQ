@@ -1,0 +1,62 @@
+name: 'docs'
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+env:
+  CMAKE_VERSION: '3.16.x'
+  CMAKE_BUILD_TYPE: 'Release'
+  CMAKE_BUILD_PREFIX: './build'
+  CMAKE_INSTALL_PREFIX: './install'
+
+jobs:
+  docs:
+    runs-on: macos-latest
+    name: '📚 Docs'
+
+    steps:
+
+      - name: '🧰 Checkout'
+        uses: actions/checkout@v2.4.0
+
+      - name: '🐍 Setup python'
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+
+      - name: '🟨 Install required packages with brew'
+        run: brew install doxygen mscgen dia graphviz basictex
+
+      - name: '🟨 Install required packages with pip'
+        run: |
+          python -m pip install --upgrade pip
+          pip install sphinx sphinx-rtd-theme sphinx-sitemap sphinxcontrib-moderncmakedomain breathe
+
+      - name: '🟨 Setup CMake'
+        uses: jwlawson/actions-setup-cmake@v1.11
+        with:
+          cmake-version: '${{env.CMAKE_VERSION}}'
+          github-api-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: '🔧 Configure'
+        run: cmake -S . -B ${{ env.CMAKE_BUILD_PREFIX }} -DCMAKE_BUILD_TYPE=${{ env.CMAKE_BUILD_TYPE }} -DBUILD_DOCS=ON
+
+      - name: '⚙️ Build'
+        run: cmake --build ${{ env.CMAKE_BUILD_PREFIX }} --config ${{ env.CMAKE_BUILD_TYPE }} --parallel 2 --target docs
+
+      - name: '📥 Install'
+        run: cmake --install ${{ env.CMAKE_BUILD_PREFIX }} --prefix ${{ github.workspace }}/bin --strip
+          && touch ${{ github.workspace }}/bin/docs/html/.nojekyll
+
+      - name: '🎉 Deploy'
+        uses: JamesIves/github-pages-deploy-action@releases/v3
+        with:
+          TOKEN: ${{ secrets.REPOS_ACCESS }}
+          REPOSITORY_NAME: yaodaq/yaodaq.github.io
+          BRANCH: master
+          FOLDER: YAODAQ
