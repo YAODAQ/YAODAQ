@@ -37,7 +37,7 @@ jobs:
           python-version: '3.x'
 
       - name: '🟨 Install required packages with brew'
-        run: brew install doxygen mscgen dia graphviz basictex inkscape
+        run: brew install doxygen mscgen dia graphviz texlive inkscape
 
       - name: '🟨 Install required packages with pip'
         run: |
