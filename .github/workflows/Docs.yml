@@ -58,6 +58,7 @@ jobs:
 
       - name: '📥 Install'
         run: cmake --install ${{ env.CMAKE_BUILD_PREFIX }} --prefix ${{ github.workspace }}/bin --strip
+          && mv ${{ github.workspace }}bin/docs/YAODAQ_Manual.pdf ${{ github.workspace }}/bin/docs/html/YAODAQ_Manual.pdf
           && touch ${{ github.workspace }}/bin/docs/html/.nojekyll
 
       - name: '🎉 Deploy'
