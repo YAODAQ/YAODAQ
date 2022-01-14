@@ -9,11 +9,12 @@ set(DOXYGEN_EXTRACT_ALL YES)
 set(DOXYGEN_BUILTIN_STL_SUPPORT YES)
 
 #Make doxygen happy
-if(EXISTS "${PROJECT_BINARY_DIR}/third_party_licenses.md")
-  file(WRITE "${PROJECT_BINARY_DIR}/doxygen_third_party_licenses.md" "Third-party licenses {#third-party-licenses}\n")
-  file(APPEND "${PROJECT_BINARY_DIR}/doxygen_third_party_licenses.md" "====================\n")
-  file(READ "${PROJECT_BINARY_DIR}/third_party_licenses.md" THIRD_PARTY_LICENSES_CONTENT)
-  file(APPEND "${PROJECT_BINARY_DIR}/doxygen_third_party_licenses.md" "${THIRD_PARTY_LICENSES_CONTENT}")
+list_third_party_licenses(third_party_licenses.md)
+if(EXISTS "${CMAKE_CURRENT_BINARY_DIR}/third_party_licenses.md")
+  file(WRITE "${CMAKE_CURRENT_BINARY_DIR}/doxygen_third_party_licenses.md" "Third-party licenses {#third-party-licenses}\n")
+  file(APPEND "${CMAKE_CURRENT_BINARY_DIR}/doxygen_third_party_licenses.md" "====================\n")
+  file(READ "${CMAKE_CURRENT_BINARY_DIR}/third_party_licenses.md" THIRD_PARTY_LICENSES_CONTENT)
+  file(APPEND "${CMAKE_CURRENT_BINARY_DIR}/doxygen_third_party_licenses.md" "${THIRD_PARTY_LICENSES_CONTENT}")
 endif()
 
 if(EXISTS "${PROJECT_SOURCE_DIR}/LICENSE")
