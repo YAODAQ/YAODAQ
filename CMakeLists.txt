@@ -42,4 +42,3 @@ if(BUILD_DOCS)
   add_subdirectory(docs)
 endif()
 
-list_third_party_licenses(third_party_licenses.md)
