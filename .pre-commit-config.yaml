@@ -1,6 +1,6 @@
 ---
 ci:
-  skip: [clang-tidy,cppcheck,include-what-you-use]
+  skip: [cppcheck]
 fail_fast: false
 
 repos:
