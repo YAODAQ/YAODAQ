@@ -27,3 +27,27 @@
 
   </a>
 </h1>
+
+## Builds
+
+|        | Linux Clang               | Linux GCC               | MacOS Clang               | MacOS GCC               | Windows M2sys               | Windows MSVC               |
+|--------|---------------------------|-------------------------|---------------------------|-------------------------|-----------------------------|----------------------------|
+| Github | [![Linux Clang][lcb]][lc] | [![Linux GCC][lgb]][lg] | [![MacOS Clang][mcb]][mc] | [![MacOS GCC][mgb]][mg] | [![Windows MSYS2][msb]][ms] | [![Windows MSVC][mmb]][mm] |
+
+[lc]:https://github.com/yaodaq/YAODAQ/actions/workflows/Linux-Clang.yml
+[lcb]:https://github.com/yaodaq/YAODAQ/actions/workflows/Linux-Clang.yml/badge.svg
+
+[lg]:https://github.com/yaodaq/YAODAQ/actions/workflows/Linux-GCC.yml
+[lgb]:https://github.com/yaodaq/YAODAQ/actions/workflows/Linux-GCC.yml/badge.svg
+
+[mc]:https://github.com/yaodaq/YAODAQ/actions/workflows/MacOS-Clang.yml
+[mcb]:https://github.com/yaodaq/YAODAQ/actions/workflows/MacOS-Clang.yml/badge.svg
+
+[mg]:https://github.com/yaodaq/YAODAQ/actions/workflows/MacOS-GCC.yml
+[mgb]:https://github.com/yaodaq/YAODAQ/actions/workflows/MacOS-GCC.yml/badge.svg
+
+[ms]:https://github.com/yaodaq/YAODAQ/actions/workflows/Windows-MSYS2.yml
+[msb]:https://github.com/yaodaq/YAODAQ/actions/workflows/Windows-MSYS2.yml/badge.svg
+
+[mm]:https://github.com/yaodaq/YAODAQ/actions/workflows/Windows-MSVC.yml
+[mmb]:https://github.com/yaodaq/YAODAQ/actions/workflows/Windows-MSVC.yml/badge.svg
