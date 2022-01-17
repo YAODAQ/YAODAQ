@@ -15,8 +15,6 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - { icon: '🟨', cc: gcc-7, cxx: g++-7, name: 'GCC 7', gpp : 'g++-7-multilib' }
-          - { icon: '🟦', cc: gcc-8, cxx: g++-8, name: 'GCC 8', gpp : 'g++-8-multilib' }
           - { icon: '🟩', cc: gcc-9, cxx: g++-9, name: 'GCC 9', gpp : 'g++-9-multilib' }
           - { icon: '🟥', cc: gcc-10, cxx: g++-10, name: 'GCC 10', gpp : 'g++-10-multilib' }
     name: '🚧 ${{ matrix.icon }} ${{ matrix.name }}'
