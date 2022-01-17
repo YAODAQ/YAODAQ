@@ -1,0 +1,64 @@
+name: 'Linux Clang'
+
+on:
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - 'docs/**'
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { icon: '🟨', cc: clang-6.0, cxx: clang++-6.0, name: 'Clang 6' }
+          - { icon: '🟦', cc: clang-7, cxx: clang++-7, name: 'Clang 7' }
+          - { icon: '🟩', cc: clang-8, cxx: clang++-8, name: 'Clang 8' }
+          - { icon: '🟥', cc: clang-9, cxx: clang++-9, name: 'Clang 9' }
+          - { icon: '🟧', cc: clang-10, cxx: clang++-10, name: 'Clang 10' }
+          - { icon: '🟪', cc: clang-11, cxx: clang++-11, name: 'Clang 11' }
+    name: '🚧 ${{ matrix.icon }} ${{ matrix.name }}'
+
+    steps:
+
+      - name: '🧰 Add toolchains'
+        run: sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y && sudo apt-get update
+
+      - name: '🧰 Checkout'
+        uses: actions/checkout@v2.4.0
+
+      - name: '📥 Load .env file'
+        if: hashFiles('.github/workflows/.env') != ''
+        uses: xom9ikk/dotenv@v1.0.2
+        with:
+          path: .github/workflows/
+
+      - name: '${{ matrix.icon }} Setup CMake'
+        uses: jwlawson/actions-setup-cmake@v1.11
+        with:
+          cmake-version: '${{env.CMAKE_VERSION}}'
+          github-api-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: '${{ matrix.icon }} Install ${{ matrix.cc }}'
+        run: sudo apt-get install ${{ matrix.cc }}
+
+      - name: '${{ matrix.icon }} Install packages'
+        if: ${{ env.INSTALL_PACKAGES != '' }}
+        run: sudo apt-get install ${{env.INSTALL_PACKAGES}}
+
+      - name: '🔧 Configure'
+        env:
+          CC: ${{matrix.cc}}
+          CXX: ${{matrix.cxx}}
+        run: cmake -S . -B ${{ env.CMAKE_BUILD_PREFIX }}/ -D CMAKE_BUILD_TYPE=${{ env.CMAKE_BUILD_TYPE }} -DBUILD_TESTS=${{ env.BUILD_TESTS }} -DBUILD_DOCS=${{ env.BUILD_DOCS }} -DBUILD_EXAMPLES=${{ env.BUILD_EXAMPLES }}
+
+      - name: '⚙️ Build'
+        run: cmake --build ${{ env.CMAKE_BUILD_PREFIX }} --config ${{ env.CMAKE_BUILD_TYPE }} --parallel ${{ env.CMAKE_NUMBER_JOBS }}
+
+      - name: '🧪 Run tests'
+        working-directory: ${{ env.CMAKE_BUILD_PREFIX }}
+        run: ctest -C ${{ env.CMAKE_BUILD_TYPE }} --parallel ${{ env.CMAKE_NUMBER_JOBS_TESTS }} -VV --output-on-failure
