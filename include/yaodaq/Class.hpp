@@ -1,5 +1,5 @@
-#ifndef INCLUDE_YAODAQ_CLASS_HPP_
-#define INCLUDE_YAODAQ_CLASS_HPP_
+#ifndef YAODAQ_CLASS_HPP
+#define YAODAQ_CLASS_HPP
 
 /**
 \copyright Copyright 2022 flagarde
@@ -21,4 +21,4 @@ enum class Class : std::int_least16_t
 
 }  // namespace yaodaq
 
-#endif  // INCLUDE_YAODAQ_CLASS_HPP_
+#endif  // YAODAQ_CLASS_HPP

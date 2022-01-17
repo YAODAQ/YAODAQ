@@ -12,7 +12,7 @@
 namespace yaodaq
 {
 
-Identifier::Identifier(const Class& aClass, const std::string& type, const std::string& name) : m_Class(aClass), m_Type(type), m_Name(name) {}
+Identifier::Identifier(const Class& aClass, std::string type, std::string name) : m_Class(aClass), m_Type(std::move(type)), m_Name(std::move(name)) {}
 
 std::string Identifier::getClass() const { return std::string(magic_enum::enum_name(m_Class)); }
 

@@ -24,8 +24,6 @@ include(ThirdPartyLicenses)
 include(DefaultConfigurations)
 set_default_configuration(CONFIGS AllWarnings)
 
-set(CMAKE_EXPORT_COMPILE_COMMANDS TRUE)
-
 include(Standards)
 cxx_17()
 c_11()
