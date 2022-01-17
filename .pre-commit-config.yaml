@@ -1,6 +1,6 @@
 ---
 ci:
-  skip: [cppcheck]
+  skip: [cppcheck,cpplint]
 fail_fast: false
 
 repos:
