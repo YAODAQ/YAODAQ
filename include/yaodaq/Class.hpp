@@ -1,5 +1,9 @@
-#ifndef YAODAQ_CLASS_H_
-#define YAODAQ_CLASS_H_
+#ifndef INCLUDE_YAODAQ_CLASS_HPP_
+#define INCLUDE_YAODAQ_CLASS_HPP_
+
+/**
+\copyright Copyright 2022 flagarde
+*/
 
 #include <cstdint>
 
@@ -15,6 +19,6 @@ enum class Class : std::int_least16_t
   WebSocketServer = Module + 1,
 };
 
-}
+}  // namespace yaodaq
 
-#endif
+#endif  // INCLUDE_YAODAQ_CLASS_HPP_

@@ -1,3 +1,7 @@
+/**
+\copyright Copyright 2022 flagarde
+*/
+
 #include "yaodaq/Identifier.hpp"
 
 #include "yaodaq/Class.hpp"

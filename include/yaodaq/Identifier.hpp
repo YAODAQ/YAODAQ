@@ -1,5 +1,9 @@
-#ifndef YAODAQ_IDENTIFIER_H_
-#define YAODAQ_IDENTIFIER_H_
+#ifndef INCLUDE_YAODAQ_IDENTIFIER_HPP_
+#define INCLUDE_YAODAQ_IDENTIFIER_HPP_
+
+/**
+\copyright Copyright 2022 flagarde
+*/
 
 #include "yaodaq/Class.hpp"
 
@@ -27,4 +31,4 @@ private:
 
 }  // namespace yaodaq
 
-#endif
+#endif  // INCLUDE_YAODAQ_IDENTIFIER_HPP_
