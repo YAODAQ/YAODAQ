@@ -21,6 +21,9 @@ default_install_prefix("${CMAKE_SOURCE_DIR}/install")
 
 include(ThirdPartyLicenses)
 
+include(DefaultConfigurations)
+set_default_configuration(CONFIGS AllWarnings)
+
 include(Standards)
 cxx_17()
 c_11()
