@@ -13,13 +13,13 @@ option(BUILD_TESTS "Build the tests" ON)
 
 project(YAODAQ VERSION 0.1 DESCRIPTION "Yet An Other DAQ" HOMEPAGE_URL "https://github.com/yaodaq/YAODAQ" LANGUAGES C CXX)
 
-include(ThirdPartyLicenses)
-
 include(PreventInSourceBuilds)
 prevent_in_source_builds()
 
 include(DefaultInstallPrefix)
 default_install_prefix("${CMAKE_SOURCE_DIR}/install")
+
+include(ThirdPartyLicenses)
 
 include(Standards)
 cxx_17()
@@ -41,5 +41,3 @@ endif()
 if(BUILD_DOCS)
   add_subdirectory(docs)
 endif()
-
-list_third_party_licenses(third_party_licenses.md)
