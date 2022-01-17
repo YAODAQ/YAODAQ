@@ -1,0 +1,41 @@
+name: pre-commit
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  pre-commit:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-python@v2
+
+    - name: '🐍 Setup python'
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.x'
+
+    - name: '📥 Load .env file'
+      if: hashFiles('.github/workflows/.env') != ''
+      uses: xom9ikk/dotenv@v1.0.2
+      with:
+        path: .github/workflows
+
+    - name: '${{ matrix.icon }} Setup CMake'
+      uses: jwlawson/actions-setup-cmake@v1.11
+      with:
+        cmake-version: '${{env.CMAKE_VERSION}}'
+        github-api-token: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: 'Install packages'
+      run: sudo apt-get install cmake lcov clang-tidy cppcheck iwyu clang clang-format cppcheck
+
+    - name: 'Install packages with pip'
+      run: pip install --user cpplint
+
+    - name: '🔧 Configure'
+      run: cmake -S . -B ${{ env.CMAKE_BUILD_PREFIX }} -D CMAKE_BUILD_TYPE=${{ env.CMAKE_BUILD_TYPE }}  -DBUILD_TESTS=${{ env.BUILD_TESTS }} -DBUILD_DOCS=${{ env.BUILD_DOCS }} -DBUILD_EXAMPLES=${{ env.BUILD_EXAMPLES }} -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
+
+    - uses: pre-commit/action@v2.0.3
