@@ -1,0 +1,57 @@
+name: 'Windows MSVC'
+
+on:
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - 'docs/**'
+  pull_request:
+
+jobs:
+  build:
+    runs-on: windows-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { icon: '🟨', env: Win32, toolset: x86  }
+          - { icon: '🟦', env: x64, toolset: x64 }
+          #- { icon: '🟩', env: ARM, toolset: x86 }
+          #- { icon: '🟥', env: ARM64, toolset: x64 }
+    name: '🚧 ${{ matrix.icon }} ${{ matrix.env }}'
+
+    steps:
+
+      - name: '🧰 Checkout'
+        uses: actions/checkout@v2.4.0
+
+      - name: '📥 Load .env file'
+        if: hashFiles('.github/workflows/.env/.env') != ''
+        uses: xom9ikk/dotenv@v1.0.2
+        with:
+          path: .github/workflows
+
+      - name: '${{ matrix.icon }} Setup CMake'
+        uses: jwlawson/actions-setup-cmake@v1.11
+        with:
+          cmake-version: '${{env.CMAKE_VERSION}}'
+          github-api-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: '${{ matrix.icon }} Setup Visual Studio'
+        uses: ilammy/msvc-dev-cmd@v1.10.0
+
+      - name: '${{ matrix.icon }} Install package'
+        if: ${{ env.INSTALL_PACKAGES != '' }}
+        run: choco install ${{env.INSTALL_PACKAGES}}
+
+      - name: '🔧 Configure'
+        run: cmake -S ${{ github.workspace }} -B ${{ env.CMAKE_BUILD_PREFIX }} -A ${{matrix.env}} -T host=${{matrix.toolset}} -DBUILD_TESTS=${{ env.BUILD_TESTS }} -DBUILD_DOCS=${{ env.BUILD_DOCS }} -DBUILD_EXAMPLES=${{ env.BUILD_EXAMPLES }}
+
+      - name: '⚙️ Build'
+        run: cmake --build ${{ env.CMAKE_BUILD_PREFIX }} --config ${{ env.CMAKE_BUILD_TYPE }} --parallel ${{ env.CMAKE_NUMBER_JOBS }}
+
+      - name: '🧪 Run tests'
+        if: ${{ matrix.env != 'ARM' && matrix.env != 'ARM64' }}
+        working-directory: ${{ env.CMAKE_BUILD_PREFIX }}
+        run: ctest -C ${{ env.CMAKE_BUILD_TYPE }} --parallel ${{ env.CMAKE_NUMBER_JOBS_TESTS }} -VV --output-on-failure
