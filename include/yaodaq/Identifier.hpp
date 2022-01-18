@@ -16,7 +16,7 @@ class Identifier
 {
 public:
   Identifier() = default;
-  Identifier(const Class& aClass, const std::string& type, const std::string& name);
+  Identifier( const Class& aClass, const std::string& type, const std::string& name );
   [[nodiscard]] std::string getClass() const;
   [[nodiscard]] std::string getType() const;
   [[nodiscard]] std::string getName() const;
@@ -24,9 +24,9 @@ public:
   [[nodiscard]] std::string get() const;
 
 private:
-  Class       m_Class{Class::Unknown};
-  std::string m_Type{"Unknown"};
-  std::string m_Name{"Unknown"};
+  Class       m_Class{ Class::Unknown };
+  std::string m_Type{ "Unknown" };
+  std::string m_Name{ "Unknown" };
 };
 
 }  // namespace yaodaq
