@@ -13,5 +13,5 @@ TEST_CASE( "Identifier" )
   CHECK_EQ( id.getType(), "MyType" );
   CHECK_EQ( id.getClass(), "WebSocketServer" );
   CHECK_EQ( id.getClassId(), yaodaq::Class::WebsocketServer );
-  CHECK_EQ( id.get(), "WebSocketServer/MyType/MyName" );
+  CHECK_EQ( id.get(), "WebsocketServer/MyType/MyName" );
 }
