@@ -16,7 +16,8 @@ enum class Class : std::int_least16_t
   Module  = 0,
   Browser = 100,
 
-  WebSocketServer = Module + 1,
+  WebsocketServer = Module + 1,
+  WebsocketClient = Module + 2,
 };
 
 }  // namespace yaodaq

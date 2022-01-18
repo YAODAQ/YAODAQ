@@ -16,11 +16,12 @@ class Identifier
 {
 public:
   Identifier() = default;
-  Identifier(const Class& aClass, std::string type, std::string name);
+  Identifier(const Class& aClass, const std::string& type, const std::string& name);
   [[nodiscard]] std::string getClass() const;
   [[nodiscard]] std::string getType() const;
   [[nodiscard]] std::string getName() const;
   [[nodiscard]] Class       getClassId() const;
+  [[nodiscard]] std::string get() const;
 
 private:
   Class       m_Class{Class::Unknown};

@@ -37,7 +37,7 @@ jobs:
           cmake-version: '${{env.CMAKE_VERSION}}'
           github-api-token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: '🟨 Install packages'
+      - name: '🍺 Install packages with brew'
         if: ${{ env.INSTALL_PACKAGES != '' }}
         run: brew install ${{env.INSTALL_PACKAGES}}
 
