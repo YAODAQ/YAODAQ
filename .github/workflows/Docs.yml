@@ -67,5 +67,5 @@ jobs:
           ACCESS_TOKEN: ${{ secrets.REPOS_ACCESS }}
           REPOSITORY_NAME: yaodaq/yaodaq.github.io
           BRANCH: main
-          FOLDER: ${{ env.CMAKE_INSTALL_PREFIX }}/share/YAODAQ/html/
+          FOLDER: ${{ env.CMAKE_INSTALL_PREFIX }}/share/doc/YAODAQ/html/
           TARGET_FOLDER: YAODAQ
