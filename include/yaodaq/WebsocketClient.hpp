@@ -5,9 +5,14 @@
 \copyright Copyright 2022 flagarde
 */
 
-#include "ixwebsocket/IXWebSocket.h"
 #include "yaodaq/Identifier.hpp"
+#include "yaodaq/Interrupt.hpp"
+#include "yaodaq/LoggerHandler.hpp"
+#include "yaodaq/Looper.hpp"
 
+#include <ixwebsocket/IXWebSocket.h>
+#include <memory>
+#include <spdlog/spdlog.h>
 #include <string>
 
 namespace yaodaq
@@ -16,11 +21,18 @@ namespace yaodaq
 class WebsocketClient : public ix::WebSocket
 {
 public:
-  WebsocketClient( const std::string& name, const std::string& type );
+  explicit WebsocketClient( const std::string& name, const std::string& type = "DefaultWebsocketClient" );
   virtual ~WebsocketClient();
+  void                            start();
+  void                            stop();
+  void                            loop();
+  std::shared_ptr<spdlog::logger> logger() { return m_Logger.logger(); }
 
 private:
-  Identifier m_Identifier;
+  void          onRaisingSignal();
+  Identifier    m_Identifier;
+  LoggerHandler m_Logger;
+  Looper        m_Looper;
 };
 
 }  // namespace yaodaq
