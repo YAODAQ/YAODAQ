@@ -18,7 +18,7 @@ add_library(YAODAQ::Interrupt ALIAS Interrupt)
 add_library(Exception Exception.cpp)
 target_include_directories(Exception PUBLIC $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include> $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
 set_target_properties(Exception PROPERTIES PUBLIC_HEADER "${YAODAQ_INCLUDES_DIR}/Exception.hpp;${YAODAQ_INCLUDES_DIR}/StatusCode.hpp")
-target_link_libraries(Exception PUBLIC fmt::fmt source_location)
+target_link_libraries(Exception PUBLIC fmt::fmt source_location::source_location)
 add_library(YAODAQ::Exception ALIAS Exception)
 
 add_library(LoggerHandler LoggerHandler.cpp)
