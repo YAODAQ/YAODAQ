@@ -22,5 +22,9 @@ add_executable(WebsocketClient.test WebsocketClient.test.cpp)
 target_link_libraries(WebsocketClient.test PRIVATE YAODAQ::WebsocketClient doctest_with_main)
 doctest_discover_tests(WebsocketClient.test)
 
+add_executable(WebsocketClientsServers.test WebsocketClientsServers.test.cpp)
+target_link_libraries(WebsocketClientsServers.test PRIVATE YAODAQ::WebsocketClient YAODAQ::WebsocketServer doctest_with_main)
+doctest_discover_tests(WebsocketClientsServers.test)
+
 install(TARGETS Identifier.test
         RUNTIME DESTINATION "${YAODAQ_INSTALL_TESTDIR}")
