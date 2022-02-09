@@ -55,12 +55,12 @@ void Interrupt::setSignal( const Signal& signal )
 {
   switch( signal )
   {
-    case Signal::ABRT: std::signal( SIGABRT, []( int a ) -> void { m_Signal.store( Signal::ABRT ); } ); break;
-    case Signal::FPE: std::signal( SIGFPE, []( int a ) -> void { m_Signal.store( Signal::FPE ); } ); break;
-    case Signal::ILL: std::signal( SIGILL, []( int a ) -> void { m_Signal.store( Signal::ILL ); } ); break;
-    case Signal::SEGV: std::signal( SIGSEGV, []( int a ) -> void { m_Signal.store( Signal::SEGV ); } ); break;
-    case Signal::INT: std::signal( SIGINT, []( int a ) -> void { m_Signal.store( Signal::INT ); } ); break;
-    case Signal::TERM: std::signal( SIGTERM, []( int a ) -> void { m_Signal.store( Signal::TERM ); } ); break;
+    case Signal::ABRT: std::signal( SIGABRT, []( int ) -> void { m_Signal.store( Signal::ABRT ); } ); break;
+    case Signal::FPE: std::signal( SIGFPE, []( int ) -> void { m_Signal.store( Signal::FPE ); } ); break;
+    case Signal::ILL: std::signal( SIGILL, []( int ) -> void { m_Signal.store( Signal::ILL ); } ); break;
+    case Signal::SEGV: std::signal( SIGSEGV, []( int ) -> void { m_Signal.store( Signal::SEGV ); } ); break;
+    case Signal::INT: std::signal( SIGINT, []( int ) -> void { m_Signal.store( Signal::INT ); } ); break;
+    case Signal::TERM: std::signal( SIGTERM, []( int ) -> void { m_Signal.store( Signal::TERM ); } ); break;
     default: break;
   }
 }

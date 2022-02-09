@@ -25,4 +25,4 @@ Class Identifier::getClassId() const { return m_Class; }
 
 std::string Identifier::get() const { return fmt::format( "{0}/{1}/{2}", getClass(), getType(), getName() ); }
 
-};  // namespace yaodaq
+}  // namespace yaodaq

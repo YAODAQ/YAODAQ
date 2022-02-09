@@ -8,7 +8,6 @@
 #include <ixwebsocket/IXNetSystem.h>
 #include <magic_enum.hpp>
 #include <spdlog/sinks/stdout_color_sinks.h>
-#include <spdlog/spdlog.h>
 #include <thread>
 
 namespace yaodaq
@@ -17,6 +16,8 @@ namespace yaodaq
 WebsocketClient::WebsocketClient( const std::string& name, const std::string& type ) : m_Identifier( Class::WebsocketClient, type, name ), m_Logger( m_Identifier.get() )
 {
   ix::initNetSystem();
+  ix::WebSocketHttpHeaders header{ { "Id", m_Identifier.get() } };
+  setExtraHeaders( header );
   m_Logger.addSink( std::make_shared<spdlog::sinks::stdout_color_sink_mt>() );
   setOnMessageCallback(
     [this]( const ix::WebSocketMessagePtr& msg )
@@ -33,17 +34,16 @@ WebsocketClient::~WebsocketClient()
 
 void WebsocketClient::start()
 {
-  if( getReadyState() != ix::ReadyState::Open )
+  if( getReadyState() == ix::ReadyState::Closed || getReadyState() == ix::ReadyState::Closing )
   {
-    logger()->trace( "Client started" );
+    logger()->trace( "Client started. Connected to {}", getUrl() );
     ix::WebSocket::start();
-    while( getReadyState() != ix::ReadyState::Open && m_Looper.getSignal() == Signal::NO ) { std::this_thread::sleep_for( std::chrono::microseconds( 1 ) ); }
   }
 }
 
 void WebsocketClient::stop()
 {
-  if( getReadyState() != ix::ReadyState::Closed )
+  if( getReadyState() == ix::ReadyState::Open || getReadyState() == ix::ReadyState::Connecting )
   {
     logger()->trace( "Client stopped" );
     ix::WebSocket::stop();
@@ -53,7 +53,7 @@ void WebsocketClient::stop()
 
 void WebsocketClient::loop()
 {
-  start();
+  WebsocketClient::start();
   m_Looper.supressInstance();
   onRaisingSignal();
 }

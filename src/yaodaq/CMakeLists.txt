@@ -36,7 +36,7 @@ add_library(YAODAQ::Identifier ALIAS Identifier)
 add_library(WebsocketServer WebsocketServer.cpp)
 target_include_directories(WebsocketServer PUBLIC $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include> $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
 set_target_properties(WebsocketServer PROPERTIES PUBLIC_HEADER "${YAODAQ_INCLUDES_DIR}/WebsocketServer.hpp")
-target_link_libraries(WebsocketServer PRIVATE Identifier LoggerHandler Exception Looper PUBLIC ixwebsocket::ixwebsocket spdlog::spdlog magic_enum::magic_enum)
+target_link_libraries(WebsocketServer PRIVATE Identifier LoggerHandler Looper PUBLIC Exception ixwebsocket::ixwebsocket spdlog::spdlog magic_enum::magic_enum)
 add_library(YAODAQ::WebsocketServer ALIAS WebsocketServer)
 
 add_library(WebsocketClient WebsocketClient.cpp)

@@ -18,7 +18,7 @@ int Looper::getInstance() { return m_instance; }
 
 void Looper::supressInstance()
 {
-  if( !m_hasBeenSupressed )
+  if( m_hasBeenSupressed == false )
   {
     m_hasBeenSupressed = true;
     m_instance--;
@@ -27,7 +27,7 @@ void Looper::supressInstance()
 
 Looper::Looper()
 {
-  if( !m_hasBeenAdded )
+  if( m_hasBeenAdded == false )
   {
     m_hasBeenAdded = true;
     ++m_instance;
@@ -41,7 +41,7 @@ Signal Looper::loop()
   {
     do {
       signal = m_Interrupt.getSignal();
-      std::this_thread::sleep_for( std::chrono::microseconds( 5 ) );
+      std::this_thread::sleep_for( std::chrono::microseconds( 1 ) );
     } while( signal == yaodaq::Signal::NO );
   }
   return signal;
@@ -51,7 +51,7 @@ Signal Looper::getSignal() { return m_Interrupt.getSignal(); }
 
 Looper::~Looper()
 {
-  if( !m_hasBeenSupressed )
+  if( m_hasBeenAdded == true && m_hasBeenSupressed == false )
   {
     m_hasBeenSupressed = true;
     --m_instance;
