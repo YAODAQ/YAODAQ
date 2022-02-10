@@ -3,6 +3,21 @@ include(IXWebSocket)
 include(Spdlog)
 include(Nlohmann)
 include(SourceLocation)
+include(Semver)
+
+semverfile(INPUT "${CMAKE_CURRENT_SOURCE_DIR}/YaodaqVersion.hpp.in" OUTPUT "${CMAKE_BINARY_DIR}/include/yaodaq/YaodaqVersion.hpp")
+add_library(Version Version.cpp)
+target_include_directories(Version PUBLIC $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include> $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}> PRIVATE $<BUILD_INTERFACE:${PROJECT_BINARY_DIR}/include>)
+set_target_properties(Version PROPERTIES PUBLIC_HEADER "${YAODAQ_INCLUDES_DIR}/Version.hpp;${CMAKE_BINARY_DIR}/include/yaodaq/YaodaqVersion.hpp")
+target_link_libraries(Version PUBLIC semver::semver PRIVATE magic_enum::magic_enum)
+add_library(YAODAQ::Version ALIAS Version)
+
+configure_file("${CMAKE_CURRENT_SOURCE_DIR}/YaodaqInfos.hpp.in" "${CMAKE_BINARY_DIR}/include/yaodaq/YaodaqInfos.hpp" @ONLY)
+add_library(YaodaqInfos INTERFACE)
+target_include_directories(Version INTERFACE $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include> $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}> $<BUILD_INTERFACE:${PROJECT_BINARY_DIR}/include>)
+set_target_properties(YaodaqInfos PROPERTIES PUBLIC_HEADER "${CMAKE_BINARY_DIR}/include/yaodaq/YaodaqInfos.hpp")
+target_link_libraries(YaodaqInfos INTERFACE fmt::fmt YAODAQ::Version)
+add_library(YAODAQ::YaodaqInfos ALIAS YaodaqInfos)
 
 add_library(Looper Looper.cpp)
 target_include_directories(Looper PUBLIC $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include> $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
@@ -46,7 +61,7 @@ target_link_libraries(WebsocketClient PRIVATE Identifier LoggerHandler Exception
 add_library(YAODAQ::WebsocketClient ALIAS WebsocketClient)
 
 # Install
-install(TARGETS Identifier WebsocketServer WebsocketClient LoggerHandler spdlog Exception Interrupt Looper
+install(TARGETS Identifier WebsocketServer WebsocketClient LoggerHandler spdlog Exception Interrupt Looper Version YaodaqInfos
         EXPORT YAODAQTargets
         LIBRARY DESTINATION "${CMAKE_INSTALL_LIBDIR}"
         ARCHIVE DESTINATION "${CMAKE_INSTALL_LIBDIR}"

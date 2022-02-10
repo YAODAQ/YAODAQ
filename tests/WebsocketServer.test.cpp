@@ -7,7 +7,6 @@
 #include "doctest/doctest.h"
 
 #include <chrono>
-#include <iostream>
 #include <thread>
 
 TEST_CASE( "WebsocketServer" )

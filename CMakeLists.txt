@@ -12,6 +12,9 @@ option(BUILD_EXAMPLES "Build the examples" ON)
 option(BUILD_TESTS "Build the tests" ON)
 
 project(YAODAQ VERSION 0.1 DESCRIPTION "Yet An Other DAQ" HOMEPAGE_URL "https://github.com/yaodaq/YAODAQ" LANGUAGES C CXX)
+set(SEMVER_PRERELEASE "alpha")
+set(SEMVER_PRERELEASE_NUMBER "1")
+set(PROJECT_ONLINE_DOCUMENTATION "https://yaodaq.github.io/YAODAQ")
 
 include(PreventInSourceBuilds)
 prevent_in_source_builds()

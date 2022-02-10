@@ -2,6 +2,14 @@ include(Doctest)
 
 set(YAODAQ_INSTALL_TESTDIR "${CMAKE_INSTALL_BINDIR}/tests")
 
+add_executable(Version.test Version.test.cpp)
+target_link_libraries(Version.test PRIVATE YAODAQ::Version doctest_with_main)
+doctest_discover_tests(Version.test)
+
+add_executable(YaodaqInfos.test YaodaqInfos.test.cpp)
+target_link_libraries(YaodaqInfos.test PRIVATE YAODAQ::YaodaqInfos doctest_with_main)
+doctest_discover_tests(YaodaqInfos.test)
+
 add_executable(Exception.test Exception.test.cpp)
 target_link_libraries(Exception.test PRIVATE YAODAQ::Exception doctest_with_main)
 doctest_discover_tests(Exception.test)

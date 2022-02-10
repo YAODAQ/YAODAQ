@@ -1,0 +1,121 @@
+#ifndef YAODAQ_YAODAQINFOS_HPP
+#define YAODAQ_YAODAQINFOS_HPP
+
+/**
+\copyright Copyright 2022 flagarde
+*/
+#include <string>
+
+#include <fmt/format.h>
+
+#include "yaodaq/YaodaqVersion.hpp"
+
+namespace yaodaq
+{
+  inline const static std::string yaodaq_description{"@PROJECT_DESCRIPTION@"};
+  inline const static std::string yaodaq_url{"@PROJECT_HOMEPAGE_URL@"};
+  inline const static std::string yaodaq_online_documentation{"@PROJECT_ONLINE_DOCUMENTATION@"};
+
+  inline const static std::string yaodaq_logo
+  {
+    fmt::format("                                                                         . . . .. ....       \n"
+                "                                                                      ..  ......  . ..       \n"
+                "                                                                     . ...  . . .. .....     \n"
+                "                                                                     .   .......: .  ...     \n"
+                "                                                                      ....  . .IM?.......    \n"
+                "                                                                     .  .. .. $MMM+ .....    \n"
+                "                                                                     . .. . .ZNMMMM+ ....    \n"
+                "                                                                      .  . .OMMMMMMM~.....   \n"
+                "...... . ..  . ...           .. . .. . . .. .      .. . . . ..      .. . .,OMMMMMMMMM~ .. ...\n"
+                " .  .  $NDDDDDDDDDDNDDDDDDDDDDDDDDDDDDDNDDDDDDDDDDDDDDDDDNDDDDDDDDDDDDDDDDDMMMMMMMMMMN~ .. . \n"
+                ". ......OMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMN:. . .\n"
+                "....... ..OMMMMMNO$777777777777777$DMMMM$77777777777777DMMMM77777777777777777$7777777777?. .. \n"
+                "   .. .. ..I?=:. ..  .         .. .ZMMMM:.    .........8MMMM... ...     . .... ...     .... ..\n"
+                "  .... .. .. . ...... .......... . ZMMMM,............. 8MMMM... ...... .... ............ .. . \n"
+                ".......... .. . .  .  ..      .  . ZMMMM,.            .8MMMM, .      . . .....  .       ..   .\n"
+                "  ... . .   ..  .  .. ....     .. .ZMMMM:. .. .........8MMMM.......  .. . ...  ........... . .\n"
+                "         ......   .. ...    ... .. OMMMM: .......  ... 8MMMM. ...........   .. . .. .         \n"
+                "          ... .. . .........  . . .ZMMMM,..  .     .. .OMMMM....  ...  ..... ....  . .        \n"
+                "           ...  . . . ...   .. .. .ZMMMM, .... ...... .8MMMM . ..  ..  .. .,.  ..... .        \n"
+                "           ......... ......    ... ZMMMM:  ..      .   8MMMM.. ... .. .   ?N+ .. . . .        \n"
+                "          .... .:NI...  ........ . ZMMMM:........ .....8MMMM.............,NMM$. .. ..         \n"
+                "          ......,MMN7...     ... ..ZMMMM,..  . .   ....8MMMM .   ..  .  .ZMMMM8:.. . .        \n"
+                "          ......,MMMMN??++++++=++++8MMMM?++++++++++++++DMMMM+++++++++++=7MMMMMMM+ , .         \n"
+                "        ...    .MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM$. ...        \n"
+                "           ... ..MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM?. ...         \n"
+                "           ... ..MMMMM+MMMMO$?~,..,ZMMMM:.,.,,,DM~..,,.OMMMM,,,.+$88$+:.,OMMMM+. ..           \n"
+                "           ... ..MMMMM+MMMMMMMMI.. ZMMMM,.. . ~M8I.... 8MMMM. .ZMMMMMMO~ ZMMMM:  .. ..        \n"
+                "           ..... NMMMM=M=...,~ZMI..$MMMM:  ...77=M,  ..8MMMM..$M7,..,?MO,ZMMMM:.. ...         \n"
+                "           ... . NMMMM=M=. .. .$M:.ZMMMM, . .,M~,M= .  8MMMM ~MI.  .. ?M+ZMMMM:.. .           \n"
+                "           ... . DMMMM+M=. . ..~M+.ZMMMM,..  +D, I$ ...8MMMM.IM: ......NOZMMMM~. .   .        \n"
+                "           ...   DMMMM+M=  .   ,MI OMMMM,. ..Z?  :M:   8MMMM.Z8 . ... .7MOMMMM~. ....         \n"
+                "           ....  DMMMM=M=.. ....MI.ZMMMM,. .:M: ..8?.. 8MMMM DZ. ..    IMZMMMM=. .  .         \n"
+                "      .  .. .. ..8MMMM=M=.  .. ,MI ZMMMM,. .IZ. ..+D...8MMMM ZD.  . .  7MZMMMM=.  .  .        \n"
+                "      .  .. .. ..8MMMM=M=...  .~M=.ZMMMM,...MMMMMMMM~..8MNMM.IM,.  ...,D$ZMMMM=.  .  .        \n"
+                "         .....  .8MMMM+M=.  ...ZM: ZMMMM,. =MMMMMMMM7  OMMMM.~M7..... +M=ZMMMM=.. .  .        \n"
+                "          ....  .DMMMM+M=. .,~ZMI .ZMMMM,..ZO.. . .IM:.8MMMM .$M7:..,?M7.ZMMMM+.. .. .        \n"
+                "           ...  .NMMMM=MMMMMMMM?.. $MMMM:.:M+   ...,M+ 8MMMM...$MMMMMMI, ZMMMM+.. .. .        \n"
+                "       ..  ...  .NMMMM+MMMNO$+:. ..ZMMMM,.?M,. .. . ZO.8MMMM. ..=78MM$...ZMMMM?... . .        \n"
+                "       ..  ...  .NMMMM:.. .. . . .,ZNMMM, . ... .  .  .OMMMM. .  . .?M+ .ZMMMM?... . .        \n"
+                "       ..  ..   .MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMNMMMM?... . .        \n"
+                "      .......    MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMI .. ..         \n"
+                "          ... ...MMMMM+~~~~~~~~~~~~~~~~~~:::~:~~~~~~~~~~~~~~~~~~~~~~~~~:~OMMMMI....  .        \n"
+                "         ........MMMMM~  . .   .  . .~Z: ... .                  ...... . ZMMMMI,  ...         \n"
+                "      .  ...  ..,MMMMM: .. .....  .. 7MM7.............            .......ZMM8+. ... .         \n"
+                "              . ,MMMN7....  ...  . . DMMMM? ..                        . .Z8=. ...   .         \n"
+                "         ..... .:M8+.. . .... .  . .~MMMMMMD:.......  ................ , :.  ...    .         \n"
+                "        ...... .,= ..  . . .  . ....$MMMMMMMM?........                ..... ...  ...          \n"
+                "              . .. . .. .. . .  . ..NMMMMMMZ~ ..      ........  ...... .. . . . ..   .        \n"
+                ".. . .     .  .        ... .. .. .  IMMMMMM7 .. .... ..                 .. .... .  .?..   .. . \n"
+                "... . ....... ......... .  .. .. .. DNMMMMD,. ......  .................. ... ... ..OMZ . .. ...\n"
+                ".. ... .....           .......... .~MMMMMM~ .......                    . ... . ..,8MMM7. ......\n"
+                ".  . .......  .........    .    .. OMMMMM7...  ........................  . .... ,DMMMMM7.. . . \n"
+                "... .. .  .            .. ... . ..~MMMMMD.. ....                       ... .  .~NMMMMMMM7. .. .\n"
+                ".. ... ................    .. .. .OMMMMM:....  ........................    ...~NMMMMMMMMM7.   .\n"
+                " . .. ?NDDDDDDDDDDDDDDDDNDDNNNDNDDNMMMMMMDNDDDNNNNDDDDDDDDDDDDDDDDDDDDDDNNDDDDDMMMMMMMMMMMMI .  \n"
+                ". .. , 7MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMI...\n"
+                "........7MMMMNZ7++++++++++++=++++IMMMMMD+++++++++++++++++++=+++MMMMMM$+++++++++++++++++++=+++...\n"
+                "       ++:.   .       . . .  ..DMMMMM:................  .. .?MMMMMN.....  ............... . ..\n"
+                " .......  .. ............ ....?MMMMM? ....   .    ....... . NMMMMM?  ...  ....         . .....\n"
+                "....... ...  .   ..     ... ..NMMMMO.             .... .. .?MMNMMN ........           .. ... .\n"
+                "   ... .. ........... ...  . ZMMMMM,................... ...NMMMMM+.. ................. .  ....\n"
+                "  ....... .   .... .... ... =MMMMM?. .  .              .  $MMMNMO.  .                  .. ... \n"
+                "........ .. .. ... ....  . ,NMMMMO .. ................. .+MMMMMM, .  ...................  .  .\n"
+                "      ......   ......  .. .ZMMMMN... .  .        .......,NMMMMM? . ........            . ... .\n"
+                "                  .... . .+MMMMM=. ...... ......  .. ...ZMMMMM8. ... .                        \n"
+                "                    .. ..,NMMMMZ. ..   . ......... ... +MMMMMM: ..  ..                        \n"
+                "                      ., ZMMMMN. . ........ . . . ..  ,NMMMMMI .   ...                        \n"
+                "               ....... ?MNMMMD$?+: . .... .... ... ..ZMMMMMD .... . .                        \n"
+                "               ...... :8NMMMMMMMMMMN8$I+:. .....  . ZMMMMMM:.  .. .                          \n"
+                "                       .. .~+7ZDMMMMMMMMMMMN8ZI+:,..7MMMMMM=. ..  ...                         \n"
+                "                    ...  ...  ...~?$8MMMMMMMMMMMMMN8MMMMMM7  . . .. ..                        \n"
+                "                  .... ..  .... ... ..,=IODMMMMMMMMMMMMMM8  . . .. ..                         \n"
+                "                               .. ..  . ..,=7OMMMMMMMMMMMNZ?~...  ..... ... .... ..          \n"
+                "                             .  ... .. ..  ....ZMMMMMMMMMMMMMN8I~...  ... ... ... . .        \n"
+                "                              ....  .. ,. .. ~8MMMMMMMMMMMMMMMMMMN$=,. ... . .. .. .         \n"
+                "                              ..   ... .  . ,ZMMMMMMMD+$NMMMMMMMMMMMMMO?: ...  .....          \n"
+                "                              .  ..   . ..,7NMMMMMMNI. ..~ZMMMMMMMMMMMMMM8I,... .. . .        \n"
+                "                              ...  ... .:7NMMMMMMM$,. .    .=OMMMMMMMMMMMMMM$: . ..           \n"
+                "                               .. .. .:ZMMMMMMMN7: ... .......,IDMMMMMMMMMMMMMZ: . ...        \n"
+                "                               .  ..=OMMMMMMMNI. .  . .  .  . ...~ZMMMMMMMMMMMMN?. .          \n"
+                "... ... ..  ......  .... . ....  ..=ZMMMMMMMMD?....   ..          .. ,7NMMMMMMMMMMM?.. ....     \n"
+                " ...   ..  ... ..... .. ... .,+ZNMMMMMMMMO=. ,...   .         .. .  ..?DMMMMMMMMMM+ .. ...   .\n"
+                ".. ....  ..  ...   ... .. ,+OMMMMMMMMM8?, ...  ...             .   ... .+NMMMMMMMMD.   ....  .\n"
+                "..  ..  ...... . .....  ,~78MMMMMMMMM8I:.. .. .. ...             . .. .  ...IMMMMMMMM~.......   \n"
+                ".  ,  . ..   ....  ,+$DMMMMMMMMMDZ+, ....    ......   .        ..  .... . . ,$MMMMMM=. .....   \n"
+                "..... . .  .....:?ZDMMMMMMMMMD$?,. ....  .... .... .   .         .... ..  ... .+MMMMM+ ..       \n"
+                ". .. . ....~?7ONMMMMMMMMO7+:.  . ..  ..... ....   ...  .        ..    .  ..  . .:DMMM,..       .\n"
+                " .  .. IZDMMMMMMMN8$?=, . .. ..... ... ....  ...  ...  .           .. .... ..... .?NO..  ....  .\n"
+                ". .. .OMN8Z7I=~.. ...                                                                          \n"
+                ". .. . ,....... .. ..  .                                                                        \n"
+                "  .   . ....  ..  ...  .                                                                        \n"
+                " .  . ...  .   . ....  .                                                                        \n"
+                ". ..... .....  ......  .                                                                        \n"
+                ". .. .... ...  ...     .                                                                        \n"
+                ".   .. .   .....                                                                                \n"
+                " .. ........     ...")
+  };
+
+}
+
+#endif  //YAODAQ_YAODAQINFOS_HPP

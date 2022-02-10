@@ -1,0 +1,15 @@
+#ifndef YAODAQ_YAODAQVERSION_HPP
+#define YAODAQ_YAODAQVERSION_HPP
+
+/**
+\copyright Copyright 2022 flagarde
+*/
+
+#include "yaodaq/Version.hpp"
+
+namespace yaodaq
+{
+  inline static const constexpr Version yaodaq_version{@SEMVER_MAJOR@,@SEMVER_MINOR@,@SEMVER_PATCH@,@SEMVER_PRERELEASE@,@SEMVER_PRERELEASE_NUMBER@};
+}
+
+#endif  // YAODAQ_YAODAQVERSION_HPP
