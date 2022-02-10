@@ -68,4 +68,4 @@ if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/styleSheet.sty")
 endif()
 set(DOXYGEN_LATEX_EXTRA_FILES "${CMAKE_CURRENT_SOURCE_DIR}/imgs/logo.svg")
 
-doxyfile_docs("${PROJECT_SOURCE_DIR}/include" "${PROJECT_SOURCE_DIR}/src" "${PROJECT_BINARY_DIR}/License.md" "${CMAKE_CURRENT_BINARY_DIR}/doxygen_third_party_licenses.md" LUALATEX)
+doxyfile_docs("${PROJECT_SOURCE_DIR}/include" "${PROJECT_SOURCE_DIR}/src" "${PROJECT_BINARY_DIR}/License.md" "${CMAKE_CURRENT_BINARY_DIR}/doxygen_third_party_licenses.md")
