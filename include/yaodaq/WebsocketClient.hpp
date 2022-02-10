@@ -9,6 +9,7 @@
 #include "yaodaq/Interrupt.hpp"
 #include "yaodaq/LoggerHandler.hpp"
 #include "yaodaq/Looper.hpp"
+#include "yaodaq/YaodaqVersion.hpp"
 
 #include <ixwebsocket/IXWebSocket.h>
 #include <memory>
