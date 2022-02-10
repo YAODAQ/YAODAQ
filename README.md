@@ -5,6 +5,7 @@
   [![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/yaodaq/YAODAQ?sort=semver)](https://github.com/yaodaq/YAODAQ)
   [![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white)](https://github.com/pre-commit/pre-commit)
   [![pre-commit.ci status](https://results.pre-commit.ci/badge/github/yaodaq/YAODAQ/main.svg)](https://results.pre-commit.ci/latest/github/yaodaq/YAODAQ/main)
+  [![pre-commit internal](https://github.com/yaodaq/YAODAQ/actions/workflows/pre-commit.yml/badge.svg)](https://github.com/yaodaq/YAODAQ/actions/workflows/pre-commit.yml)
   [![Codacy Badge](https://app.codacy.com/project/badge/Grade/29328e324e6f4a8bb9d549c08286edf0)](https://www.codacy.com/gh/yaodaq/YAODAQ/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=yaodaq/YAODAQ&amp;utm_campaign=Badge_Grade)
 
 </h1>
