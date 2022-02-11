@@ -17,7 +17,7 @@ const char* Exception::what() const noexcept { return m_Message.c_str(); }
 
 const char* Exception::description() const noexcept { return m_Description.c_str(); }
 
-int_least32_t Exception::code() const noexcept { return m_Code; }
+std::int_least32_t Exception::code() const noexcept { return m_Code; }
 
 void Exception::constructMessage()
 {

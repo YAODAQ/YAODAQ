@@ -34,5 +34,13 @@ add_executable(WebsocketClientsServers.test WebsocketClientsServers.test.cpp)
 target_link_libraries(WebsocketClientsServers.test PRIVATE YAODAQ::WebsocketClient YAODAQ::WebsocketServer doctest_with_main)
 doctest_discover_tests(WebsocketClientsServers.test)
 
-install(TARGETS Version.test YaodaqInfos.test Exception.test Identifier.test LoggerHandler.test WebsocketServer.test WebsocketClient.test WebsocketClientsServers.test
+add_executable(Message.test Message.test.cpp)
+target_link_libraries(Message.test PRIVATE YAODAQ::WebsocketClient YAODAQ::Message doctest_with_main)
+doctest_discover_tests(Message.test)
+
+add_executable(IXWebsocketMessage.test IXWebsocketMessage.test.cpp)
+target_link_libraries(IXWebsocketMessage.test PRIVATE YAODAQ::IXWebsocketMessage doctest_with_main)
+doctest_discover_tests(IXWebsocketMessage.test)
+
+install(TARGETS Version.test YaodaqInfos.test Exception.test Identifier.test LoggerHandler.test WebsocketServer.test WebsocketClient.test WebsocketClientsServers.test Message.test
         RUNTIME DESTINATION "${YAODAQ_INSTALL_TESTDIR}")
