@@ -11,7 +11,7 @@ namespace yaodaq
 
 LoggerHandler::LoggerHandler() { init(); }
 
-void LoggerHandler::setName(const std::string& name)
+void LoggerHandler::setName( const std::string& name )
 {
   m_Name = name;
   init();

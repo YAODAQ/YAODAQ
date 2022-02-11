@@ -3,9 +3,10 @@
 */
 
 #include "yaodaq/WebsocketClient.hpp"
+
+#include "yaodaq/Exception.hpp"
 #include "yaodaq/IXWebsocketMessage.hpp"
 #include "yaodaq/StatusCode.hpp"
-#include "yaodaq/Exception.hpp"
 
 #include <chrono>
 #include <ixwebsocket/IXNetSystem.h>
@@ -16,11 +17,11 @@
 namespace yaodaq
 {
 
-WebsocketClient::WebsocketClient( const std::string& name, const std::string& type ) : m_Identifier(type, name )
+WebsocketClient::WebsocketClient( const std::string& name, const std::string& type ) : m_Identifier( type, name )
 {
   ix::initNetSystem();
 
-  m_Identifier.generateKey(Domain::Application,Class::Client,Family::WebSocketClient);
+  m_Identifier.generateKey( Domain::Application, Class::Client, Family::WebSocketClient );
   m_Logger.setName( m_Identifier.get() );
   m_Logger.addSink( std::make_shared<spdlog::sinks::stdout_color_sink_mt>() );
 
@@ -31,23 +32,22 @@ WebsocketClient::WebsocketClient( const std::string& name, const std::string& ty
     [this]( const ix::WebSocketMessagePtr& msg )
     {
       if( msg->type == ix::WebSocketMessageType::Message ) { logger()->error( "{}", msg->str ); }
-      else if (msg->type == ix::WebSocketMessageType::Error)
+      else if( msg->type == ix::WebSocketMessageType::Error )
       {
         std::cout << "Connection error: " << msg->errorInfo.reason << std::endl;
       }
-      else if (msg->type == ix::WebSocketMessageType::Close)
+      else if( msg->type == ix::WebSocketMessageType::Close )
       {
         disableAutomaticReconnection();
-        if(msg->closeInfo.code== magic_enum::enum_integer(StatusCode::CLIENT_WITH_SAME_NAME_ALREADY_CONNECTED))
+        if( msg->closeInfo.code == magic_enum::enum_integer( StatusCode::CLIENT_WITH_SAME_NAME_ALREADY_CONNECTED ) )
         {
-          logger()->critical(fmt::format(fg(fmt::color::red) | fmt::emphasis::bold,msg->closeInfo.reason));
-          throw Exception(StatusCode::CLIENT_WITH_SAME_NAME_ALREADY_CONNECTED,msg->closeInfo.reason);
+          logger()->critical( fmt::format( fg( fmt::color::red ) | fmt::emphasis::bold, msg->closeInfo.reason ) );
+          throw Exception( StatusCode::CLIENT_WITH_SAME_NAME_ALREADY_CONNECTED, msg->closeInfo.reason );
         }
       }
     }
 
-
-    );
+  );
 }
 
 WebsocketClient::~WebsocketClient()

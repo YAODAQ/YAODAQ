@@ -5,14 +5,13 @@
 \copyright Copyright 2022 flagarde
 */
 
-#include <string>
-#include <map>
-#include <memory>
-
-#include "yaodaq/Message.hpp"
 #include "yaodaq/ConnectionState.hpp"
+#include "yaodaq/Message.hpp"
 
 #include <ixwebsocket/IXWebSocketOpenInfo.h>
+#include <map>
+#include <memory>
+#include <string>
 
 namespace yaodaq
 {
@@ -20,15 +19,12 @@ namespace yaodaq
 class Open : public Message
 {
 public:
-  Open(const ix::WebSocketOpenInfo& openInfo);
-  Open(const ix::WebSocketOpenInfo& openInfo,std::shared_ptr<ConnectionState>& connectionState);
-  std::string getURI() const;
-  std::map<std::string,std::string> getHeaders() const;
-  std::string getProtocol() const;
-  /*
-  std::string getKeyStr() const;
-  std::string getIdStr() const;*/
+  explicit Open( const ix::WebSocketOpenInfo& openInfo );
+  Open( const ix::WebSocketOpenInfo& openInfo, std::shared_ptr<ConnectionState>& connectionState );
+  std::string                        getURI() const;
+  std::map<std::string, std::string> getHeaders() const;
+  std::string                        getProtocol() const;
 };
 
-}
+}  // namespace yaodaq
 #endif

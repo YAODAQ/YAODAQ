@@ -18,6 +18,6 @@ enum class StatusCode : std::int_least32_t
   CLIENT_WITH_SAME_NAME_ALREADY_CONNECTED = 5000,
 };
 
-}
+}  // namespace yaodaq
 
 #endif

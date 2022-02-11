@@ -40,7 +40,7 @@ add_library(YAODAQ::Identifier ALIAS Identifier)
 
 add_library(Message Message.cpp)
 set_target_properties(Message PROPERTIES PUBLIC_HEADER "${YAODAQ_INCLUDE}/yaodaq/Message.hpp;${YAODAQ_INCLUDE}/yaodaq/MessageType.hpp")
-target_link_libraries(Message PUBLIC YAODAQ::Headers nlohmann_json::nlohmann_json YAODAQ::Version PRIVATE magic_enum::magic_enum fmt::fmt YAODAQ::Identifier PRIVATE ixwebsocket::ixwebsocket)
+target_link_libraries(Message PUBLIC YAODAQ::Headers nlohmann_json::nlohmann_json YAODAQ::Version PRIVATE magic_enum::magic_enum fmt::fmt YAODAQ::Identifier ixwebsocket::ixwebsocket)
 add_library(YAODAQ::Message ALIAS Message)
 
 add_library(IXWebsocketMessage IXWebsocketMessage.cpp)
@@ -53,7 +53,6 @@ set_target_properties(ConnectionState PROPERTIES PUBLIC_HEADER "${YAODAQ_INCLUDE
 target_link_libraries(ConnectionState PUBLIC YAODAQ::Headers ixwebsocket::ixwebsocket YAODAQ::Identifier)
 add_library(YAODAQ::ConnectionState ALIAS ConnectionState)
 
-
 add_library(Looper Looper.cpp)
 set_target_properties(Looper PROPERTIES PUBLIC_HEADER "${YAODAQ_INCLUDES_DIR}/Looper.hpp")
 target_link_libraries(Looper PRIVATE Interrupt magic_enum::magic_enum fmt::fmt)
@@ -63,8 +62,6 @@ add_library(Interrupt Interrupt.cpp)
 set_target_properties(Interrupt PROPERTIES PUBLIC_HEADER "${YAODAQ_INCLUDES_DIR}/Interrupt.hpp;${YAODAQ_INCLUDES_DIR}/Signal.hpp;${YAODAQ_INCLUDES_DIR}/Severity.hpp")
 target_link_libraries(Interrupt PUBLIC YAODAQ::Headers)
 add_library(YAODAQ::Interrupt ALIAS Interrupt)
-
-
 
 add_library(LoggerHandler LoggerHandler.cpp)
 set_target_properties(LoggerHandler PROPERTIES PUBLIC_HEADER "${YAODAQ_INCLUDES_DIR}/LoggerHandler.hpp")

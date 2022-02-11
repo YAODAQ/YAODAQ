@@ -15,14 +15,14 @@ void quit_clients( yaodaq::WebsocketClient& client1, yaodaq::WebsocketClient& cl
   std::this_thread::sleep_for( std::chrono::seconds( 1 ) );
   for( int i = 10; i > 0; --i )
   {
-    client1.logger()->warn( "Killing client1 in {} seconds ({})", i, ix::WebSocket::readyStateToString(client1.getReadyState()));
-    client1.send("I'm client 1");
-    client2.logger()->warn( "Killing client2 in {} seconds ({})", i, ix::WebSocket::readyStateToString(client2.getReadyState()));
-    client2.send("I'm client 2");
-    client3.logger()->warn( "Killing client3 in {} seconds ({})", i, ix::WebSocket::readyStateToString(client3.getReadyState()));
-    client3.send("I'm client 3");
-    not_connected.logger()->warn( "Killing not_connected in {} seconds ({})", i, ix::WebSocket::readyStateToString(not_connected.getReadyState()));
-    not_connected.send("YOU SHOULD  NOT SEE THIS !!!!!");
+    client1.logger()->warn( "Killing client1 in {} seconds ({})", i, ix::WebSocket::readyStateToString( client1.getReadyState() ) );
+    client1.send( "I'm client 1" );
+    client2.logger()->warn( "Killing client2 in {} seconds ({})", i, ix::WebSocket::readyStateToString( client2.getReadyState() ) );
+    client2.send( "I'm client 2" );
+    client3.logger()->warn( "Killing client3 in {} seconds ({})", i, ix::WebSocket::readyStateToString( client3.getReadyState() ) );
+    client3.send( "I'm client 3" );
+    not_connected.logger()->warn( "Killing not_connected in {} seconds ({})", i, ix::WebSocket::readyStateToString( not_connected.getReadyState() ) );
+    not_connected.send( "YOU SHOULD  NOT SEE THIS !!!!!" );
     std::this_thread::sleep_for( std::chrono::seconds( 1 ) );
   }
   client1.stop();
@@ -62,7 +62,7 @@ TEST_CASE( "WebsocketClientsServers" )
   not_connected.setUrl( "ws://127.0.0.1:8888/" );
   client3.setUrl( "ws://127.0.0.1:8080/" );
 
-  std::thread m_quit_clients( quit_clients, std::ref( client1 ), std::ref( client2 ), std::ref( client3 ),std::ref(not_connected) );
+  std::thread m_quit_clients( quit_clients, std::ref( client1 ), std::ref( client2 ), std::ref( client3 ), std::ref( not_connected ) );
   m_quit_clients.detach();
 
   std::thread m_quit_servers( quit_servers, std::ref( server1 ), std::ref( server2 ) );

@@ -13,9 +13,9 @@ namespace yaodaq
 /* The domain specify if we are on browser or standalone program */
 enum class Domain : std::uint_least8_t
 {
-  Unknown = 0,
+  Unknown     = 0,
   Application = 1,
-  Web = 2,
+  Web         = 2,
 };
 
 /* The class define if we are a server, module, or board */
@@ -24,9 +24,9 @@ enum class Class : std::uint_least8_t
   Unknown = 0,
   Server,
   Client,
-  //Module is a client with start stop etc...
+  // Module is a client with start stop etc...
   Module,
-  //Board is a module with a connector
+  // Board is a module with a connector
   Board,
 };
 

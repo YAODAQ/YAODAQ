@@ -4,12 +4,13 @@
 
 #include "yaodaq/WebsocketServer.hpp"
 
-#include "yaodaq/Exception.hpp"
-#include "yaodaq/StatusCode.hpp"
-#include "yaodaq/IXWebsocketMessage.hpp"
 #include "yaodaq/ConnectionState.hpp"
+#include "yaodaq/Exception.hpp"
+#include "yaodaq/IXWebsocketMessage.hpp"
 #include "yaodaq/Identifier.hpp"
+#include "yaodaq/StatusCode.hpp"
 
+#include <chrono>
 #include <iostream>
 #include <ixwebsocket/IXNetSystem.h>
 #include <magic_enum.hpp>
@@ -18,39 +19,38 @@
 #include <string>
 #include <thread>
 #include <utility>
-#include <chrono>
 
 namespace yaodaq
 {
 
 WebsocketServer::WebsocketServer( const std::string& name, const int& port, const std::string& host, const int& backlog, const std::size_t& maxConnections, const int& handshakeTimeoutSecs, const int& addressFamily, const std::string& type ) :
-  ix::WebSocketServer( port, host, backlog, maxConnections, handshakeTimeoutSecs, addressFamily ), m_Identifier(type, name )
+  ix::WebSocketServer( port, host, backlog, maxConnections, handshakeTimeoutSecs, addressFamily ), m_Identifier( type, name )
 {
   ix::initNetSystem();
 
-  m_Identifier.generateKey(Domain::Application,Class::Server,Family::WebSocketServer);
+  m_Identifier.generateKey( Domain::Application, Class::Server, Family::WebSocketServer );
   m_Logger.setName( m_Identifier.get() );
   m_Logger.addSink( std::make_shared<spdlog::sinks::stdout_color_sink_mt>() );
 
-  setConnectionStateFactory([](){return std::make_shared<ConnectionState>();});
+  setConnectionStateFactory( []() { return std::make_shared<ConnectionState>(); } );
 
-  setOnClientMessageCallback
-    (
+  setOnClientMessageCallback(
     [this]( std::shared_ptr<ix::ConnectionState> connectionState, ix::WebSocket& webSocket, const ix::WebSocketMessagePtr& msg )
     {
       // The ConnectionState object contains information about the connection
-      std::shared_ptr<ConnectionState> connection = std::static_pointer_cast<ConnectionState>(connectionState);
+      std::shared_ptr<ConnectionState> connection = std::static_pointer_cast<ConnectionState>( connectionState );
 
       if( msg->type == ix::WebSocketMessageType::Open )
       {
         // Check if a client with the same name is already connected;
-        logger()->critical(fmt::format(fg(fmt::color::red) | fmt::emphasis::bold,getHost()+":"+std::to_string(getPort())));
-        connection->computeId(getHost()+":"+std::to_string(getPort()),Identifier::parse(msg->openInfo.headers["id"]));
-        if(connection->isTerminated())
+        logger()->critical( fmt::format( fg( fmt::color::red ) | fmt::emphasis::bold, getHost() + ":" + std::to_string( getPort() ) ) );
+        connection->computeId( getHost() + ":" + std::to_string( getPort() ), Identifier::parse( msg->openInfo.headers["id"] ) );
+        if( connection->isTerminated() )
         {
-          logger()->error(fmt::format(fg(fmt::color::red) | fmt::emphasis::bold,"One client with the name \"{}\" is already connected !",Identifier::parse(msg->openInfo.headers["id"]).getName()));
-          webSocket.stop(magic_enum::enum_integer(StatusCode::CLIENT_WITH_SAME_NAME_ALREADY_CONNECTED),fmt::format("One client with the name \"{}\" is already connected to ws{}://{}:{} !",Identifier::parse(msg->openInfo.headers["id"]).getName(),"",getHost(),getPort()));
-          std::this_thread::sleep_for(std::chrono::milliseconds(10));
+          logger()->error( fmt::format( fg( fmt::color::red ) | fmt::emphasis::bold, "One client with the name \"{}\" is already connected !", Identifier::parse( msg->openInfo.headers["id"] ).getName() ) );
+          webSocket.stop( magic_enum::enum_integer( StatusCode::CLIENT_WITH_SAME_NAME_ALREADY_CONNECTED ),
+                          fmt::format( "One client with the name \"{}\" is already connected to ws{}://{}:{} !", Identifier::parse( msg->openInfo.headers["id"] ).getName(), "", getHost(), getPort() ) );
+          std::this_thread::sleep_for( std::chrono::milliseconds( 10 ) );
           return;
         }
       }
@@ -58,8 +58,7 @@ WebsocketServer::WebsocketServer( const std::string& name, const int& port, cons
       {
         webSocket.send( msg->str, msg->binary );
       }
-    }
-    );
+    } );
 }
 
 void WebsocketServer::listen()

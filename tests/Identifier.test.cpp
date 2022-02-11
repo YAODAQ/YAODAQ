@@ -8,8 +8,8 @@
 
 TEST_CASE( "Identifier" )
 {
-  yaodaq::Identifier id("MyType", "MyName" );
-  id.generateKey(yaodaq::Domain::Application,yaodaq::Class::Module,yaodaq::Family::Logger);
+  yaodaq::Identifier id( "MyType", "MyName" );
+  id.generateKey( yaodaq::Domain::Application, yaodaq::Class::Module, yaodaq::Family::Logger );
 
   CHECK_EQ( id.getDomain(), "Application" );
   CHECK_EQ( id.getClass(), "Module" );
