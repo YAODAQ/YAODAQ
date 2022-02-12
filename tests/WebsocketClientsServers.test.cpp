@@ -77,8 +77,8 @@ TEST_CASE( "WebsocketClientsServers" )
     server1.loop();
     server2.loop();
   }
-  catch(const yaodaq::Exception& exception)
+  catch( const yaodaq::Exception& exception )
   {
-    std::cout<<exception.what()<<std::endl;
+    std::cout << exception.what() << std::endl;
   }
 }
