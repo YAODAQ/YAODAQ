@@ -48,31 +48,37 @@ TEST_CASE( "WebsocketClientsServers" )
 {
   // Client3 have the same name than client2  but is not connected to the same server so it should be all good !
   // not_connected should not be connected because it has the same name and is connected to the same server
+  try
+  {
+    yaodaq::WebsocketServer server1( "MyWebsocketServer", 8080, "127.0.0.1" );
+    yaodaq::WebsocketServer server2( "MyWebsocketServer", 8888, "127.0.0.1" );
 
-  yaodaq::WebsocketServer server1( "MyWebsocketServer", 8080, "127.0.0.1" );
-  yaodaq::WebsocketServer server2( "MyWebsocketServer", 8888, "127.0.0.1" );
+    yaodaq::WebsocketClient client1( "MyWebsocketClient1" );
+    yaodaq::WebsocketClient client2( "MyWebsocketClient2" );
+    yaodaq::WebsocketClient client3( "MyWebsocketClient2" );
+    yaodaq::WebsocketClient not_connected( "MyWebsocketClient2" );
 
-  yaodaq::WebsocketClient client1( "MyWebsocketClient1" );
-  yaodaq::WebsocketClient client2( "MyWebsocketClient2" );
-  yaodaq::WebsocketClient client3( "MyWebsocketClient2" );
-  yaodaq::WebsocketClient not_connected( "MyWebsocketClient2" );
+    client1.setUrl( "ws://127.0.0.1:8888/" );
+    client2.setUrl( "ws://127.0.0.1:8888/" );
+    not_connected.setUrl( "ws://127.0.0.1:8888/" );
+    client3.setUrl( "ws://127.0.0.1:8080/" );
 
-  client1.setUrl( "ws://127.0.0.1:8888/" );
-  client2.setUrl( "ws://127.0.0.1:8888/" );
-  not_connected.setUrl( "ws://127.0.0.1:8888/" );
-  client3.setUrl( "ws://127.0.0.1:8080/" );
+    std::thread m_quit_clients( quit_clients, std::ref( client1 ), std::ref( client2 ), std::ref( client3 ), std::ref( not_connected ) );
+    m_quit_clients.detach();
 
-  std::thread m_quit_clients( quit_clients, std::ref( client1 ), std::ref( client2 ), std::ref( client3 ), std::ref( not_connected ) );
-  m_quit_clients.detach();
+    std::thread m_quit_servers( quit_servers, std::ref( server1 ), std::ref( server2 ) );
+    m_quit_servers.detach();
 
-  std::thread m_quit_servers( quit_servers, std::ref( server1 ), std::ref( server2 ) );
-  m_quit_servers.detach();
+    client1.loop();
+    client2.loop();
+    client3.loop();
+    not_connected.loop();
 
-  client1.loop();
-  client2.loop();
-  client3.loop();
-  not_connected.loop();
-
-  server1.loop();
-  server2.loop();
+    server1.loop();
+    server2.loop();
+  }
+  catch(const yaodaq::Exception& exception)
+  {
+    std::cout<<exception.what()<<std::endl;
+  }
 }
