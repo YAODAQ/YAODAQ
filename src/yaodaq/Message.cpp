@@ -26,14 +26,14 @@ Message::Message()
   m_JSON["from"];
   m_JSON["to"];
   m_JSON["type"] = magic_enum::enum_name( MessageType::Unknown );
-  m_JSON["uuid"] = ix::uuid4();
+  // m_JSON["uuid"] = ix::uuid4();
   m_JSON["content"];
   m_JSON["timestamp"]                       = fmt::format( "{:%F %T %z}", fmt::gmtime( std::chrono::system_clock::to_time_t( std::chrono::system_clock::now() ) ) );
-  m_JSON["meta"]["compiler"]                = nlohmann::json::meta()["compiler"];
-  m_JSON["meta"]["platform"]                = nlohmann::json::meta()["platform"];
-  m_JSON["meta"]["versions"]["json"]        = nlohmann::json::meta()["version"]["string"];
-  m_JSON["meta"]["versions"]["yaodaq"]      = yaodaq_version.to_string();
-  m_JSON["meta"]["versions"]["ixwebsocket"] = std::string( IX_WEBSOCKET_VERSION );
+  // m_JSON["meta"]["compiler"]                = nlohmann::json::meta()["compiler"];
+  // m_JSON["meta"]["platform"]                = nlohmann::json::meta()["platform"];
+  // m_JSON["meta"]["versions"]["json"]        = nlohmann::json::meta()["version"]["string"];
+  // m_JSON["meta"]["versions"]["yaodaq"]      = yaodaq_version.to_string();
+  // m_JSON["meta"]["versions"]["ixwebsocket"] = std::string( IX_WEBSOCKET_VERSION );
 }
 
 void Message::setContent( const nlohmann::json& content ) { m_JSON["content"] = static_cast<nlohmann::json>( content ); }
