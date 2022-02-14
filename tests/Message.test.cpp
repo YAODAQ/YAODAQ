@@ -15,9 +15,9 @@ TEST_CASE( "Testing the Message class." )
   std::cout << "message : \n" << message.dump( 1, ' ' ) << std::endl;
   std::cout << message.getTypeName() << " " << message.getTypeValue() << " " << message.getContent() << std::endl;
   // Json
-  nlohmann::json  content_json = nlohmann::json::parse( R"({"happy": true, "pi": 3.141})" );
+  /*nlohmann::json  content_json = nlohmann::json::parse( R"({"happy": true, "pi": 3.141})" );
   yaodaq::Message message_json( content_json, yaodaq::MessageType::Open );
-  std::cout << "message_json : \n" << message_json.dump( 1, ' ' ) << std::endl;
+  std::cout << "message_json : \n" << message_json.dump( 1, ' ' ) << std::endl;*/
 
   // With const char*
   /*yaodaq::Message message_const_char_star( "happy", yaodaq::MessageType::Open );
@@ -42,9 +42,10 @@ TEST_CASE( "Testing the Message class." )
             << message_content_string_json.getTimestamp() << std::endl;*/
 }
 
+/*
 TEST_CASE( "Testing the setFrom." )
 {
-  /*yaodaq::Identifier identifier( "MyName", "MyType" );
+  yaodaq::Identifier identifier( "MyName", "MyType" );
   identifier.generateKey( yaodaq::Domain::Application, yaodaq::Class::Module, yaodaq::Family::FileWriter );
   yaodaq::Message message( "My message", yaodaq::MessageType::Close );
   message.setFrom( identifier );
@@ -59,5 +60,5 @@ TEST_CASE( "Testing the setFrom." )
   CHECK( message.getIdentifier().getClass() == identifier.getClass() );
   CHECK( message.getIdentifier().getFamily() == identifier.getFamily() );
   CHECK( message.getIdentifier().getType() == identifier.getType() );
-  CHECK( message.getIdentifier().getName() == identifier.getName() );*/
-}
+  CHECK( message.getIdentifier().getName() == identifier.getName() );
+}*/
