@@ -36,7 +36,7 @@ Message::Message()
   m_JSON["meta"]["versions"]["ixwebsocket"] = std::string( IX_WEBSOCKET_VERSION );
 }
 
-void Message::setContent( const nlohmann::json& content ) { /*m_JSON["content"] = static_cast<nlohmann::json>( content );*/ }
+void Message::setContent( const nlohmann::json& content ) { m_JSON["content"] = static_cast<nlohmann::json>( content ); }
 
 void Message::setContent( const std::string& content )
 {
