@@ -39,17 +39,17 @@ target_link_libraries(Identifier PUBLIC YAODAQ::Exception YAODAQ::Headers PRIVAT
 add_library(YAODAQ::Identifier ALIAS Identifier)
 
 add_library(Message Message.cpp)
-set_target_properties(Message PROPERTIES PUBLIC_HEADER "${YAODAQ_INCLUDE}/yaodaq/Message.hpp;${YAODAQ_INCLUDE}/yaodaq/MessageType.hpp")
+set_target_properties(Message PROPERTIES PUBLIC_HEADER "${YAODAQ_INCLUDES_DIR}/Message.hpp;${YAODAQ_INCLUDES_DIR}/MessageType.hpp")
 target_link_libraries(Message PUBLIC YAODAQ::Headers nlohmann_json::nlohmann_json YAODAQ::Version PRIVATE magic_enum::magic_enum fmt::fmt YAODAQ::Identifier ixwebsocket::ixwebsocket)
 add_library(YAODAQ::Message ALIAS Message)
 
 add_library(IXWebsocketMessage IXWebsocketMessage.cpp)
-set_target_properties(IXWebsocketMessage PROPERTIES PUBLIC_HEADER "${YAODAQ_INCLUDE}/yaodaq/IXWebsocketMessage.hpp")
+set_target_properties(IXWebsocketMessage PROPERTIES PUBLIC_HEADER "${YAODAQ_INCLUDES_DIR}/IXWebsocketMessage.hpp")
 target_link_libraries(IXWebsocketMessage PUBLIC YAODAQ::Message ixwebsocket::ixwebsocket)
 add_library(YAODAQ::IXWebsocketMessage ALIAS IXWebsocketMessage)
 
 add_library(ConnectionState ConnectionState.cpp)
-set_target_properties(ConnectionState PROPERTIES PUBLIC_HEADER "${YAODAQ_INCLUDE}/yaodaq/ConnectionState.hpp")
+set_target_properties(ConnectionState PROPERTIES PUBLIC_HEADER "${YAODAQ_INCLUDES_DIR}/ConnectionState.hpp")
 target_link_libraries(ConnectionState PUBLIC YAODAQ::Headers ixwebsocket::ixwebsocket YAODAQ::Identifier)
 add_library(YAODAQ::ConnectionState ALIAS ConnectionState)
 
