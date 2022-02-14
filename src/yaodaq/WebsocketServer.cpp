@@ -4,6 +4,7 @@
 
 #include "yaodaq/WebsocketServer.hpp"
 
+#include "yaodaq/Classification.hpp"
 #include "yaodaq/ConnectionState.hpp"
 #include "yaodaq/Exception.hpp"
 #include "yaodaq/IXWebsocketMessage.hpp"
@@ -39,11 +40,10 @@ WebsocketServer::WebsocketServer( const std::string& name, const int& port, cons
     {
       // The ConnectionState object contains information about the connection
       std::shared_ptr<ConnectionState> connection = std::static_pointer_cast<ConnectionState>( connectionState );
-
-      if( msg->type == ix::WebSocketMessageType::Open )
+      if( msg->type == ix::WebSocketMessageType::Message ) {}
+      else if( msg->type == ix::WebSocketMessageType::Open )
       {
         // Check if a client with the same name is already connected;
-        logger()->critical( fmt::format( fg( fmt::color::red ) | fmt::emphasis::bold, getHost() + ":" + std::to_string( getPort() ) ) );
         connection->computeId( getHost() + ":" + std::to_string( getPort() ), Identifier::parse( msg->openInfo.headers["id"] ) );
         if( connection->isTerminated() )
         {
@@ -53,13 +53,109 @@ WebsocketServer::WebsocketServer( const std::string& name, const int& port, cons
           std::this_thread::sleep_for( std::chrono::milliseconds( 10 ) );
           return;
         }
+        addClient( Identifier::parse( msg->openInfo.headers["id"] ), webSocket );
+        Open open( msg->openInfo, connection );
+        sendToLoggers( open, webSocket );
+        onOpen( open );
       }
-      else if( msg->type == ix::WebSocketMessageType::Message )
+      else if( msg->type == ix::WebSocketMessageType::Close )
       {
-        webSocket.send( msg->str, msg->binary );
+        Close close( msg->closeInfo, connection );
+        sendToLoggers( close, webSocket );
+        onClose( close );
+        removeClient( webSocket );
+      }
+      else if( msg->type == ix::WebSocketMessageType::Error )
+      {
+        Error error( msg->errorInfo, connection );
+        sendToLoggers( error, webSocket );
+        onError( error );
+      }
+      else if( msg->type == ix::WebSocketMessageType::Ping )
+      {
+        Ping ping( msg, connection );
+        sendToLoggers( ping, webSocket );
+        onPing( ping );
+      }
+      else if( msg->type == ix::WebSocketMessageType::Pong )
+      {
+        Pong pong( msg, connection );
+        sendToLoggers( pong, webSocket );
+        onPong( pong );
+      }
+      else if( msg->type == ix::WebSocketMessageType::Fragment )
+      {
+        Fragment fragment( msg, connection );
+        sendToLoggers( fragment, webSocket );
+        onFragment( fragment );
       }
     } );
 }
+
+void WebsocketServer::addClient( const Identifier& identifier, ix::WebSocket& websocket )
+{
+  std::lock_guard<std::mutex> guard( m_Mutex );
+  m_Clients.try_emplace( identifier, websocket );
+}
+
+void WebsocketServer::removeClient( ix::WebSocket& websocket )
+{
+  std::lock_guard<std::mutex> guard( m_Mutex );
+  for( std::map<Identifier, ix::WebSocket&>::iterator it = m_Clients.begin(); it != m_Clients.end(); ++it )
+  {
+    if( &it->second == &websocket )
+    {
+      m_Clients.erase( it->first );
+      break;
+    }
+  }
+}
+
+void WebsocketServer::sendToLoggers( Message& message, ix::WebSocket& webSocket )
+{
+  for( std::map<Identifier, ix::WebSocket&>::iterator it = m_Clients.begin(); it != m_Clients.end(); ++it )
+  {
+    if( magic_enum::enum_cast<Family>( it->first.getFamily() ).value() == Family::Logger && &webSocket != &it->second ) it->second.send( message.dump() );
+  }
+}
+
+void WebsocketServer::sendToLoggers( Message& message )
+{
+  for( std::map<Identifier, ix::WebSocket&>::iterator it = m_Clients.begin(); it != m_Clients.end(); ++it )
+  {
+    if( magic_enum::enum_cast<Family>( it->first.getFamily() ).value() == Family::Logger ) it->second.send( message.dump() );
+  }
+}
+
+void WebsocketServer::sendToLoggers( const Message& message, ix::WebSocket& webSocket )
+{
+  for( std::map<Identifier, ix::WebSocket&>::iterator it = m_Clients.begin(); it != m_Clients.end(); ++it )
+  {
+    if( magic_enum::enum_cast<Family>( it->first.getFamily() ).value() == Family::Logger && &webSocket != &it->second ) it->second.send( message.dump() );
+  }
+}
+
+void WebsocketServer::sendToLoggers( const Message& message )
+{
+  for( std::map<Identifier, ix::WebSocket&>::iterator it = m_Clients.begin(); it != m_Clients.end(); ++it )
+  {
+    if( magic_enum::enum_cast<Family>( it->first.getFamily() ).value() == Family::Logger ) it->second.send( message.dump() );
+  }
+}
+
+void WebsocketServer::onMessage( Message& message ) {}
+
+void WebsocketServer::onOpen( Open& open ) {}
+
+void WebsocketServer::onClose( Close& close ) {}
+
+void WebsocketServer::onError( Error& error ) {}
+
+void WebsocketServer::onPing( Ping& ping ) {}
+
+void WebsocketServer::onPong( Pong& pong ) {}
+
+void WebsocketServer::onFragment( Fragment& fragment ) {}
 
 void WebsocketServer::listen()
 {

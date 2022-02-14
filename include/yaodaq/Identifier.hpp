@@ -28,6 +28,7 @@ public:
   [[nodiscard]] std::string get() const;
   bool                      empty() const;
   static Identifier         parse( const std::string& );
+  bool                      operator<( const Identifier& ) const;
 
 private:
   std::string m_Type{ "Unknown" };

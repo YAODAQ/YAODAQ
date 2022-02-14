@@ -11,6 +11,7 @@
 
 #include <chrono>
 #include <ctime>
+#include <ixwebsocket/IXUuid.h>
 #include <string>
 
 // Versions numbers
@@ -25,6 +26,7 @@ Message::Message()
   m_JSON["from"];
   m_JSON["to"];
   m_JSON["type"] = magic_enum::enum_name( MessageType::Unknown );
+  m_JSON["uuid"] = ix::uuid4();
   m_JSON["content"];
   m_JSON["timestamp"]                       = fmt::format( "{:%F %T %z}", fmt::gmtime( std::chrono::system_clock::to_time_t( std::chrono::system_clock::now() ) ) );
   m_JSON["meta"]["compiler"]                = nlohmann::json::meta()["compiler"];
@@ -41,6 +43,7 @@ void Message::setContent( const std::string& content )
   m_JSON["content"] = nlohmann::json::parse( content, nullptr, false );
   if( m_JSON["content"].is_discarded() ) { m_JSON["content"] = static_cast<std::string>( content ); }
 }
+
 void Message::setContent( const char* content )
 {
   m_JSON["content"] = nlohmann::json::parse( content, nullptr, false );
@@ -61,14 +64,7 @@ std::string Message::getTypeName() const { return m_JSON["type"].get<std::string
 
 MessageType Message::getTypeValue() const { return magic_enum::enum_cast<MessageType>( m_JSON["type"].get<std::string>() ).value(); }
 
-std::string Message::getContent() const
-{
-  if( m_JSON["content"].is_null() ) return "";
-  else if( m_JSON["content"].is_string() )
-    return m_JSON["content"].get<std::string>();
-  else
-    return m_JSON["content"].dump();
-}
+nlohmann::json Message::getContent() const { return m_JSON["content"]; }
 
 std::string Message::getTimestamp() const { return m_JSON["timestamp"].get<std::string>(); }
 
@@ -103,33 +99,5 @@ Identifier Message::getIdentifier() const
 }
 
 Message::Message( const MessageType& messageType ) : Message() { m_JSON["type"] = magic_enum::enum_name( messageType ); }
-
-/*
-
-
-std::string Open::getProtocolStr() const
-{
-  return m_Value["Content"]["Protocol"].asString();
-}
-
-Open::Open(const Message& message)
-{
-  setContent(message.getContentAsJson());
-  setFrom(message.getFromStr());
-  setTo(message.getToStr());
-  if(message.getType()!=TYPE::Open) throw Exception(StatusCode::INVALID_CONVERSION,"Impossible to convert \"{}\" to \"{}\"",getTypeStr(),"Open");
-  else setType(message.getType());
-}
-
-std::string Open::getKeyStr() const
-{
-  return m_Value["Content"]["Key"].asString();
-}
-
-std::string Open::getIdStr() const
-{
-  return m_Value["Content"]["ID"].asString();
-}
-*/
 
 }  // namespace yaodaq

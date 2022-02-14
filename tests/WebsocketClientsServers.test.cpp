@@ -3,6 +3,7 @@
 */
 
 #include "doctest/doctest.h"
+#include "yaodaq/Message.hpp"
 #include "yaodaq/WebsocketClient.hpp"
 #include "yaodaq/WebsocketServer.hpp"
 
@@ -37,6 +38,9 @@ void quit_servers( yaodaq::WebsocketServer& server1, yaodaq::WebsocketServer& se
   {
     server1.logger()->warn( "Killing server1 in {} seconds", i );
     server2.logger()->warn( "Killing server2 in {} seconds", i );
+
+    server1.sendToLoggers( yaodaq::Message( "Killing server1 in {} seconds" ) );
+    server1.sendToLoggers( yaodaq::Message( "Killing server2 in {} seconds" ) );
     std::this_thread::sleep_for( std::chrono::seconds( 1 ) );
   }
   server1.stop();

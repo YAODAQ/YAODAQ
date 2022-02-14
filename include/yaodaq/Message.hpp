@@ -24,7 +24,7 @@ public:
   explicit Message( const char* content, const MessageType& messageType = MessageType::Unknown );
   std::string    dump( const int& indent = -1, const char& indent_char = ' ', const bool& ensure_ascii = false, const nlohmann::detail::error_handler_t& error_handler = nlohmann::detail::error_handler_t::strict ) const;
   nlohmann::json get() const;
-  std::string    getContent() const;
+  nlohmann::json getContent() const;
   std::string    getTypeName() const;
   MessageType    getTypeValue() const;
   std::string    getTimestamp() const;

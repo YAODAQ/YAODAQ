@@ -72,4 +72,6 @@ Identifier Identifier::parse( const std::string& id )
   }
 }
 
+bool Identifier::operator<( const Identifier& identifier ) const { return this->get() < identifier.get(); }
+
 }  // namespace yaodaq

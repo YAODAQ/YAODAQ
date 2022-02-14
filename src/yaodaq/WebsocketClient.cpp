@@ -42,13 +42,28 @@ WebsocketClient::WebsocketClient( const std::string& name, const std::string& ty
         if( msg->closeInfo.code == magic_enum::enum_integer( StatusCode::CLIENT_WITH_SAME_NAME_ALREADY_CONNECTED ) )
         {
           logger()->critical( fmt::format( fg( fmt::color::red ) | fmt::emphasis::bold, msg->closeInfo.reason ) );
-          throw Exception( StatusCode::CLIENT_WITH_SAME_NAME_ALREADY_CONNECTED, msg->closeInfo.reason );
+          close();
+          // throw Exception( StatusCode::CLIENT_WITH_SAME_NAME_ALREADY_CONNECTED, msg->closeInfo.reason );
         }
       }
     }
 
   );
 }
+
+void WebsocketClient::onMessage( Message& message ) {}
+
+void WebsocketClient::onOpen( Open& open ) {}
+
+void WebsocketClient::onClose( Close& close ) {}
+
+void WebsocketClient::onError( Error& error ) {}
+
+void WebsocketClient::onPing( Ping& ping ) {}
+
+void WebsocketClient::onPong( Pong& pong ) {}
+
+void WebsocketClient::onFragment( Fragment& fragment ) {}
 
 WebsocketClient::~WebsocketClient()
 {

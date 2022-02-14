@@ -18,6 +18,14 @@
 namespace yaodaq
 {
 
+class Message;
+class Open;
+class Close;
+class Error;
+class Ping;
+class Pong;
+class Fragment;
+
 class WebsocketClient : public ix::WebSocket
 {
 public:
@@ -27,6 +35,14 @@ public:
   void                            stop();
   void                            loop();
   std::shared_ptr<spdlog::logger> logger() { return m_Logger.logger(); }
+
+  virtual void onMessage( Message& message );
+  virtual void onOpen( Open& open );
+  virtual void onClose( Close& close );
+  virtual void onError( Error& error );
+  virtual void onPing( Ping& ping );
+  virtual void onPong( Pong& pong );
+  virtual void onFragment( Fragment& fragment );
 
 private:
   void          onRaisingSignal();

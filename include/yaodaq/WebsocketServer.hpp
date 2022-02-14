@@ -11,12 +11,22 @@
 #include "yaodaq/Looper.hpp"
 
 #include <ixwebsocket/IXWebSocketServer.h>
+#include <map>
 #include <memory>
+#include <mutex>
 #include <spdlog/spdlog.h>
 #include <string>
 
 namespace yaodaq
 {
+
+class Message;
+class Open;
+class Close;
+class Error;
+class Ping;
+class Pong;
+class Fragment;
 
 class WebsocketServer : public ix::WebSocketServer
 {
@@ -30,19 +40,36 @@ public:
   void stop( bool useless = true );
   void listen();
 
+  virtual void onMessage( Message& message );
+  virtual void onOpen( Open& open );
+  virtual void onClose( Close& close );
+  virtual void onError( Error& error );
+  virtual void onPing( Ping& ping );
+  virtual void onPong( Pong& pong );
+  virtual void onFragment( Fragment& fragment );
+
   void setVerbosity( const yaodaq::LoggerHandler::Verbosity& verbosity );
 
   std::shared_ptr<spdlog::logger> logger() { return m_Logger.logger(); }
 
+  void sendToLoggers( Message& message );
+  void sendToLoggers( const Message& message );
+  void sendToLoggers( Message& message, ix::WebSocket& webSocket );
+  void sendToLoggers( const Message& message, ix::WebSocket& webSocket );
+
 private:
-  void          onRaisingSignal();
-  bool          m_isListening{ false };
-  Identifier    m_Identifier;
-  LoggerHandler m_Logger;
-  Interrupt     m_Interrupt;
-  Looper        m_Looper;
-  bool          m_isStopped{ false };
-  bool          m_isStarted{ false };
+  void                                 addClient( const Identifier&, ix::WebSocket& );
+  void                                 removeClient( ix::WebSocket& );
+  void                                 onRaisingSignal();
+  bool                                 m_isListening{ false };
+  Identifier                           m_Identifier;
+  LoggerHandler                        m_Logger;
+  Interrupt                            m_Interrupt;
+  Looper                               m_Looper;
+  bool                                 m_isStopped{ false };
+  bool                                 m_isStarted{ false };
+  std::map<Identifier, ix::WebSocket&> m_Clients;
+  std::mutex                           m_Mutex;
 };
 
 }  // namespace yaodaq
