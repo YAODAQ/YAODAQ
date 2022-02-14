@@ -36,18 +36,18 @@ Message::Message()
   // m_JSON["meta"]["versions"]["ixwebsocket"] = std::string( IX_WEBSOCKET_VERSION );
 }
 
-void Message::setContent( const nlohmann::json& content ) { m_JSON["content"] = static_cast<nlohmann::json>( content ); }
+void Message::setContent( const nlohmann::json& content ) { /*m_JSON["content"] = static_cast<nlohmann::json>( content );*/ }
 
 void Message::setContent( const std::string& content )
 {
-  m_JSON["content"] = nlohmann::json::parse( content, nullptr, false );
-  if( m_JSON["content"].is_discarded() ) { m_JSON["content"] = static_cast<std::string>( content ); }
+  /*m_JSON["content"] = nlohmann::json::parse( content, nullptr, false );
+  if( m_JSON["content"].is_discarded() ) { m_JSON["content"] = static_cast<std::string>( content ); }*/
 }
 
 void Message::setContent( const char* content )
 {
-  m_JSON["content"] = nlohmann::json::parse( content, nullptr, false );
-  if( m_JSON["content"].is_discarded() ) { m_JSON["content"] = static_cast<std::string>( content ); }
+  /*m_JSON["content"] = nlohmann::json::parse( content, nullptr, false );
+  if( m_JSON["content"].is_discarded() ) { m_JSON["content"] = static_cast<std::string>( content ); }*/
 }
 
 Message::Message( const nlohmann::json& content, const MessageType& messageType ) : Message( messageType ) { setContent( content ); }
