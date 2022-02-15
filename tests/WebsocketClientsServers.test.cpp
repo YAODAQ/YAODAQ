@@ -19,9 +19,9 @@ void quit_clients( yaodaq::WebsocketClient& client1, yaodaq::WebsocketClient& cl
     client1.logger()->warn( "Killing client1 in {} seconds ({})", i, ix::WebSocket::readyStateToString( client1.getReadyState() ) );
     client1.send( "I'm client 1" );
     client2.logger()->warn( "Killing client2 in {} seconds ({})", i, ix::WebSocket::readyStateToString( client2.getReadyState() ) );
-    client2.send( "I'm client 2" );
+    client2.send( "I'm client 1" );
     client3.logger()->warn( "Killing client3 in {} seconds ({})", i, ix::WebSocket::readyStateToString( client3.getReadyState() ) );
-    client3.send( "I'm client 3" );
+    client3.send( "I'm client 1" );
     not_connected.logger()->warn( "Killing not_connected in {} seconds ({})", i, ix::WebSocket::readyStateToString( not_connected.getReadyState() ) );
     not_connected.send( "YOU SHOULD  NOT SEE THIS !!!!!" );
     std::this_thread::sleep_for( std::chrono::seconds( 1 ) );

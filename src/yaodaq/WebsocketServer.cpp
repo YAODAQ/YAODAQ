@@ -40,7 +40,11 @@ WebsocketServer::WebsocketServer( const std::string& name, const int& port, cons
     {
       // The ConnectionState object contains information about the connection
       std::shared_ptr<ConnectionState> connection = std::static_pointer_cast<ConnectionState>( connectionState );
-      if( msg->type == ix::WebSocketMessageType::Message ) {}
+      if( msg->type == ix::WebSocketMessageType::Message )
+      {
+        IXMessage ixmessage( msg );
+        onMessage( ixmessage );
+      }
       else if( msg->type == ix::WebSocketMessageType::Open )
       {
         // Check if a client with the same name is already connected;
@@ -50,7 +54,7 @@ WebsocketServer::WebsocketServer( const std::string& name, const int& port, cons
           logger()->error( fmt::format( fg( fmt::color::red ) | fmt::emphasis::bold, "One client with the name \"{}\" is already connected !", Identifier::parse( msg->openInfo.headers["id"] ).getName() ) );
           webSocket.stop( magic_enum::enum_integer( StatusCode::CLIENT_WITH_SAME_NAME_ALREADY_CONNECTED ),
                           fmt::format( "One client with the name \"{}\" is already connected to ws{}://{}:{} !", Identifier::parse( msg->openInfo.headers["id"] ).getName(), "", getHost(), getPort() ) );
-          std::this_thread::sleep_for( std::chrono::milliseconds( 10 ) );
+          std::this_thread::sleep_for( std::chrono::milliseconds( 100 ) );
           return;
         }
         addClient( Identifier::parse( msg->openInfo.headers["id"] ), webSocket );

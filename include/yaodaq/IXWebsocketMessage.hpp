@@ -23,6 +23,7 @@ class IXMessage : public Message
 {
 public:
   explicit IXMessage( const MessageType& messageType );
+  explicit IXMessage( const ix::WebSocketMessagePtr& msg );
 
 protected:
   void setConnectionStateInfos( std::shared_ptr<ConnectionState>& connectionState );

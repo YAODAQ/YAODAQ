@@ -7,6 +7,7 @@
 #include "fmt/chrono.h"
 #include "magic_enum.hpp"
 #include "yaodaq/Classification.hpp"
+#include "yaodaq/Exception.hpp"
 #include "yaodaq/Identifier.hpp"
 
 #include <chrono>
@@ -23,12 +24,12 @@ namespace yaodaq
 
 Message::Message()
 {
-  m_JSON["from"] = nlohmann::json{};
-  m_JSON["to"] = nlohmann::json{};
+  m_JSON["from"];
+  m_JSON["to"];
   m_JSON["type"] = magic_enum::enum_name( MessageType::Unknown );
   m_JSON["uuid"] = ix::uuid4();
-  m_JSON["content"] = nlohmann::json{};
-  m_JSON["timestamp"] = fmt::format( "{:%F %T %z}", fmt::gmtime( std::chrono::system_clock::to_time_t( std::chrono::system_clock::now() ) ) );
+  m_JSON["content"];
+  m_JSON["timestamp"]                       = fmt::format( "{:%F %T %z}", fmt::gmtime( std::chrono::system_clock::to_time_t( std::chrono::system_clock::now() ) ) );
   m_JSON["meta"]["compiler"]                = nlohmann::json::meta()["compiler"];
   m_JSON["meta"]["platform"]                = nlohmann::json::meta()["platform"];
   m_JSON["meta"]["versions"]["json"]        = nlohmann::json::meta()["version"]["string"];
@@ -40,14 +41,14 @@ void Message::setContent( const nlohmann::json& content ) { m_JSON["content"] = 
 
 void Message::setContent( const std::string& content )
 {
-  /*m_JSON["content"] = nlohmann::json::parse( content, nullptr, false );
-  if( m_JSON["content"].is_discarded() ) { m_JSON["content"] = static_cast<std::string>( content ); }*/
+  m_JSON["content"] = nlohmann::json::parse( content, nullptr, false );
+  if( m_JSON["content"].is_discarded() ) { m_JSON["content"] = static_cast<std::string>( content ); }
 }
 
 void Message::setContent( const char* content )
 {
-  /*m_JSON["content"] = nlohmann::json::parse( content, nullptr, false );
-  if( m_JSON["content"].is_discarded() ) { m_JSON["content"] = static_cast<std::string>( content ); }*/
+  m_JSON["content"] = nlohmann::json::parse( content, nullptr, false );
+  if( m_JSON["content"].is_discarded() ) { m_JSON["content"] = static_cast<std::string>( content ); }
 }
 
 Message::Message( const nlohmann::json& content, const MessageType& messageType ) : Message( messageType ) { setContent( content ); }
@@ -99,5 +100,30 @@ Identifier Message::getIdentifier() const
 }
 
 Message::Message( const MessageType& messageType ) : Message() { m_JSON["type"] = magic_enum::enum_name( messageType ); }
+
+// MessageException
+MessageException::MessageException( const Exception& exception ) : Message( MessageType::Exception )
+{
+  nlohmann::json j;
+  j["code"]          = exception.code();
+  j["description"]   = exception.description();
+  j["line"]          = exception.line();
+  j["column"]        = exception.column();
+  j["file_name"]     = exception.file_name();
+  j["function_name"] = exception.function_name();
+  setContent( j );
+}
+
+std::int_least32_t MessageException::getCode() { return get()["content"]["code"].get<std::int_least32_t>(); }
+
+std::string MessageException::getDescription() { return get()["content"]["description"].get<std::string>(); }
+
+std::int_least32_t MessageException::getLine() { return get()["content"]["line"].get<std::int_least32_t>(); }
+
+std::int_least32_t MessageException::getColumn() { return get()["content"]["column"].get<std::int_least32_t>(); }
+
+std::string MessageException::getFileName() { return get()["content"]["file_name"].get<std::string>(); }
+
+std::string MessageException::getFunctionName() { return get()["content"]["function_name"].get<std::string>(); }
 
 }  // namespace yaodaq

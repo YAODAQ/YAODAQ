@@ -40,7 +40,7 @@ add_library(YAODAQ::Identifier ALIAS Identifier)
 
 add_library(Message Message.cpp)
 set_target_properties(Message PROPERTIES PUBLIC_HEADER "${YAODAQ_INCLUDES_DIR}/Message.hpp;${YAODAQ_INCLUDES_DIR}/MessageType.hpp")
-target_link_libraries(Message PUBLIC YAODAQ::Headers nlohmann_json::nlohmann_json YAODAQ::Version PRIVATE magic_enum::magic_enum fmt::fmt YAODAQ::Identifier ixwebsocket::ixwebsocket)
+target_link_libraries(Message PUBLIC YAODAQ::Headers nlohmann_json::nlohmann_json YAODAQ::Version YAODAQ::Exception PRIVATE magic_enum::magic_enum fmt::fmt YAODAQ::Identifier ixwebsocket::ixwebsocket)
 add_library(YAODAQ::Message ALIAS Message)
 
 add_library(IXWebsocketMessage IXWebsocketMessage.cpp)

@@ -9,6 +9,16 @@ namespace yaodaq
 
 IXMessage::IXMessage( const MessageType& messageType ) : Message( messageType ) {}
 
+IXMessage::IXMessage( const ix::WebSocketMessagePtr& msg ) : Message()
+{
+  // FIXME
+  nlohmann::json json = nlohmann::json::parse( msg->str, nullptr, false );
+  if( json.is_discarded() ) { m_JSON["content"] = static_cast<std::string>( msg->str ); }
+  else
+    m_JSON = json;
+  std::cout << m_JSON.dump() << std::endl;
+}
+
 void IXMessage::setConnectionStateInfos( std::shared_ptr<ConnectionState>& connectionState )
 {
   nlohmann::json j = getContent();

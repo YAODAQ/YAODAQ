@@ -14,6 +14,7 @@ namespace yaodaq
 {
 
 class Identifier;
+class Exception;
 
 class Message
 {
@@ -34,12 +35,22 @@ public:
 
 protected:
   explicit Message( const MessageType& messageType );
-  void setContent( const nlohmann::json& content );
-  void setContent( const std::string& content );
-  void setContent( const char* content );
-
-private:
+  void           setContent( const nlohmann::json& content );
+  void           setContent( const std::string& content );
+  void           setContent( const char* content );
   nlohmann::json m_JSON;
+};
+
+class MessageException : public Message
+{
+public:
+  explicit MessageException( const Exception& content );
+  std::int_least32_t getCode();
+  std::string        getDescription();
+  std::int_least32_t getLine();
+  std::int_least32_t getColumn();
+  std::string        getFileName();
+  std::string        getFunctionName();
 };
 
 }  // namespace yaodaq
