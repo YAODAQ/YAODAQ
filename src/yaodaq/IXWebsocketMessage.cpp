@@ -28,6 +28,12 @@ void IXMessage::setConnectionStateInfos( std::shared_ptr<ConnectionState>& conne
   setContent( j );
 }
 
+std::string IXMessage::getId() const { return get()["content"]["id"].get<std::string>(); }
+
+std::string IXMessage::getRemoteIp() const { return get()["content"]["remote_ip"].get<std::string>(); }
+
+int IXMessage::getRemotePort() const { return get()["content"]["remote_port"].get<int>(); }
+
 // Open
 Open::Open( const ix::WebSocketOpenInfo& openInfo ) : IXMessage( MessageType::Open )
 {

@@ -10,6 +10,7 @@
 #include "yaodaq/Exception.hpp"
 #include "yaodaq/Identifier.hpp"
 
+#include <algorithm>
 #include <chrono>
 #include <ctime>
 #include <ixwebsocket/IXUuid.h>

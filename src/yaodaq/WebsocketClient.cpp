@@ -6,6 +6,7 @@
 
 #include "yaodaq/Exception.hpp"
 #include "yaodaq/IXWebsocketMessage.hpp"
+#include "yaodaq/Message.hpp"
 #include "yaodaq/StatusCode.hpp"
 
 #include <chrono>
@@ -16,6 +17,10 @@
 
 namespace yaodaq
 {
+
+bool WebsocketClient::m_ThrowGeneralIfSameName{ true };
+
+void WebsocketClient::throwGeneralIfSameName( const bool& activate ) { m_ThrowGeneralIfSameName = activate; }
 
 WebsocketClient::WebsocketClient( const std::string& name, const std::string& type ) : m_Identifier( type, name )
 {
@@ -31,39 +36,89 @@ WebsocketClient::WebsocketClient( const std::string& name, const std::string& ty
   setOnMessageCallback(
     [this]( const ix::WebSocketMessagePtr& msg )
     {
-      if( msg->type == ix::WebSocketMessageType::Message ) { logger()->error( "{}", msg->str ); }
-      else if( msg->type == ix::WebSocketMessageType::Error )
+      if( msg->type == ix::WebSocketMessageType::Message )
       {
-        std::cout << "Connection error: " << msg->errorInfo.reason << std::endl;
+        IXMessage ixmessage( msg );
+        onMessage( ixmessage );
+      }
+      else if( msg->type == ix::WebSocketMessageType::Open )
+      {
+        Open open( msg->openInfo );
+        onOpen( open );
       }
       else if( msg->type == ix::WebSocketMessageType::Close )
       {
-        disableAutomaticReconnection();
-        if( msg->closeInfo.code == magic_enum::enum_integer( StatusCode::CLIENT_WITH_SAME_NAME_ALREADY_CONNECTED ) )
-        {
-          logger()->critical( fmt::format( fg( fmt::color::red ) | fmt::emphasis::bold, msg->closeInfo.reason ) );
-          close();
-          // throw Exception( StatusCode::CLIENT_WITH_SAME_NAME_ALREADY_CONNECTED, msg->closeInfo.reason );
-        }
+        Close close( msg->closeInfo );
+        onClose( close );
       }
-    }
-
-  );
+      else if( msg->type == ix::WebSocketMessageType::Error )
+      {
+        Error error( msg->errorInfo );
+        onError( error );
+      }
+      else if( msg->type == ix::WebSocketMessageType::Ping )
+      {
+        Ping ping( msg );
+        onPing( ping );
+      }
+      else if( msg->type == ix::WebSocketMessageType::Pong )
+      {
+        Pong pong( msg );
+        onPong( pong );
+      }
+      else if( msg->type == ix::WebSocketMessageType::Fragment )
+      {
+        Fragment fragment( msg );
+        onFragment( fragment );
+      }
+    } );
 }
 
-void WebsocketClient::onMessage( Message& message ) {}
+void WebsocketClient::onMessage( Message& message )
+{
+  switch( message.getTypeValue() )
+  {
+    case MessageType::Exception:
+      MessageException& message_exception = reinterpret_cast<MessageException&>( message );
+      // Special case for connection to the server with the same name as an other client !
+      if( static_cast<StatusCode>( message_exception.getCode() ) == StatusCode::CLIENT_WITH_SAME_NAME_ALREADY_CONNECTED )
+      {
+        disableAutomaticReconnection();
+        std::this_thread::sleep_for( std::chrono::milliseconds( 100 ) );
+        close( message_exception.getCode(), message_exception.getDescription() );
+        std::this_thread::sleep_for( std::chrono::milliseconds( 100 ) );
+        if( m_ThrowGeneralIfSameName ) throw Exception( static_cast<StatusCode>( message_exception.getCode() ), message_exception.getDescription() );
+      }
+      onException( message_exception );
+      break;
+  }
+}
 
-void WebsocketClient::onOpen( Open& open ) {}
+void WebsocketClient::onOpen( Open& open )
+{
+  std::string headers;
+  for( auto it: open.getHeaders() ) { headers += fmt::format( "\t{}: {}\n", it.first, it.second ); }
+  logger()->debug( fmt::format( fg( fmt::color::green ), "Connection opened:\nURI: {}\nProtocol: {}\nHeaders:\n{}", open.getURI(), open.getProtocol(), headers ) );
+}
 
-void WebsocketClient::onClose( Close& close ) {}
+void WebsocketClient::onClose( Close& close ) { logger()->debug( fmt::format( fg( fmt::color::green ), "Connection closed:\nCode: {}\nReason: {}\nRemote: {}", close.getCode(), close.getReason(), close.getRemote() ) ); }
 
-void WebsocketClient::onError( Error& error ) {}
+void WebsocketClient::onError( Error& error )
+{
+  logger()->error( fmt::format( fg( fmt::color::red ), "Error:\nRetries: {}\nWait time: {}\nHTTP status: {}\nReason: {}\nCompression error: {}", error.getRetries(), error.getWaitTime(), error.getHttpStatus(), error.getDecompressionError() ) );
+}
 
-void WebsocketClient::onPing( Ping& ping ) {}
+void WebsocketClient::onPing( Ping& ping ) { logger()->debug( fmt::format( fg( fmt::color::green ), "Ping:\n{}", ping.getContent().dump( 2 ) ) ); }
 
-void WebsocketClient::onPong( Pong& pong ) {}
+void WebsocketClient::onPong( Pong& pong ) { logger()->debug( fmt::format( fg( fmt::color::green ), "Pong:\n{}", pong.getContent().dump( 2 ) ) ); }
 
 void WebsocketClient::onFragment( Fragment& fragment ) {}
+
+void WebsocketClient::onException( MessageException& message )
+{
+  Exception exception( StatusCode::CLIENT_WITH_SAME_NAME_ALREADY_CONNECTED, message.getDescription() );
+  logger()->critical( "{Exception }", exception.what() );
+}
 
 WebsocketClient::~WebsocketClient()
 {

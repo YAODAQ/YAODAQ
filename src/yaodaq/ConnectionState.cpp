@@ -30,7 +30,7 @@ void ConnectionState::computeId( const std::string& host, const Identifier& id )
     std::list<std::pair<std::string, std::string>>::iterator found = std::find( m_Ids.begin(), m_Ids.end(), m_Pair );
     if( found == m_Ids.end() )
     {
-      _id = id.getName();
+      _id = id.get();
       m_Ids.push_back( m_Pair );
     }
     else
