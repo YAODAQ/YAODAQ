@@ -6,7 +6,6 @@
 */
 
 #include "yaodaq/Identifier.hpp"
-#include "yaodaq/Interrupt.hpp"
 #include "yaodaq/LoggerHandler.hpp"
 #include "yaodaq/Looper.hpp"
 
@@ -27,6 +26,7 @@ class Error;
 class Ping;
 class Pong;
 class Fragment;
+class MessageException;
 
 class WebsocketServer : public ix::WebSocketServer
 {
@@ -40,6 +40,7 @@ public:
   void stop( bool useless = true );
   void listen();
 
+  // IXWebsocket
   virtual void onMessage( Message& message );
   virtual void onOpen( Open& open );
   virtual void onClose( Close& close );
@@ -47,6 +48,9 @@ public:
   virtual void onPing( Ping& ping );
   virtual void onPong( Pong& pong );
   virtual void onFragment( Fragment& fragment );
+
+  virtual void onException(MessageException& );
+  virtual void onUnknown(Message&);
 
   void setVerbosity( const yaodaq::LoggerHandler::Verbosity& verbosity );
 
@@ -64,7 +68,6 @@ private:
   bool                                 m_isListening{ false };
   Identifier                           m_Identifier;
   LoggerHandler                        m_Logger;
-  Interrupt                            m_Interrupt;
   Looper                               m_Looper;
   bool                                 m_isStopped{ false };
   bool                                 m_isStarted{ false };

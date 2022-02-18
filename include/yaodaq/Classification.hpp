@@ -1,5 +1,5 @@
-#ifndef YAODAQ_CLASSIFICATION_HPP
-#define YAODAQ_CLASSIFICATION_HPP
+#ifndef YAODAQ_CLASSIFICATION
+#define YAODAQ_CLASSIFICATION
 
 /**
 \copyright Copyright 2022 flagarde
@@ -47,4 +47,4 @@ enum class Family : std::uint_least16_t
 
 }  // namespace yaodaq
 
-#endif  // YAODAQ_CLASSIFICATION_HPP
+#endif  // YAODAQ_CLASSIFICATION

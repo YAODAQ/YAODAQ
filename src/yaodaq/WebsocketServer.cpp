@@ -161,10 +161,14 @@ void WebsocketServer::onMessage( Message& message )
   switch( message.getTypeValue() )
   {
     case MessageType::Exception:
+    {
       MessageException& message_exception = reinterpret_cast<MessageException&>( message );
       onException( message_exception );
-      break;
-    default: logger()->critical( "SSSS" );
+    }
+    default:
+    {
+      onUnknown( message );
+    }
   }
 }
 
@@ -194,6 +198,11 @@ void WebsocketServer::onPong( Pong& pong ) { logger()->debug( fmt::format( fg( f
 void WebsocketServer::onFragment( Fragment& fragment ) {}
 
 void WebsocketServer::onException( MessageException& message ) {}
+
+void WebsocketServer::onUnknown(Message& unknown)
+{
+  logger()->error( fmt::format( fg( fmt::color::red ), "Unknwown:\n{}", unknown.dump( 2 ) ) );
+}
 
 void WebsocketServer::listen()
 {

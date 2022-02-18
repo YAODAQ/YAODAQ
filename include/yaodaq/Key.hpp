@@ -1,5 +1,5 @@
-#ifndef YAODAQ_KEY_HPP
-#define YAODAQ_KEY_HPP
+#ifndef YAODAQ_KEY
+#define YAODAQ_KEY
 
 /**
 \copyright Copyright 2022 flagarde
@@ -28,4 +28,4 @@ public:
 
 }  // namespace yaodaq
 
-#endif  // YAODAQ_KEY_HPP
+#endif  // YAODAQ_KEY

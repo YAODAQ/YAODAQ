@@ -24,7 +24,9 @@ class IXMessage : public Message
 public:
   explicit IXMessage( const MessageType& messageType );
   explicit IXMessage( const ix::WebSocketMessagePtr& msg );
-
+  std::string getId() const;
+  std::string getRemoteIp() const;
+  int getRemotePort() const;
 protected:
   void setConnectionStateInfos( std::shared_ptr<ConnectionState>& connectionState );
 };

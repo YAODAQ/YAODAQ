@@ -1,5 +1,5 @@
-#ifndef YAODAQ_IDENTIFIER_HPP
-#define YAODAQ_IDENTIFIER_HPP
+#ifndef YAODAQ_IDENTIFIER
+#define YAODAQ_IDENTIFIER
 
 /**
 \copyright Copyright 2022 flagarde
@@ -38,4 +38,4 @@ private:
 
 }  // namespace yaodaq
 
-#endif  // YAODAQ_IDENTIFIER_HPP
+#endif  // YAODAQ_IDENTIFIER

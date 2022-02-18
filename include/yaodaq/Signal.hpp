@@ -27,4 +27,4 @@ enum class Signal
 
 }  // namespace yaodaq
 
-#endif  // YAODAQ_CLASS_HPP
+#endif  // YAODAQ_CLASS

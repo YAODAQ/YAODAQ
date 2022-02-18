@@ -1,5 +1,5 @@
-#ifndef YAODAQ_HANDLER_HPP
-#define YAODAQ_HANDLER_HPP
+#ifndef YAODAQ_HANDLER
+#define YAODAQ_HANDLER
 
 /**
 \copyright Copyright 2022 flagarde
@@ -33,4 +33,4 @@ private:
 
 }  // namespace yaodaq
 
-#endif  // YAODAQ_HANDLER_HPP
+#endif  // YAODAQ_HANDLER

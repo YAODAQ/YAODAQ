@@ -6,7 +6,6 @@
 */
 
 #include "yaodaq/Identifier.hpp"
-#include "yaodaq/Interrupt.hpp"
 #include "yaodaq/LoggerHandler.hpp"
 #include "yaodaq/Looper.hpp"
 
@@ -25,6 +24,7 @@ class Error;
 class Ping;
 class Pong;
 class Fragment;
+class MessageException;
 
 class WebsocketClient : public ix::WebSocket
 {
@@ -35,7 +35,9 @@ public:
   void                            stop();
   void                            loop();
   std::shared_ptr<spdlog::logger> logger() { return m_Logger.logger(); }
+  static void throwGeneralIfSameName( const bool& );
 
+  // IXWebsocket
   virtual void onMessage( Message& message );
   virtual void onOpen( Open& open );
   virtual void onClose( Close& close );
@@ -44,11 +46,14 @@ public:
   virtual void onPong( Pong& pong );
   virtual void onFragment( Fragment& fragment );
 
+  virtual void onException(MessageException& );
+
 private:
   void          onRaisingSignal();
   Identifier    m_Identifier;
   LoggerHandler m_Logger;
   Looper        m_Looper;
+  static bool m_ThrowGeneralIfSameName;
 };
 
 }  // namespace yaodaq
