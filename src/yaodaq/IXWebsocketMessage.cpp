@@ -16,7 +16,6 @@ IXMessage::IXMessage( const ix::WebSocketMessagePtr& msg ) : Message()
   if( json.is_discarded() ) { m_JSON["content"] = static_cast<std::string>( msg->str ); }
   else
     m_JSON = json;
-  std::cout << m_JSON.dump() << std::endl;
 }
 
 void IXMessage::setConnectionStateInfos( std::shared_ptr<ConnectionState>& connectionState )
@@ -34,8 +33,8 @@ std::string IXMessage::getRemoteIp() const { return get()["content"]["remote_ip"
 
 int IXMessage::getRemotePort() const { return get()["content"]["remote_port"].get<int>(); }
 
-// Open
-Open::Open( const ix::WebSocketOpenInfo& openInfo ) : IXMessage( MessageType::Open )
+// IXOpen
+IXOpen::IXOpen( const ix::WebSocketOpenInfo& openInfo ) : IXMessage( MessageType::Open )
 {
   nlohmann::json j = getContent();
   j["uri"]         = openInfo.uri;
@@ -44,20 +43,20 @@ Open::Open( const ix::WebSocketOpenInfo& openInfo ) : IXMessage( MessageType::Op
   setContent( j );
 }
 
-Open::Open( const ix::WebSocketOpenInfo& openInfo, std::shared_ptr<ConnectionState>& connectionState ) : Open( openInfo ) { setConnectionStateInfos( connectionState ); }
+IXOpen::IXOpen( const ix::WebSocketOpenInfo& openInfo, std::shared_ptr<ConnectionState>& connectionState ) : IXOpen( openInfo ) { setConnectionStateInfos( connectionState ); }
 
-std::string Open::getURI() const { return get()["content"]["uri"].get<std::string>(); }
+std::string IXOpen::getURI() const { return get()["content"]["uri"].get<std::string>(); }
 
-std::map<std::string, std::string> Open::getHeaders() const
+std::map<std::string, std::string> IXOpen::getHeaders() const
 {
   std::map<std::string, std::string> ret = get()["content"]["headers"].get<std::map<std::string, std::string>>();
   return ret;
 }
 
-std::string Open::getProtocol() const { return get()["content"]["protocol"].get<std::string>(); }
+std::string IXOpen::getProtocol() const { return get()["content"]["protocol"].get<std::string>(); }
 
-// Close
-Close::Close( const ix::WebSocketCloseInfo& closeInfo ) : IXMessage( MessageType::Close )
+// IXClose
+IXClose::IXClose( const ix::WebSocketCloseInfo& closeInfo ) : IXMessage( MessageType::Close )
 {
   nlohmann::json j;
   j["code"]   = closeInfo.code;
@@ -66,14 +65,14 @@ Close::Close( const ix::WebSocketCloseInfo& closeInfo ) : IXMessage( MessageType
   setContent( j );
 }
 
-Close::Close( const ix::WebSocketCloseInfo& closeInfo, std::shared_ptr<ConnectionState>& connectionState ) : Close( closeInfo ) { setConnectionStateInfos( connectionState ); }
+IXClose::IXClose( const ix::WebSocketCloseInfo& closeInfo, std::shared_ptr<ConnectionState>& connectionState ) : IXClose( closeInfo ) { setConnectionStateInfos( connectionState ); }
 
-std::uint16_t Close::getCode() const { return get()["content"]["code"].get<std::uint16_t>(); }
-std::string   Close::getReason() const { return get()["content"]["reason"].get<std::string>(); }
-bool          Close::getRemote() const { return get()["content"]["remote"].get<bool>(); }
+std::uint16_t IXClose::getCode() const { return get()["content"]["code"].get<std::uint16_t>(); }
+std::string   IXClose::getReason() const { return get()["content"]["reason"].get<std::string>(); }
+bool          IXClose::getRemote() const { return get()["content"]["remote"].get<bool>(); }
 
-// Error
-Error::Error( const ix::WebSocketErrorInfo& errorInfo ) : IXMessage( MessageType::Error )
+// IXError
+IXError::IXError( const ix::WebSocketErrorInfo& errorInfo ) : IXMessage( MessageType::Error )
 {
   nlohmann::json j;
   j["retries"]             = errorInfo.retries;
@@ -84,31 +83,31 @@ Error::Error( const ix::WebSocketErrorInfo& errorInfo ) : IXMessage( MessageType
   setContent( j );
 }
 
-Error::Error( const ix::WebSocketErrorInfo& errorInfo, std::shared_ptr<ConnectionState>& connectionState ) : Error( errorInfo ) { setConnectionStateInfos( connectionState ); }
+IXError::IXError( const ix::WebSocketErrorInfo& errorInfo, std::shared_ptr<ConnectionState>& connectionState ) : IXError( errorInfo ) { setConnectionStateInfos( connectionState ); }
 
-std::uint16_t Error::getRetries() const { return get()["content"]["retries"].get<std::uint16_t>(); }
+std::uint16_t IXError::getRetries() const { return get()["content"]["retries"].get<std::uint16_t>(); }
 
-double Error::getWaitTime() const { return get()["content"]["wait_time"].get<double>(); }
+double IXError::getWaitTime() const { return get()["content"]["wait_time"].get<double>(); }
 
-int Error::getHttpStatus() const { return get()["content"]["http_status"].get<int>(); }
+int IXError::getHttpStatus() const { return get()["content"]["http_status"].get<int>(); }
 
-std::string Error::getReason() const { return get()["content"]["reason"].get<std::string>(); }
+std::string IXError::getReason() const { return get()["content"]["reason"].get<std::string>(); }
 
-bool Error::getDecompressionError() const { return get()["content"]["decompression_error"].get<bool>(); }
+bool IXError::getDecompressionError() const { return get()["content"]["decompression_error"].get<bool>(); }
 
 // Ping
-Ping::Ping( const ix::WebSocketMessagePtr& ping ) : IXMessage( MessageType::Ping ) {}
+IXPing::IXPing( const ix::WebSocketMessagePtr& ping ) : IXMessage( MessageType::Ping ) {}
 
-Ping::Ping( const ix::WebSocketMessagePtr& ping, std::shared_ptr<ConnectionState>& connectionState ) : Ping( ping ) { setConnectionStateInfos( connectionState ); }
+IXPing::IXPing( const ix::WebSocketMessagePtr& ping, std::shared_ptr<ConnectionState>& connectionState ) : IXPing( ping ) { setConnectionStateInfos( connectionState ); }
 
 // Pong
-Pong::Pong( const ix::WebSocketMessagePtr& pong ) : IXMessage( MessageType::Pong ) {}
+IXPong::IXPong( const ix::WebSocketMessagePtr& pong ) : IXMessage( MessageType::Pong ) {}
 
-Pong::Pong( const ix::WebSocketMessagePtr& pong, std::shared_ptr<ConnectionState>& connectionState ) : Pong( pong ) { setConnectionStateInfos( connectionState ); }
+IXPong::IXPong( const ix::WebSocketMessagePtr& pong, std::shared_ptr<ConnectionState>& connectionState ) : IXPong( pong ) { setConnectionStateInfos( connectionState ); }
 
 // Fragment
-Fragment::Fragment( const ix::WebSocketMessagePtr& fragment ) : IXMessage( MessageType::Fragment ) {}
+IXFragment::IXFragment( const ix::WebSocketMessagePtr& fragment ) : IXMessage( MessageType::Fragment ) {}
 
-Fragment::Fragment( const ix::WebSocketMessagePtr& fragment, std::shared_ptr<ConnectionState>& connectionState ) : Fragment( fragment ) { setConnectionStateInfos( connectionState ); }
+IXFragment::IXFragment( const ix::WebSocketMessagePtr& fragment, std::shared_ptr<ConnectionState>& connectionState ) : IXFragment( fragment ) { setConnectionStateInfos( connectionState ); }
 
 }  // namespace yaodaq

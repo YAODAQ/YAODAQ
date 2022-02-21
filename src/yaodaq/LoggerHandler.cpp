@@ -19,7 +19,7 @@ void LoggerHandler::setName( const std::string& name )
 
 LoggerHandler::~LoggerHandler() {}
 
-void LoggerHandler::setVerbosity( const Verbosity& verbosity )
+void LoggerHandler::setVerbosity( const LogLevel& verbosity )
 {
   m_Verbosity = verbosity;
   init();
@@ -30,13 +30,54 @@ void LoggerHandler::init()
   m_Logger = std::make_shared<spdlog::logger>( m_Name, std::begin( m_Sinks ), std::end( m_Sinks ) );
   switch( m_Verbosity )
   {
-    case Verbosity::Off: m_Logger->set_level( spdlog::level::off ); break;
-    case Verbosity::Trace: m_Logger->set_level( spdlog::level::trace ); break;
-    case Verbosity::Debug: m_Logger->set_level( spdlog::level::debug ); break;
-    case Verbosity::Info: m_Logger->set_level( spdlog::level::info ); break;
-    case Verbosity::Warn: m_Logger->set_level( spdlog::level::warn ); break;
-    case Verbosity::Error: m_Logger->set_level( spdlog::level::err ); break;
-    case Verbosity::Critical: m_Logger->set_level( spdlog::level::critical ); break;
+    case LogLevel::Off: m_Logger->set_level( spdlog::level::off ); break;
+    case LogLevel::Trace: m_Logger->set_level( spdlog::level::trace ); break;
+    case LogLevel::Debug: m_Logger->set_level( spdlog::level::debug ); break;
+    case LogLevel::Info: m_Logger->set_level( spdlog::level::info ); break;
+    case LogLevel::Warn: m_Logger->set_level( spdlog::level::warn ); break;
+    case LogLevel::Error: m_Logger->set_level( spdlog::level::err ); break;
+    case LogLevel::Critical: m_Logger->set_level( spdlog::level::critical ); break;
+  }
+}
+
+void LoggerHandler::printLog(const LogLevel& level,const std::string& str)
+{
+  switch( level )
+  {
+    case LogLevel::Off :
+    {
+      break;
+    }
+    case LogLevel::Trace:
+    {
+      logger()->trace(str);
+      break;
+    }
+    case LogLevel::Debug:
+    {
+      logger()->debug(str);
+      break;
+    }
+    case LogLevel::Info:
+    {
+      logger()->info(str);
+      break;
+    }
+    case LogLevel::Warn:
+    {
+      logger()->warn(str);
+      break;
+    }
+    case LogLevel::Error:
+    {
+      logger()->error(str);
+      break;
+    }
+    case LogLevel::Critical:
+    {
+      logger()->critical(str);
+      break;
+    }
   }
 }
 

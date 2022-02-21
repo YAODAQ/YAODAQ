@@ -14,12 +14,16 @@
 namespace yaodaq
 {
 
-volatile std::atomic<Signal> Interrupt::m_Signal = Signal::NO;
+volatile std::atomic<Signal> Interrupt::m_Signal{Signal::NO};
 
-Interrupt::Interrupt() { init(); }
+Interrupt::Interrupt()
+{
+  init();
+}
 
 void Interrupt::restore()
 {
+  std::lock_guard<std::mutex> guard( m_Mutex );
   std::signal( SIGTERM, SIG_DFL );
   std::signal( SIGSEGV, SIG_DFL );
   std::signal( SIGINT, SIG_DFL );
@@ -30,6 +34,7 @@ void Interrupt::restore()
 
 void Interrupt::init()
 {
+  std::lock_guard<std::mutex> guard( m_Mutex );
   setSignal( Signal::TERM );
   setSignal( Signal::TERM );
   setSignal( Signal::SEGV );
@@ -39,13 +44,12 @@ void Interrupt::init()
   setSignal( Signal::FPE );
 }
 
-Interrupt::~Interrupt() { restore(); }
+Interrupt::~Interrupt(){ restore(); }
 
 Signal Interrupt::getSignal()
 {
   if( m_Signal.load() != Signal::NO )
   {
-    std::lock_guard<std::mutex> guard( m_mutex );
     init();
   }
   return m_Signal.load();
@@ -53,6 +57,7 @@ Signal Interrupt::getSignal()
 
 void Interrupt::setSignal( const Signal& signal )
 {
+  std::lock_guard<std::mutex> guard( m_Mutex );
   switch( signal )
   {
     case Signal::ABRT: std::signal( SIGABRT, []( int ) -> void { m_Signal.store( Signal::ABRT ); } ); break;

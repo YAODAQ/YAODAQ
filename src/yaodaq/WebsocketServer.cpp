@@ -28,13 +28,10 @@ WebsocketServer::WebsocketServer( const std::string& name, const int& port, cons
   ix::WebSocketServer( port, host, backlog, maxConnections, handshakeTimeoutSecs, addressFamily ), m_Identifier( type, name )
 {
   ix::initNetSystem();
-
   m_Identifier.generateKey( Domain::Application, Class::Server, Family::WebSocketServer );
   m_Logger.setName( m_Identifier.get() );
   m_Logger.addSink( std::make_shared<spdlog::sinks::stdout_color_sink_mt>() );
-
   setConnectionStateFactory( []() { return std::make_shared<ConnectionState>(); } );
-
   setOnClientMessageCallback(
     [this]( std::shared_ptr<ix::ConnectionState> connectionState, ix::WebSocket& webSocket, const ix::WebSocketMessagePtr& msg )
     {
@@ -43,8 +40,7 @@ WebsocketServer::WebsocketServer( const std::string& name, const int& port, cons
       if( msg->type == ix::WebSocketMessageType::Message )
       {
         IXMessage ixmessage( msg );
-        // sendToLoggers(ixmessage,webSocket);
-        onMessage( ixmessage );
+        onMessage( ixmessage, webSocket );
       }
       else if( msg->type == ix::WebSocketMessageType::Open )
       {
@@ -52,55 +48,54 @@ WebsocketServer::WebsocketServer( const std::string& name, const int& port, cons
         connection->computeId( getHost() + ":" + std::to_string( getPort() ), Identifier::parse( msg->openInfo.headers["id"] ) );
         if( connection->isTerminated() )
         {
-          logger()->error( fmt::format( fg( fmt::color::red ) | fmt::emphasis::bold, "One client with the name \"{}\" is already connected !", Identifier::parse( msg->openInfo.headers["id"] ).getName() ) );
+          error( fmt::format( fg( fmt::color::red ) | fmt::emphasis::bold, "One client with the name \"{}\" is already connected !", Identifier::parse( msg->openInfo.headers["id"] ).getName() ) );
           MessageException message_exception(
             Exception( StatusCode::CLIENT_WITH_SAME_NAME_ALREADY_CONNECTED, fmt::format( "One client with the name \"{}\" is already connected to ws{}://{}:{} !", Identifier::parse( msg->openInfo.headers["id"] ).getName(), "", getHost(), getPort() ) ) );
 
           // Send to the client on exception;
           webSocket.send( message_exception.dump() );
           // Send to loggers except the client as it has been send before;
-          // sendToLoggers(message_exception,webSocket);
+          sendToLoggers( message_exception, webSocket );
 
           webSocket.stop( magic_enum::enum_integer( StatusCode::CLIENT_WITH_SAME_NAME_ALREADY_CONNECTED ),
                           fmt::format( "One client with the name \"{}\" is already connected to ws{}://{}:{} !", Identifier::parse( msg->openInfo.headers["id"] ).getName(), "", getHost(), getPort() ) );
-          std::this_thread::sleep_for( std::chrono::milliseconds( 50 ) );
           return;
         }
         addClient( Identifier::parse( msg->openInfo.headers["id"] ), webSocket );
-        Open open( msg->openInfo, connection );
-        // sendToLoggers( open, webSocket );
-        onOpen( open );
+        IXOpen open( msg->openInfo, connection );
+        onIXOpen( open );
+        sendToLoggers( open, webSocket );
       }
       else if( msg->type == ix::WebSocketMessageType::Close )
       {
-        Close close( msg->closeInfo, connection );
-        // sendToLoggers( close, webSocket );
-        onClose( close );
+        IXClose close( msg->closeInfo, connection );
+        onIXClose( close );
+        sendToLoggers( close, webSocket );
         removeClient( webSocket );
       }
       else if( msg->type == ix::WebSocketMessageType::Error )
       {
-        Error error( msg->errorInfo, connection );
-        // sendToLoggers( error, webSocket );
-        onError( error );
+        IXError error( msg->errorInfo, connection );
+        onIXError( error );
+        sendToLoggers( error, webSocket );
       }
       else if( msg->type == ix::WebSocketMessageType::Ping )
       {
-        Ping ping( msg, connection );
-        // sendToLoggers( ping, webSocket );
-        onPing( ping );
+        IXPing ping( msg, connection );
+        onIXPing( ping );
+        sendToLoggers( ping, webSocket );
       }
       else if( msg->type == ix::WebSocketMessageType::Pong )
       {
-        Pong pong( msg, connection );
-        // sendToLoggers( pong, webSocket );
-        onPong( pong );
+        IXPong pong( msg, connection );
+        onIXPong( pong );
+        sendToLoggers( pong, webSocket );
       }
       else if( msg->type == ix::WebSocketMessageType::Fragment )
       {
-        Fragment fragment( msg, connection );
-        // sendToLoggers( fragment, webSocket );
-        onFragment( fragment );
+        IXFragment fragment( msg, connection );
+        onIXFragment( fragment );
+        sendToLoggers( fragment, webSocket );
       }
     } );
 }
@@ -156,7 +151,7 @@ void WebsocketServer::sendToLoggers( const Message& message )
   }
 }
 
-void WebsocketServer::onMessage( Message& message )
+void WebsocketServer::onMessage( Message& message, ix::WebSocket& webSocket )
 {
   switch( message.getTypeValue() )
   {
@@ -164,44 +159,115 @@ void WebsocketServer::onMessage( Message& message )
     {
       MessageException& message_exception = reinterpret_cast<MessageException&>( message );
       onException( message_exception );
+      sendToLoggers( message_exception, webSocket );
+      break;
     }
-    default:
+    case MessageType::Log:
     {
-      onUnknown( message );
+      Log& log = reinterpret_cast<Log&>( message );
+      onLog( log );
+      sendToLoggers( log, webSocket );
+      break;
+    }
+    case MessageType::UserType:
+    {
+      UserType& user_type = reinterpret_cast<UserType&>( message );
+      onUserType( user_type );
+      send( user_type, webSocket );
+      break;
+    }
+    // Receiving here should never happens;
+    case MessageType::Open:
+    {
+      ShouldNotHappens(message,webSocket);
+      break;
+    }
+    case MessageType::Close:
+    {
+      ShouldNotHappens(message,webSocket);
+      break;
+    }
+    case MessageType::Error:
+    {
+      ShouldNotHappens(message,webSocket);
+      break;
+    }
+    case MessageType::Ping:
+    {
+      ShouldNotHappens(message,webSocket);
+      break;
+    }
+    case MessageType::Pong:
+    {
+      ShouldNotHappens(message,webSocket);
+      break;
+    }
+    case MessageType::Fragment:
+    {
+      ShouldNotHappens(message,webSocket);
+      break;
+    }
+    case MessageType::Unknown:
+    {
+      Exception        exception( StatusCode::MESSAGE_TYPE_UNKNOWN, message.dump() );
+      MessageException message_exception( exception );
+      onException( message_exception );
+      // Send back to the cliemt it sent an Unkmown type!
+      webSocket.send( message_exception.dump() );
+      sendToLoggers( message_exception, webSocket );
+      break;
     }
   }
 }
 
-void WebsocketServer::onOpen( Open& open )
+void WebsocketServer::onIXOpen( IXOpen& open )
 {
   std::string headers;
   for( auto it: open.getHeaders() ) { headers += fmt::format( "\t{}: {}\n", it.first, it.second ); }
-  logger()->debug( fmt::format( fg( fmt::color::green ), "Connection opened:\nId: {}\nRemote IP: {}\nRemote port: {}\nURI: {}\nProtocol: {}\nHeaders:\n{}", open.getId(), open.getRemoteIp(), open.getRemotePort(), open.getURI(), open.getProtocol(), headers ) );
+  debug( fmt::format( fg( fmt::color::green ), "Connection opened:\nId: {}\nRemote IP: {}\nRemote port: {}\nURI: {}\nProtocol: {}\nHeaders:\n{}", open.getId(), open.getRemoteIp(), open.getRemotePort(), open.getURI(), open.getProtocol(), headers ) );
 }
 
-void WebsocketServer::onClose( Close& close )
+void WebsocketServer::onIXClose( IXClose& close )
 {
-  logger()->debug(
-    fmt::format( fg( fmt::color::green ), "Connection closed:\nId: {}\nRemote IP: {}\nRemote port: {}\nCode: {}\nReason: {}\nRemote: {}", close.getId(), close.getRemoteIp(), close.getRemotePort(), close.getCode(), close.getReason(), close.getRemote() ) );
+  debug( fmt::format( fg( fmt::color::green ), "Connection closed:\nId: {}\nRemote IP: {}\nRemote port: {}\nCode: {}\nReason: {}\nRemote: {}", close.getId(), close.getRemoteIp(), close.getRemotePort(), close.getCode(), close.getReason(), close.getRemote() ) );
 }
 
-void WebsocketServer::onError( Error& error )
+void WebsocketServer::onIXError( IXError& err )
 {
-  logger()->error( fmt::format( fg( fmt::color::red ), "Error:\nId: {}\nRemote IP: {}\nRemote port: {}\nRetries: {}\nWait time: {}\nHTTP status: {}\nReason: {}\nCompression error: {}", error.getId(), error.getRemoteIp(), error.getRemotePort(),
-                                error.getRetries(), error.getWaitTime(), error.getHttpStatus(), error.getDecompressionError() ) );
+  error( fmt::format( fg( fmt::color::red ), "Error:\nId: {}\nRemote IP: {}\nRemote port: {}\nRetries: {}\nWait time: {}\nHTTP status: {}\nReason: {}\nCompression error: {}", err.getId(), err.getRemoteIp(), err.getRemotePort(), err.getRetries(),
+                      err.getWaitTime(), err.getHttpStatus(), err.getReason(), err.getDecompressionError() ) );
 }
 
-void WebsocketServer::onPing( Ping& ping ) { logger()->debug( fmt::format( fg( fmt::color::green ), "Ping:\n{}", ping.getContent().dump( 2 ) ) ); }
+void WebsocketServer::onIXPing( IXPing& ping ) { trace( fmt::format( fg( fmt::color::green ), "Ping:\n{}", to_fmt( ping.getContent().dump( 2 ) ) ) ); }
 
-void WebsocketServer::onPong( Pong& pong ) { logger()->debug( fmt::format( fg( fmt::color::green ), "Pong:\n{}", pong.getContent().dump( 2 ) ) ); }
+void WebsocketServer::onIXPong( IXPong& pong ) { trace( fmt::format( fg( fmt::color::green ), "Pong:\n{}", to_fmt( pong.getContent().dump( 2 ) ) ) ); }
 
-void WebsocketServer::onFragment( Fragment& fragment ) {}
+void WebsocketServer::onIXFragment( IXFragment& fragment ) { debug( fmt::format( fg( fmt::color::green ), "Fragment:\n{}", to_fmt( fragment.getContent().dump( 2 ) ) ) ); }
 
-void WebsocketServer::onException( MessageException& message ) {}
-
-void WebsocketServer::onUnknown(Message& unknown)
+void WebsocketServer::ShouldNotHappens( Message& message, ix::WebSocket& webSocket )
 {
-  logger()->error( fmt::format( fg( fmt::color::red ), "Unknwown:\n{}", unknown.dump( 2 ) ) );
+  Exception        exception( StatusCode::INTERNAL_ERROR, fmt::format( "Internal error : {} should not received this message in this function\nMessage received :\n{}", m_Identifier.get(), message.dump() ) );
+  MessageException message_exception( exception );
+  onException( message_exception );
+  // Notify loggers the client and then crash !
+  webSocket.send( message_exception.dump() );
+  sendToLoggers( message_exception, webSocket );
+}
+
+void WebsocketServer::onException( MessageException& message)
+{
+  Exception exception( static_cast<StatusCode>(message.getCode()), message.getDescription() );
+  critical( "Exception:\n{}", exception.what() );
+}
+
+void WebsocketServer::onLog(Log& log)
+{
+  m_Logger.log(log.getLevel(),fmt::format("{} (from {})",log.getLog(),log.getIdentifier().getName()));
+}
+
+void WebsocketServer::onUserType(UserType& user_type)
+{
+  debug( fmt::format( fg( fmt::color::green ), "Fragment:\n{}", to_fmt(user_type.dump( 2 ) )) );
 }
 
 void WebsocketServer::listen()
@@ -212,7 +278,7 @@ void WebsocketServer::listen()
     if( ret.first )
     {
       m_isListening = ret.first;
-      logger()->info( "Server listening on {0}:{1}", getHost(), getPort() );
+      info( "Server listening on {0}:{1}", getHost(), getPort() );
     }
     else
       throw Exception( StatusCode::LISTEN_ERROR, ret.second );
@@ -224,7 +290,7 @@ void WebsocketServer::start()
   if( !m_isStarted )
   {
     m_isStarted = true;
-    logger()->trace( "Server started" );
+    trace( "Server started" );
     ix::WebSocketServer::start();
   }
 }
@@ -235,12 +301,12 @@ void WebsocketServer::stop( bool useless )
   {
     m_isStopped = true;
     useless     = !useless;
-    logger()->trace( "Server stopped" );
+    trace( "Server stopped" );
     ix::WebSocketServer::stop();
   }
 }
 
-void WebsocketServer::setVerbosity( const yaodaq::LoggerHandler::Verbosity& verbosity ) { m_Logger.setVerbosity( verbosity ); }
+void WebsocketServer::setVerbosity( const LogLevel& verbosity ) { m_Logger.setVerbosity( verbosity ); }
 
 WebsocketServer::~WebsocketServer()
 {
@@ -262,28 +328,67 @@ void WebsocketServer::onRaisingSignal()
   if( m_Looper.getInstance() == 0 )
   {
     int value = magic_enum::enum_integer( signal );
-    if( value >= magic_enum::enum_integer( yaodaq::Severity::Critical ) ) { logger()->critical( "Signal SIG{} raised !", magic_enum::enum_name( signal ) ); }
+    if( value >= magic_enum::enum_integer( yaodaq::Severity::Critical ) ) { critical( "Signal SIG{} raised !", magic_enum::enum_name( signal ) ); }
     else if( value >= magic_enum::enum_integer( yaodaq::Severity::Error ) )
     {
-      logger()->error( "Signal SIG{} raised !", magic_enum::enum_name( signal ) );
+      error( "Signal SIG{} raised !", magic_enum::enum_name( signal ) );
     }
     else if( value >= magic_enum::enum_integer( yaodaq::Severity::Warning ) )
     {
       fmt::print( "\n" );
-      logger()->warn( "Signal SIG{} raised !", magic_enum::enum_name( signal ) );
+      warn( "Signal SIG{} raised !", magic_enum::enum_name( signal ) );
     }
     else if( value >= magic_enum::enum_integer( yaodaq::Severity::Info ) )
     {
       fmt::print( "\n" );
-      logger()->info( "Signal SIG{} raised !", magic_enum::enum_name( signal ) );
+      info( "Signal SIG{} raised !", magic_enum::enum_name( signal ) );
     }
     else
     {
       fmt::print( "\n" );
-      logger()->trace( "Signal SIG{} raised !", magic_enum::enum_name( signal ) );
+      trace( "Signal SIG{} raised !", magic_enum::enum_name( signal ) );
     }
     if( magic_enum::enum_integer( signal ) >= magic_enum::enum_integer( Severity::Critical ) ) std::exit( magic_enum::enum_integer( signal ) );
   }
 }
+
+void WebsocketServer::send(Message& message)
+{
+  if(message.getIdentifier().empty()) message.setFrom(m_Identifier);
+  for( std::map<Identifier, ix::WebSocket&>::iterator it = m_Clients.begin(); it != m_Clients.end(); ++it )
+  {
+    it->second.send( message.dump() );
+  }
+}
+
+void WebsocketServer::send(const Message& message)
+{
+  Message ret{message};
+  if(message.getIdentifier().empty()) ret.setFrom(m_Identifier);
+  for( std::map<Identifier, ix::WebSocket&>::iterator it = m_Clients.begin(); it != m_Clients.end(); ++it )
+  {
+    it->second.send( ret.dump() );
+  }
+}
+
+void WebsocketServer::send(Message& message,ix::WebSocket& webSocket)
+{
+  if(message.getIdentifier().empty()) message.setFrom(m_Identifier);
+  for( std::map<Identifier, ix::WebSocket&>::iterator it = m_Clients.begin(); it != m_Clients.end(); ++it )
+  {
+    if( &webSocket != &it->second ) it->second.send( message.dump() );
+  }
+}
+
+void WebsocketServer::send(const Message& message,ix::WebSocket& webSocket)
+{
+  Message ret{message};
+  if(message.getIdentifier().empty()) ret.setFrom(m_Identifier);
+  for( std::map<Identifier, ix::WebSocket&>::iterator it = m_Clients.begin(); it != m_Clients.end(); ++it )
+  {
+    if( &webSocket != &it->second ) it->second.send( ret.dump() );
+  }
+}
+
 
 }  // namespace yaodaq

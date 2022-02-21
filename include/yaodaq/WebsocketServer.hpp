@@ -8,6 +8,7 @@
 #include "yaodaq/Identifier.hpp"
 #include "yaodaq/LoggerHandler.hpp"
 #include "yaodaq/Looper.hpp"
+#include "yaodaq/Message.hpp"
 
 #include <ixwebsocket/IXWebSocketServer.h>
 #include <map>
@@ -19,14 +20,14 @@
 namespace yaodaq
 {
 
+class IXOpen;
+class IXClose;
+class IXError;
+class IXPing;
+class IXPong;
+class IXFragment;
+
 class Message;
-class Open;
-class Close;
-class Error;
-class Ping;
-class Pong;
-class Fragment;
-class MessageException;
 
 class WebsocketServer : public ix::WebSocketServer
 {
@@ -41,27 +42,61 @@ public:
   void listen();
 
   // IXWebsocket
-  virtual void onMessage( Message& message );
-  virtual void onOpen( Open& open );
-  virtual void onClose( Close& close );
-  virtual void onError( Error& error );
-  virtual void onPing( Ping& ping );
-  virtual void onPong( Pong& pong );
-  virtual void onFragment( Fragment& fragment );
+  virtual void onIXOpen( IXOpen&);
+  virtual void onIXClose( IXClose&);
+  virtual void onIXError( IXError&);
+  virtual void onIXPing( IXPing&);
+  virtual void onIXPong( IXPong&);
+  virtual void onIXFragment( IXFragment&);
 
-  virtual void onException(MessageException& );
-  virtual void onUnknown(Message&);
+  // YAODAQ
+  virtual void onMessage( Message&, ix::WebSocket&);
 
-  void setVerbosity( const yaodaq::LoggerHandler::Verbosity& verbosity );
+  virtual void onException(MessageException&);
+  virtual void onLog(Log&);
+  virtual void onUserType(UserType&);
 
-  std::shared_ptr<spdlog::logger> logger() { return m_Logger.logger(); }
+  void setVerbosity( const LogLevel& verbosity );
 
   void sendToLoggers( Message& message );
   void sendToLoggers( const Message& message );
   void sendToLoggers( Message& message, ix::WebSocket& webSocket );
   void sendToLoggers( const Message& message, ix::WebSocket& webSocket );
 
+  void send(Message& message);
+  void send(const Message& message);
+  void send(Message& message,ix::WebSocket& webSocket);
+  void send(const Message& message,ix::WebSocket& webSocket);
+
+  // Log
+  template<typename... Args> inline void trace(fmt::string_view fmt, const Args&... args)
+  {
+    m_Logger.trace(fmt,args...);
+  }
+  template<typename... Args> inline void debug(fmt::string_view fmt, const Args&... args)
+  {
+    m_Logger.debug(fmt,args...);
+  }
+  template<typename... Args> inline void info(fmt::string_view fmt, const Args&... args)
+  {
+    m_Logger.info(fmt,args...);
+  }
+  template<typename... Args> inline void warn(fmt::string_view fmt, const Args&... args)
+  {
+    m_Logger.warn(fmt,args...);
+  }
+  template<typename... Args> inline void error(fmt::string_view fmt, const Args&... args)
+  {
+    m_Logger.error(fmt,args...);
+  }
+  template<typename... Args> inline void critical(fmt::string_view fmt, const Args&... args)
+  {
+    m_Logger.critical(fmt,args...);
+  }
+
 private:
+  // On on internal error
+  void ShouldNotHappens(Message& message, ix::WebSocket& webSocket );
   void                                 addClient( const Identifier&, ix::WebSocket& );
   void                                 removeClient( ix::WebSocket& );
   void                                 onRaisingSignal();

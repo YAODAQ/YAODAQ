@@ -6,6 +6,7 @@
 */
 
 #include "yaodaq/Interrupt.hpp"
+#include <mutex>
 
 namespace yaodaq
 {
@@ -27,6 +28,7 @@ private:
   bool             m_hasBeenAdded{ false };
   bool             m_hasBeenSupressed{ false };
   static Interrupt m_Interrupt;
+  static bool      m_Initialized;
 };
 
 }  // namespace yaodaq

@@ -16,7 +16,7 @@ TEST_CASE( "WebsocketServer" )
   server.start();
   for( int i = 10; i > 0; --i )
   {
-    server.logger()->warn( "Killing server in {} seconds", i );
+    server.warn( "Killing server in {} seconds", i );
     std::this_thread::sleep_for( std::chrono::seconds( 1 ) );
   }
   server.stop();

@@ -14,8 +14,8 @@ void quit_function( yaodaq::WebsocketClient& client1, yaodaq::WebsocketClient& c
 {
   for( int i = 10; i > 0; --i )
   {
-    client1.logger()->warn( "Killing client1 in {} seconds", i );
-    client2.logger()->warn( "Killing client2 in {} seconds", i );
+    client1.warn( "Killing client1 in {} seconds", i );
+    client2.warn( "Killing client2 in {} seconds", i );
     std::this_thread::sleep_for( std::chrono::seconds( 1 ) );
   }
   client1.stop();

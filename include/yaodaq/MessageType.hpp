@@ -24,6 +24,8 @@ enum class MessageType : std::int_least16_t
   // Unknown should not be used !
   Unknown = 0,
   Exception,
+  Log,
+  UserType,
 };
 
 inline std::ostream& operator<<( std::ostream& os, const MessageType& messageTypes ) { return os << static_cast<std::int_least8_t>( messageTypes ); }

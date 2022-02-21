@@ -27,17 +27,17 @@ int main( int argc, char** argv )
     app.add_option( "-m,--max", maxConnections, "Maximum connections" )->check( CLI::PositiveNumber );
     int handshakeTimeoutSecs{ 3 };
     app.add_option( "-t,--timeout", handshakeTimeoutSecs, "Timeout in seconds" )->check( CLI::PositiveNumber );
-    yaodaq::LoggerHandler::Verbosity verbosity{ yaodaq::LoggerHandler::Verbosity::Trace };
+    yaodaq::LogLevel verbosity{ yaodaq::LogLevel::Trace };
     app.add_option( "-v,--verbosity", verbosity, "Verbosity" )
       ->ignore_case()
-      ->transform( CLI::Transformer( std::map<std::string, yaodaq::LoggerHandler::Verbosity>( {
-                     { "off", yaodaq::LoggerHandler::Verbosity::Off },
-                     { "trace", yaodaq::LoggerHandler::Verbosity::Trace },
-                     { "debug", yaodaq::LoggerHandler::Verbosity::Debug },
-                     { "info", yaodaq::LoggerHandler::Verbosity::Info },
-                     { "warn", yaodaq::LoggerHandler::Verbosity::Warn },
-                     { "error", yaodaq::LoggerHandler::Verbosity::Error },
-                     { "critical", yaodaq::LoggerHandler::Verbosity::Critical },
+      ->transform( CLI::Transformer( std::map<std::string, yaodaq::LogLevel>( {
+                     { "off", yaodaq::LogLevel::Off },
+                     { "trace", yaodaq::LogLevel::Trace },
+                     { "debug", yaodaq::LogLevel::Debug },
+                     { "info", yaodaq::LogLevel::Info },
+                     { "warn", yaodaq::LogLevel::Warn },
+                     { "error", yaodaq::LogLevel::Error },
+                     { "critical", yaodaq::LogLevel::Critical },
                    } ) ),
                    "Log level", "Select the log level (off, trace, debug, info, warn, error, critical)" );
     std::string name{ "WebsocketServer" };

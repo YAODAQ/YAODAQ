@@ -28,7 +28,7 @@ public:
 private:
   volatile static std::atomic<Signal> m_Signal;
   void                                setSignal( const Signal& signal );
-  std::mutex                          m_mutex;
+  std::mutex                          m_Mutex;
 };
 
 }  // namespace yaodaq

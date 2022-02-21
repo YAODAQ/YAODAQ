@@ -31,31 +31,31 @@ protected:
   void setConnectionStateInfos( std::shared_ptr<ConnectionState>& connectionState );
 };
 
-class Open : public IXMessage
+class IXOpen : public IXMessage
 {
 public:
-  explicit Open( const ix::WebSocketOpenInfo& openInfo );
-  Open( const ix::WebSocketOpenInfo& openInfo, std::shared_ptr<ConnectionState>& connectionState );
+  explicit IXOpen( const ix::WebSocketOpenInfo& openInfo );
+  IXOpen( const ix::WebSocketOpenInfo& openInfo, std::shared_ptr<ConnectionState>& connectionState );
   std::string                        getURI() const;
   std::map<std::string, std::string> getHeaders() const;
   std::string                        getProtocol() const;
 };
 
-class Close : public IXMessage
+class IXClose : public IXMessage
 {
 public:
-  explicit Close( const ix::WebSocketCloseInfo& closeInfo );
-  Close( const ix::WebSocketCloseInfo& closeInfo, std::shared_ptr<ConnectionState>& connectionState );
+  explicit IXClose( const ix::WebSocketCloseInfo& closeInfo );
+  IXClose( const ix::WebSocketCloseInfo& closeInfo, std::shared_ptr<ConnectionState>& connectionState );
   std::uint16_t getCode() const;
   std::string   getReason() const;
   bool          getRemote() const;
 };
 
-class Error : public IXMessage
+class IXError : public IXMessage
 {
 public:
-  explicit Error( const ix::WebSocketErrorInfo& errorInfo );
-  Error( const ix::WebSocketErrorInfo& errorInfo, std::shared_ptr<ConnectionState>& connectionState );
+  explicit IXError( const ix::WebSocketErrorInfo& errorInfo );
+  IXError( const ix::WebSocketErrorInfo& errorInfo, std::shared_ptr<ConnectionState>& connectionState );
   std::uint16_t getRetries() const;
   double        getWaitTime() const;
   int           getHttpStatus() const;
@@ -63,25 +63,25 @@ public:
   bool          getDecompressionError() const;
 };
 
-class Ping : public IXMessage
+class IXPing : public IXMessage
 {
 public:
-  explicit Ping( const ix::WebSocketMessagePtr& ping );
-  Ping( const ix::WebSocketMessagePtr& ping, std::shared_ptr<ConnectionState>& connectionState );
+  explicit IXPing( const ix::WebSocketMessagePtr& ping );
+  IXPing( const ix::WebSocketMessagePtr& ping, std::shared_ptr<ConnectionState>& connectionState );
 };
 
-class Pong : public IXMessage
+class IXPong : public IXMessage
 {
 public:
-  explicit Pong( const ix::WebSocketMessagePtr& pong );
-  Pong( const ix::WebSocketMessagePtr& pong, std::shared_ptr<ConnectionState>& connectionState );
+  explicit IXPong( const ix::WebSocketMessagePtr& pong );
+  IXPong( const ix::WebSocketMessagePtr& pong, std::shared_ptr<ConnectionState>& connectionState );
 };
 
-class Fragment : public IXMessage
+class IXFragment : public IXMessage
 {
 public:
-  explicit Fragment( const ix::WebSocketMessagePtr& fragment );
-  Fragment( const ix::WebSocketMessagePtr& fragment, std::shared_ptr<ConnectionState>& connectionState );
+  explicit IXFragment( const ix::WebSocketMessagePtr& fragment );
+  IXFragment( const ix::WebSocketMessagePtr& fragment, std::shared_ptr<ConnectionState>& connectionState );
 };
 
 }  // namespace yaodaq
