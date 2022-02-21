@@ -10,16 +10,13 @@
 namespace yaodaq
 {
 
-bool Looper::m_Initialized{false};
+bool Looper::m_Initialized{ false };
 
 int Looper::m_instance{ 0 };
 
-Interrupt Looper::m_Interrupt{Interrupt{}};
+Interrupt Looper::m_Interrupt{ Interrupt{} };
 
-int Looper::getInstance()
-{
-  return m_instance;
-}
+int Looper::getInstance() { return m_instance; }
 
 void Looper::supressInstance()
 {
@@ -37,7 +34,7 @@ Looper::Looper()
     m_hasBeenAdded = true;
     ++m_instance;
   }
-  m_Initialized =true;
+  m_Initialized = true;
 }
 
 Signal Looper::loop()
@@ -53,8 +50,7 @@ Signal Looper::loop()
   return signal;
 }
 
-Signal Looper::getSignal() {
-  return m_Interrupt.getSignal(); }
+Signal Looper::getSignal() { return m_Interrupt.getSignal(); }
 
 Looper::~Looper()
 {

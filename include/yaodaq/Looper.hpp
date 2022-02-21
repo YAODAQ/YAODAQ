@@ -6,6 +6,7 @@
 */
 
 #include "yaodaq/Interrupt.hpp"
+
 #include <mutex>
 
 namespace yaodaq

@@ -13,7 +13,7 @@
 TEST_CASE( "IXWebsocketMessage : Open" )
 {
   ix::WebSocketOpenInfo openInfo( "http::127.0.0.1", { { "a", "1" }, { "b", "2" } }, "MyProtocol" );
-  yaodaq::IXOpen          open( openInfo );
+  yaodaq::IXOpen        open( openInfo );
   std::cout << open.dump( 2 ) << std::endl;
 
   CHECK_EQ( open.getURI(), openInfo.uri );

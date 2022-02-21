@@ -18,13 +18,13 @@ void quit_clients( yaodaq::WebsocketClient& client1, yaodaq::WebsocketClient& cl
   for( int i = 10; i > 0; --i )
   {
     client1.warn( "Killing client1 in {} seconds ({})", i, ix::WebSocket::readyStateToString( client1.getReadyState() ) );
-    client1.send( yaodaq::Error("I am an error log from client 1") );
+    client1.send( yaodaq::Error( "I am an error log from client 1" ) );
     client2.warn( "Killing client2 in {} seconds ({})", i, ix::WebSocket::readyStateToString( client2.getReadyState() ) );
-    client2.send( yaodaq::Warn("I am a warn log from client 2") );
+    client2.send( yaodaq::Warn( "I am a warn log from client 2" ) );
     client3.warn( "Killing client3 in {} seconds ({})", i, ix::WebSocket::readyStateToString( client3.getReadyState() ) );
-    client3.send( yaodaq::Trace("I am a trace log from client 2") );
+    client3.send( yaodaq::Trace( "I am a trace log from client 2" ) );
     not_connected.warn( "Killing not_connected in {} seconds ({})", i, ix::WebSocket::readyStateToString( not_connected.getReadyState() ) );
-    not_connected.send( yaodaq::Critical("YOU SHOULD  NOT SEE THIS !!!!!") );
+    not_connected.send( yaodaq::Critical( "YOU SHOULD  NOT SEE THIS !!!!!" ) );
     std::this_thread::sleep_for( std::chrono::seconds( 1 ) );
   }
   client1.stop();
@@ -39,40 +39,8 @@ void quit_servers( yaodaq::WebsocketServer& server1, yaodaq::WebsocketServer& se
   {
     server1.warn( "Killing server1 in {} seconds", i );
     server2.warn( "Killing server2 in {} seconds", i );
-    server1.send( yaodaq::Warn("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas blandit, sem sit amet vehicula ultrices,"
-                                "tellus diam malesuada arcu, vitae consectetur augue lectus condimentum nisi. Vestibulum sed ornare ligula. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas."
-                                "In sit amet sapien eu lorem pulvinar laoreet. Nunc interdum magna felis, vel feugiat turpis venenatis ut. Duis non eleifend velit. Proin vitae tellus ornare mi porttitor volutpat."
-                                "Nam sit amet lectus nec libero scelerisque varius sit amet sit amet magna. Vivamus eget libero posuere, maximus nisi sit amet, mollis metus."
-                                "Quisque sit amet dui vitae sapien sollicitudin auctor. Nam nibh neque, auctor eget urna et, dapibus varius arcu."
-                                "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas blandit, sem sit amet vehicula ultrices,"
-                                "tellus diam malesuada arcu, vitae consectetur augue lectus condimentum nisi. Vestibulum sed ornare ligula. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas."
-                                "In sit amet sapien eu lorem pulvinar laoreet. Nunc interdum magna felis, vel feugiat turpis venenatis ut. Duis non eleifend velit. Proin vitae tellus ornare mi porttitor volutpat."
-                                "Nam sit amet lectus nec libero scelerisque varius sit amet sit amet magna. Vivamus eget libero posuere, maximus nisi sit amet, mollis metus."
-                                "Quisque sit amet dui vitae sapien sollicitudin auctor. Nam nibh neque, auctor eget urna et, dapibus varius arcu."
-                                "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas blandit, sem sit amet vehicula ultrices,"
-                                "tellus diam malesuada arcu, vitae consectetur augue lectus condimentum nisi. Vestibulum sed ornare ligula. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas."
-                                "In sit amet sapien eu lorem pulvinar laoreet. Nunc interdum magna felis, vel feugiat turpis venenatis ut. Duis non eleifend velit. Proin vitae tellus ornare mi porttitor volutpat."
-                                "Nam sit amet lectus nec libero scelerisque varius sit amet sit amet magna. Vivamus eget libero posuere, maximus nisi sit amet, mollis metus."
-                                "Quisque sit amet dui vitae sapien sollicitudin auctor. Nam nibh neque, auctor eget urna et, dapibus varius arcu."
-                                "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas blandit, sem sit amet vehicula ultrices,"
-                                "tellus diam malesuada arcu, vitae consectetur augue lectus condimentum nisi. Vestibulum sed ornare ligula. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas."
-                                "In sit amet sapien eu lorem pulvinar laoreet. Nunc interdum magna felis, vel feugiat turpis venenatis ut. Duis non eleifend velit. Proin vitae tellus ornare mi porttitor volutpat."
-                                "Nam sit amet lectus nec libero scelerisque varius sit amet sit amet magna. Vivamus eget libero posuere, maximus nisi sit amet, mollis metus."
-                                "Quisque sit amet dui vitae sapien sollicitudin auctor. Nam nibh neque, auctor eget urna et, dapibus varius arcu."
-                                "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas blandit, sem sit amet vehicula ultrices,"
-                                "tellus diam malesuada arcu, vitae consectetur augue lectus condimentum nisi. Vestibulum sed ornare ligula. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas."
-                                "In sit amet sapien eu lorem pulvinar laoreet. Nunc interdum magna felis, vel feugiat turpis venenatis ut. Duis non eleifend velit. Proin vitae tellus ornare mi porttitor volutpat."
-                                "Nam sit amet lectus nec libero scelerisque varius sit amet sit amet magna. Vivamus eget libero posuere, maximus nisi sit amet, mollis metus."
-                                "Quisque sit amet dui vitae sapien sollicitudin auctor. Nam nibh neque, auctor eget urna et, dapibus varius arcu."
-                                "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas blandit, sem sit amet vehicula ultrices,"
-                                "tellus diam malesuada arcu, vitae consectetur augue lectus condimentum nisi. Vestibulum sed ornare ligula. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas."
-                                "In sit amet sapien eu lorem pulvinar laoreet. Nunc interdum magna felis, vel feugiat turpis venenatis ut. Duis non eleifend velit. Proin vitae tellus ornare mi porttitor volutpat."
-                                "Nam sit amet lectus nec libero scelerisque varius sit amet sit amet magna. Vivamus eget libero posuere, maximus nisi sit amet, mollis metus."
-                                "Quisque sit amet dui vitae sapien sollicitudin auctor. Nam nibh neque, auctor eget urna et, dapibus varius arcu."
-                                "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas blandit, sem sit amet vehicula ultrices,"
-                                "tellus diam malesuada arcu, vitae consectetur augue lectus condimentum nisi. Vestibulum sed ornare ligula. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas."
-                                "In sit amet sapien eu lorem pulvinar laoreet. Nunc interdum magna felis, vel feugiat turpis venenatis ut. Duis non eleifend velit. Proin vitae tellus ornare mi porttitor volutpat."
-                                ) );
+    server1.send( yaodaq::Warn( "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas blandit, sem sit amet vehicula ultrices,"
+                                "tellus diam malesuada arcu, vitae consectetur augue lectus condimentum nisi. Vestibulum sed ornare ligula. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas." ) );
     server1.sendToLoggers( yaodaq::Message( "Killing server1 in {} seconds" ) );
     server1.sendToLoggers( yaodaq::Message( "Killing server2 in {} seconds" ) );
     std::this_thread::sleep_for( std::chrono::seconds( 1 ) );
@@ -111,7 +79,6 @@ TEST_CASE( "WebsocketClientsServers" )
     server1.loop();
     client3.loop();
 
-
     client1.loop();
     client2.loop();
     server2.loop();
@@ -119,9 +86,6 @@ TEST_CASE( "WebsocketClientsServers" )
     // Wait to be sure this one is the last one!
     std::this_thread::sleep_for( std::chrono::seconds( 1 ) );
     not_connected.loop();
-
-
-
   }
   catch( const yaodaq::Exception& e )
   {

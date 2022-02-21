@@ -40,42 +40,42 @@ void LoggerHandler::init()
   }
 }
 
-void LoggerHandler::printLog(const LogLevel& level,const std::string& str)
+void LoggerHandler::printLog( const LogLevel& level, const std::string& str )
 {
   switch( level )
   {
-    case LogLevel::Off :
+    case LogLevel::Off:
     {
       break;
     }
     case LogLevel::Trace:
     {
-      logger()->trace(str);
+      logger()->trace( str );
       break;
     }
     case LogLevel::Debug:
     {
-      logger()->debug(str);
+      logger()->debug( str );
       break;
     }
     case LogLevel::Info:
     {
-      logger()->info(str);
+      logger()->info( str );
       break;
     }
     case LogLevel::Warn:
     {
-      logger()->warn(str);
+      logger()->warn( str );
       break;
     }
     case LogLevel::Error:
     {
-      logger()->error(str);
+      logger()->error( str );
       break;
     }
     case LogLevel::Critical:
     {
-      logger()->critical(str);
+      logger()->critical( str );
       break;
     }
   }

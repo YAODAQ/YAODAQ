@@ -14,12 +14,9 @@
 namespace yaodaq
 {
 
-volatile std::atomic<Signal> Interrupt::m_Signal{Signal::NO};
+volatile std::atomic<Signal> Interrupt::m_Signal{ Signal::NO };
 
-Interrupt::Interrupt()
-{
-  init();
-}
+Interrupt::Interrupt() { init(); }
 
 void Interrupt::restore()
 {
@@ -44,14 +41,11 @@ void Interrupt::init()
   setSignal( Signal::FPE );
 }
 
-Interrupt::~Interrupt(){ restore(); }
+Interrupt::~Interrupt() { restore(); }
 
 Signal Interrupt::getSignal()
 {
-  if( m_Signal.load() != Signal::NO )
-  {
-    init();
-  }
+  if( m_Signal.load() != Signal::NO ) { init(); }
   return m_Signal.load();
 }
 

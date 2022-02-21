@@ -5,7 +5,7 @@
 \copyright Copyright 2022 flagarde
 */
 
-#include<cstdint>
+#include <cstdint>
 
 namespace yaodaq
 {
@@ -21,6 +21,6 @@ enum class LogLevel : std::uint_least16_t
   Critical
 };
 
-}
+}  // namespace yaodaq
 
 #endif

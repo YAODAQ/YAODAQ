@@ -179,32 +179,32 @@ void WebsocketServer::onMessage( Message& message, ix::WebSocket& webSocket )
     // Receiving here should never happens;
     case MessageType::Open:
     {
-      ShouldNotHappens(message,webSocket);
+      ShouldNotHappens( message, webSocket );
       break;
     }
     case MessageType::Close:
     {
-      ShouldNotHappens(message,webSocket);
+      ShouldNotHappens( message, webSocket );
       break;
     }
     case MessageType::Error:
     {
-      ShouldNotHappens(message,webSocket);
+      ShouldNotHappens( message, webSocket );
       break;
     }
     case MessageType::Ping:
     {
-      ShouldNotHappens(message,webSocket);
+      ShouldNotHappens( message, webSocket );
       break;
     }
     case MessageType::Pong:
     {
-      ShouldNotHappens(message,webSocket);
+      ShouldNotHappens( message, webSocket );
       break;
     }
     case MessageType::Fragment:
     {
-      ShouldNotHappens(message,webSocket);
+      ShouldNotHappens( message, webSocket );
       break;
     }
     case MessageType::Unknown:
@@ -212,7 +212,7 @@ void WebsocketServer::onMessage( Message& message, ix::WebSocket& webSocket )
       Exception        exception( StatusCode::MESSAGE_TYPE_UNKNOWN, message.dump() );
       MessageException message_exception( exception );
       onException( message_exception );
-      // Send back to the cliemt it sent an Unkmown type!
+      // Send back to the cliemt it sent an Unknown type!
       webSocket.send( message_exception.dump() );
       sendToLoggers( message_exception, webSocket );
       break;
@@ -254,21 +254,15 @@ void WebsocketServer::ShouldNotHappens( Message& message, ix::WebSocket& webSock
   sendToLoggers( message_exception, webSocket );
 }
 
-void WebsocketServer::onException( MessageException& message)
+void WebsocketServer::onException( MessageException& message )
 {
-  Exception exception( static_cast<StatusCode>(message.getCode()), message.getDescription() );
+  Exception exception( static_cast<StatusCode>( message.getCode() ), message.getDescription() );
   critical( "Exception:\n{}", exception.what() );
 }
 
-void WebsocketServer::onLog(Log& log)
-{
-  m_Logger.log(log.getLevel(),fmt::format("{} (from {})",log.getLog(),log.getIdentifier().getName()));
-}
+void WebsocketServer::onLog( Log& log ) { m_Logger.log( log.getLevel(), fmt::format( "{} (from {})", log.getLog(), log.getIdentifier().getName() ) ); }
 
-void WebsocketServer::onUserType(UserType& user_type)
-{
-  debug( fmt::format( fg( fmt::color::green ), "Fragment:\n{}", to_fmt(user_type.dump( 2 ) )) );
-}
+void WebsocketServer::onUserType( UserType& user_type ) { debug( fmt::format( fg( fmt::color::green ), "Fragment:\n{}", to_fmt( user_type.dump( 2 ) ) ) ); }
 
 void WebsocketServer::listen()
 {
@@ -352,43 +346,36 @@ void WebsocketServer::onRaisingSignal()
   }
 }
 
-void WebsocketServer::send(Message& message)
+void WebsocketServer::send( Message& message )
 {
-  if(message.getIdentifier().empty()) message.setFrom(m_Identifier);
-  for( std::map<Identifier, ix::WebSocket&>::iterator it = m_Clients.begin(); it != m_Clients.end(); ++it )
-  {
-    it->second.send( message.dump() );
-  }
+  if( message.getIdentifier().empty() ) message.setFrom( m_Identifier );
+  for( std::map<Identifier, ix::WebSocket&>::iterator it = m_Clients.begin(); it != m_Clients.end(); ++it ) { it->second.send( message.dump() ); }
 }
 
-void WebsocketServer::send(const Message& message)
+void WebsocketServer::send( const Message& message )
 {
-  Message ret{message};
-  if(message.getIdentifier().empty()) ret.setFrom(m_Identifier);
-  for( std::map<Identifier, ix::WebSocket&>::iterator it = m_Clients.begin(); it != m_Clients.end(); ++it )
-  {
-    it->second.send( ret.dump() );
-  }
+  Message ret{ message };
+  if( message.getIdentifier().empty() ) ret.setFrom( m_Identifier );
+  for( std::map<Identifier, ix::WebSocket&>::iterator it = m_Clients.begin(); it != m_Clients.end(); ++it ) { it->second.send( ret.dump() ); }
 }
 
-void WebsocketServer::send(Message& message,ix::WebSocket& webSocket)
+void WebsocketServer::send( Message& message, ix::WebSocket& webSocket )
 {
-  if(message.getIdentifier().empty()) message.setFrom(m_Identifier);
+  if( message.getIdentifier().empty() ) message.setFrom( m_Identifier );
   for( std::map<Identifier, ix::WebSocket&>::iterator it = m_Clients.begin(); it != m_Clients.end(); ++it )
   {
     if( &webSocket != &it->second ) it->second.send( message.dump() );
   }
 }
 
-void WebsocketServer::send(const Message& message,ix::WebSocket& webSocket)
+void WebsocketServer::send( const Message& message, ix::WebSocket& webSocket )
 {
-  Message ret{message};
-  if(message.getIdentifier().empty()) ret.setFrom(m_Identifier);
+  Message ret{ message };
+  if( message.getIdentifier().empty() ) ret.setFrom( m_Identifier );
   for( std::map<Identifier, ix::WebSocket&>::iterator it = m_Clients.begin(); it != m_Clients.end(); ++it )
   {
     if( &webSocket != &it->second ) it->second.send( ret.dump() );
   }
 }
-
 
 }  // namespace yaodaq

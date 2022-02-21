@@ -6,9 +6,8 @@
 */
 
 #include "nlohmann/json.hpp"
-
-#include "yaodaq/MessageType.hpp"
 #include "yaodaq/LogLevel.hpp"
+#include "yaodaq/MessageType.hpp"
 #include "yaodaq/Utility.hpp"
 
 #include <string>
@@ -61,54 +60,54 @@ public:
 class Log : public Message
 {
 public:
-  Log(const LogLevel& level,const std::string& log);
-  Log(const std::string& log);
-  LogLevel getLevel() const;
+  Log( const LogLevel& level, const std::string& log );
+  explicit Log( const std::string& log );
+  LogLevel    getLevel() const;
   std::string getLog() const;
 };
 
 class Trace : public Log
 {
 public:
-  Trace(const std::string& log);
+  explicit Trace( const std::string& log );
 };
 
 class Debug : public Log
 {
 public:
-  Debug(const std::string& log);
+  explicit Debug( const std::string& log );
 };
 
 class Info : public Log
 {
 public:
-  Info(const std::string& log);
+  explicit Info( const std::string& log );
 };
 
 class Warn : public Log
 {
 public:
-  Warn(const std::string& log);
+  explicit Warn( const std::string& log );
 };
 
 class Error : public Log
 {
 public:
-  Error(const std::string& log);
+  explicit Error( const std::string& log );
 };
 
 class Critical : public Log
 {
 public:
-  Critical(const std::string& log);
+  explicit Critical( const std::string& log );
 };
 
 class UserType : public Message
 {
 public:
-  explicit UserType(const std::string& type, const nlohmann::json& content);
-  explicit UserType(const std::string& type, const std::string& content);
-  explicit UserType(const std::string& type, const char* content);
+  UserType( const std::string& type, const nlohmann::json& content );
+  UserType( const std::string& type, const std::string& content );
+  UserType( const std::string& type, const char* content );
   std::string getType();
 };
 

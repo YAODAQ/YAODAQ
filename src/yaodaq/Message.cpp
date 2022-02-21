@@ -128,69 +128,51 @@ std::string MessageException::getFileName() { return get()["content"]["file_name
 std::string MessageException::getFunctionName() { return get()["content"]["function_name"].get<std::string>(); }
 
 // Log
-Log::Log(const LogLevel& level,const std::string& log) : Message( MessageType::Log )
+Log::Log( const LogLevel& level, const std::string& log ) : Message( MessageType::Log )
 {
   nlohmann::json j;
-  j["verbosity"] = magic_enum::enum_name(level);
-  j["log"] = log;
+  j["verbosity"] = magic_enum::enum_name( level );
+  j["log"]       = log;
   setContent( j );
 }
 
-Log::Log(const std::string& log) : Message( MessageType::Log )
+Log::Log( const std::string& log ) : Message( MessageType::Log )
 {
   nlohmann::json j;
-  j["verbosity"] = magic_enum::enum_name(LogLevel::Info);
-  j["log"] = log;
+  j["verbosity"] = magic_enum::enum_name( LogLevel::Info );
+  j["log"]       = log;
   setContent( j );
 }
 
-LogLevel Log::getLevel() const
-{
-  return magic_enum::enum_cast<LogLevel>(get()["content"]["verbosity"].get<std::string>()).value();
-}
+LogLevel Log::getLevel() const { return magic_enum::enum_cast<LogLevel>( get()["content"]["verbosity"].get<std::string>() ).value(); }
 
-std::string Log::getLog() const
-{
-  return get()["content"]["log"].get<std::string>();
-}
+std::string Log::getLog() const { return get()["content"]["log"].get<std::string>(); }
 
 // Trace
-Trace::Trace(const std::string& log) : Log(LogLevel::Trace,log){}
+Trace::Trace( const std::string& log ) : Log( LogLevel::Trace, log ) {}
 
 // Debug
-Debug::Debug(const std::string& log) : Log(LogLevel::Debug,log){}
+Debug::Debug( const std::string& log ) : Log( LogLevel::Debug, log ) {}
 
 // Info
-Info::Info(const std::string& log) : Log(LogLevel::Info,log){}
+Info::Info( const std::string& log ) : Log( LogLevel::Info, log ) {}
 
 // Warn
-Warn::Warn(const std::string& log) : Log(LogLevel::Warn,log){}
+Warn::Warn( const std::string& log ) : Log( LogLevel::Warn, log ) {}
 
 // Error
-Error::Error(const std::string& log) : Log(LogLevel::Error,log){}
+Error::Error( const std::string& log ) : Log( LogLevel::Error, log ) {}
 
-//Critical
-Critical::Critical(const std::string& log) : Log(LogLevel::Critical,log){}
+// Critical
+Critical::Critical( const std::string& log ) : Log( LogLevel::Critical, log ) {}
 
 // UserType
-UserType::UserType(const std::string& type, const nlohmann::json& content) : Message(content, MessageType::UserType )
-{
-  m_JSON["user_type"]=type;
-}
+UserType::UserType( const std::string& type, const nlohmann::json& content ) : Message( content, MessageType::UserType ) { m_JSON["user_type"] = type; }
 
-UserType::UserType(const std::string& type, const std::string& content) : Message(content, MessageType::UserType )
-{
-  m_JSON["user_type"]=type;
-}
+UserType::UserType( const std::string& type, const std::string& content ) : Message( content, MessageType::UserType ) { m_JSON["user_type"] = type; }
 
-UserType::UserType(const std::string& type, const char* content) : Message(content, MessageType::UserType )
-{
-  m_JSON["user_type"]=type;
-}
+UserType::UserType( const std::string& type, const char* content ) : Message( content, MessageType::UserType ) { m_JSON["user_type"] = type; }
 
-std::string UserType::getType()
-{
-  return get()["user_type"].get<std::string>();
-}
+std::string UserType::getType() { return get()["user_type"].get<std::string>(); }
 
 }  // namespace yaodaq
