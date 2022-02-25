@@ -32,9 +32,9 @@ public:
     Critical
   };
   LoggerHandler();
-  explicit LoggerHandler( const std::string& );
   ~LoggerHandler();
   void                            setVerbosity( const Verbosity& verbosity );
+  void                            setName( const std::string& );
   std::shared_ptr<spdlog::logger> logger();
   void                            addSink( const spdlog::sink_ptr& );
   void                            clearSinks();

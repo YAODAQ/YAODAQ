@@ -6,10 +6,8 @@
 */
 
 #include "yaodaq/Identifier.hpp"
-#include "yaodaq/Interrupt.hpp"
 #include "yaodaq/LoggerHandler.hpp"
 #include "yaodaq/Looper.hpp"
-#include "yaodaq/YaodaqVersion.hpp"
 
 #include <ixwebsocket/IXWebSocket.h>
 #include <memory>
@@ -22,7 +20,8 @@ namespace yaodaq
 class WebsocketClient : public ix::WebSocket
 {
 public:
-  explicit WebsocketClient( const std::string& name, const std::string& type = "DefaultWebsocketClient" );
+  static void throwGeneralIfSameName( const bool& );
+  explicit WebsocketClient( const std::string& name, const std::string& type = "YAODAQWebsocketClient" );
   virtual ~WebsocketClient();
   void                            start();
   void                            stop();
@@ -34,6 +33,7 @@ private:
   Identifier    m_Identifier;
   LoggerHandler m_Logger;
   Looper        m_Looper;
+  static bool   m_ThrowGeneralIfSameName;
 };
 
 }  // namespace yaodaq

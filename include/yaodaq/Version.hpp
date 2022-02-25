@@ -1,5 +1,5 @@
-#ifndef YAODAQ_VERSION_HPP
-#define YAODAQ_VERSION_HPP
+#ifndef YAODAQ_VERSION
+#define YAODAQ_VERSION
 
 /**
 \copyright Copyright 2022 flagarde
@@ -27,4 +27,4 @@ public:
 
 }  // namespace yaodaq
 
-#endif  // YAODAQ_VERSION_HPP
+#endif  // YAODAQ_VERSION

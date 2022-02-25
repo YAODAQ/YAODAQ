@@ -12,7 +12,8 @@ TEST_CASE( "LoggerHandler" )
 {
   yaodaq::LoggerHandler logger1;
   logger1.addSink( std::make_shared<spdlog::sinks::stdout_color_sink_mt>() );
-  yaodaq::LoggerHandler logger2( "Logger 2" );
+  yaodaq::LoggerHandler logger2;
+  logger2.setName( "Logger 2" );
   logger2.addSink( std::make_shared<spdlog::sinks::stdout_color_sink_mt>() );
 
   logger1.logger()->trace( "Trace" );

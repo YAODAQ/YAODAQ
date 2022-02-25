@@ -4,9 +4,13 @@
 
 #include "yaodaq/WebsocketServer.hpp"
 
+#include "yaodaq/ConnectionState.hpp"
 #include "yaodaq/Exception.hpp"
+#include "yaodaq/IXWebsocketMessage.hpp"
+#include "yaodaq/Identifier.hpp"
 #include "yaodaq/StatusCode.hpp"
 
+#include <chrono>
 #include <iostream>
 #include <ixwebsocket/IXNetSystem.h>
 #include <magic_enum.hpp>
@@ -20,41 +24,37 @@ namespace yaodaq
 {
 
 WebsocketServer::WebsocketServer( const std::string& name, const int& port, const std::string& host, const int& backlog, const std::size_t& maxConnections, const int& handshakeTimeoutSecs, const int& addressFamily, const std::string& type ) :
-  ix::WebSocketServer( port, host, backlog, maxConnections, handshakeTimeoutSecs, addressFamily ), m_Identifier( Class::WebsocketServer, type, name ), m_Logger( m_Identifier.get() )
+  ix::WebSocketServer( port, host, backlog, maxConnections, handshakeTimeoutSecs, addressFamily ), m_Identifier( type, name )
 {
   ix::initNetSystem();
+
+  m_Identifier.generateKey( Domain::Application, Class::Server, Family::WebSocketServer );
+  m_Logger.setName( m_Identifier.get() );
   m_Logger.addSink( std::make_shared<spdlog::sinks::stdout_color_sink_mt>() );
+
+  setConnectionStateFactory( []() { return std::make_shared<ConnectionState>(); } );
+
   setOnClientMessageCallback(
-    []( std::shared_ptr<ix::ConnectionState> connectionState, ix::WebSocket& webSocket, const ix::WebSocketMessagePtr& msg )
+    [this]( std::shared_ptr<ix::ConnectionState> connectionState, ix::WebSocket& webSocket, const ix::WebSocketMessagePtr& msg )
     {
-      // The ConnectionState object contains information about the connection,
-      // at this point only the client ip address and the port.
-      std::cout << "Remote ip: " << connectionState->getRemoteIp() << std::endl;
+      // The ConnectionState object contains information about the connection
+      std::shared_ptr<ConnectionState> connection = std::static_pointer_cast<ConnectionState>( connectionState );
 
       if( msg->type == ix::WebSocketMessageType::Open )
       {
-        std::cout << "New connection" << std::endl;
-
-        // A connection state object is available, and has a default id
-        // You can subclass ConnectionState and pass an alternate factory
-        // to override it. It is useful if you want to store custom
-        // attributes per connection (authenticated bool flag, attributes, etc...)
-        std::cout << "id: " << connectionState->getId() << std::endl;
-
-        // The uri the client did connect to.
-        std::cout << "Uri: " << msg->openInfo.uri << std::endl;
-
-        std::cout << "Headers:" << std::endl;
-        for( auto it: msg->openInfo.headers ) { std::cout << "\t" << it.first << ": " << it.second << std::endl; }
+        // Check if a client with the same name is already connected;
+        logger()->critical( fmt::format( fg( fmt::color::red ) | fmt::emphasis::bold, getHost() + ":" + std::to_string( getPort() ) ) );
+        connection->computeId( getHost() + ":" + std::to_string( getPort() ), Identifier::parse( msg->openInfo.headers["id"] ) );
+        if( connection->isTerminated() )
+        {
+          logger()->error( fmt::format( fg( fmt::color::red ) | fmt::emphasis::bold, "One client with the name \"{}\" is already connected !", Identifier::parse( msg->openInfo.headers["id"] ).getName() ) );
+          webSocket.stop( magic_enum::enum_integer( StatusCode::CLIENT_WITH_SAME_NAME_ALREADY_CONNECTED ),
+                          fmt::format( "One client with the name \"{}\" is already connected to ws{}://{}:{} !", Identifier::parse( msg->openInfo.headers["id"] ).getName(), "", getHost(), getPort() ) );
+          return;
+        }
       }
       else if( msg->type == ix::WebSocketMessageType::Message )
       {
-        // For an echo server, we just send back to the client whatever was received by the server
-        // All connected clients are available in an std::set. See the broadcast cpp example.
-        // Second parameter tells whether we are sending the message in binary or text mode.
-        // Here we send it in the same mode as it was received.
-        std::cout << "Received: " << msg->str << std::endl;
-
         webSocket.send( msg->str, msg->binary );
       }
     } );
@@ -68,7 +68,7 @@ void WebsocketServer::listen()
     if( ret.first )
     {
       m_isListening = ret.first;
-      logger()->info( "Server listening on host {0} port {1}", getHost(), getPort() );
+      logger()->info( "Server listening on {0}:{1}", getHost(), getPort() );
     }
     else
       throw Exception( StatusCode::LISTEN_ERROR, ret.second );

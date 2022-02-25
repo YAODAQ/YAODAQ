@@ -8,10 +8,13 @@
 
 TEST_CASE( "Identifier" )
 {
-  yaodaq::Identifier id( yaodaq::Class::WebsocketServer, "MyType", "MyName" );
-  CHECK_EQ( id.getName(), "MyName" );
+  yaodaq::Identifier id( "MyType", "MyName" );
+  id.generateKey( yaodaq::Domain::Application, yaodaq::Class::Module, yaodaq::Family::Logger );
+
+  CHECK_EQ( id.getDomain(), "Application" );
+  CHECK_EQ( id.getClass(), "Module" );
+  CHECK_EQ( id.getFamily(), "Logger" );
   CHECK_EQ( id.getType(), "MyType" );
-  CHECK_EQ( id.getClass(), "WebsocketServer" );
-  CHECK_EQ( id.getClassId(), yaodaq::Class::WebsocketServer );
-  CHECK_EQ( id.get(), "WebsocketServer/MyType/MyName" );
+  CHECK_EQ( id.getName(), "MyName" );
+  CHECK_EQ( id.get(), "Application/Module/Logger/MyType/MyName" );
 }

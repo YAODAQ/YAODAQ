@@ -14,8 +14,10 @@ enum class StatusCode : std::int_least32_t
 {
   SUCCESS = 0,
   LISTEN_ERROR,
+  WRONG_NUMBER_PARAMETERS,
+  CLIENT_WITH_SAME_NAME_ALREADY_CONNECTED = 4999,
 };
 
-}
+}  // namespace yaodaq
 
 #endif
