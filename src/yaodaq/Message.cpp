@@ -26,7 +26,7 @@ Message::Message()
    m_JSON["to"];
    m_JSON["type"]      = magic_enum::enum_name( MessageType::Unknown );
    m_JSON["content"];
-  // m_JSON["timestamp"] = fmt::format( "{:%F %T %z}", fmt::gmtime( std::chrono::system_clock::to_time_t( std::chrono::system_clock::now() ) ) );
+   m_JSON["timestamp"] = fmt::format( "{:%F %T %z}", fmt::gmtime( std::chrono::system_clock::to_time_t( std::chrono::system_clock::now() ) ) );
    m_JSON["meta"]["compiler"]                = nlohmann::json::meta()["compiler"];
    m_JSON["meta"]["platform"]                = nlohmann::json::meta()["platform"];
    m_JSON["meta"]["versions"]["json"]        = nlohmann::json::meta()["version"]["string"];
