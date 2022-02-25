@@ -17,8 +17,8 @@ jobs:
         include:
           - { icon: '🟨', env: Win32, toolset: x86  }
           - { icon: '🟦', env: x64, toolset: x64 }
-          #- { icon: '🟩', env: ARM, toolset: x86 }
-          #- { icon: '🟥', env: ARM64, toolset: x64 }
+          - { icon: '🟩', env: amd64_arm, toolset: x86 }
+          - { icon: '🟥', env: amd64_arm64, toolset: x64 }
     name: '🚧 ${{ matrix.icon }} ${{ matrix.env }}'
 
     steps:
@@ -40,13 +40,15 @@ jobs:
 
       - name: '${{ matrix.icon }} Setup Visual Studio'
         uses: ilammy/msvc-dev-cmd@v1.10.0
+        with:
+          arch: ${{ matrix.env }}
 
       - name: '${{ matrix.icon }} Install package'
         if: ${{ env.INSTALL_PACKAGES != '' }}
         run: choco install ${{env.INSTALL_PACKAGES}}
 
       - name: '🔧 Configure'
-        run: cmake -S ${{ github.workspace }} -B ${{ env.CMAKE_BUILD_PREFIX }} -A ${{matrix.env}} -T host=${{matrix.toolset}} -DBUILD_TESTS=${{ env.BUILD_TESTS }} -DBUILD_DOCS=${{ env.BUILD_DOCS }} -DBUILD_EXAMPLES=${{ env.BUILD_EXAMPLES }}
+        run: cmake -S ${{ github.workspace }} -B ${{ env.CMAKE_BUILD_PREFIX }} -T host=${{matrix.toolset}} -DBUILD_TESTS=${{ env.BUILD_TESTS }} -DBUILD_DOCS=${{ env.BUILD_DOCS }} -DBUILD_EXAMPLES=${{ env.BUILD_EXAMPLES }}
 
       - name: '⚙️ Build'
         run: cmake --build ${{ env.CMAKE_BUILD_PREFIX }} --config ${{ env.CMAKE_BUILD_TYPE }} --parallel ${{ env.CMAKE_NUMBER_JOBS }}
