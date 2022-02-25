@@ -20,7 +20,7 @@
 namespace yaodaq
 {
 
-Message::Message()
+Message::Message() : m_JSON( nlohmann::json{} )
 {
   m_JSON["from"];
   m_JSON["to"];
