@@ -17,8 +17,8 @@ jobs:
         include:
           - { icon: '🟨', env: Win32}
           - { icon: '🟦', env: x64}
-          - { icon: '🟩', env: amd64_arm}
-          - { icon: '🟥', env: amd64_arm64}
+          #- { icon: '🟩', env: amd64_arm}
+          #- { icon: '🟥', env: amd64_arm64}
     name: '🚧 ${{ matrix.icon }} ${{ matrix.env }}'
 
     steps:
