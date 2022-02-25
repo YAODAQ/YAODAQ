@@ -21,7 +21,7 @@ class Identifier;
 class ConnectionState : public ix::ConnectionState
 {
 public:
-  void computeId( const std::string& host, const Identifier& id ) final;
+  virtual void computeId( const std::string& host, const Identifier& id ) final;
   ConnectionState();
   virtual ~ConnectionState();
 
