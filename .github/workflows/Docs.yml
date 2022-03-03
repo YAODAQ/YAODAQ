@@ -47,7 +47,6 @@ jobs:
         with:
           update-conda: true
           activate-conda: false
-          python-version: ${{ matrix.python-version }}
           conda-channels: conda-forge
 
       - name: '🟨 Install packages with conda'
