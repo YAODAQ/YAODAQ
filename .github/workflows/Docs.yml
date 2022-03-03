@@ -43,7 +43,7 @@ jobs:
             mkdir -p ${{ env.CMAKE_INSTALL_PREFIX }}/bin
             cp bin/micromamba ${{ env.CMAKE_INSTALL_PREFIX }}/bin/micromamba
             ${{ env.CMAKE_INSTALL_PREFIX }}/bin/micromamba shell init --shell=bash --prefix=~/micromamba
-            eval "$(${{ env.CMAKE_INSTALL_PREFIX }}/bin/micromamba shell hook --shell=bash)"
+            source ~/.bashrc
             ${{ env.CMAKE_INSTALL_PREFIX }}/bin/micromamba activate
             ${{ env.CMAKE_INSTALL_PREFIX }}/bin/micromamba install python doxygen graphviz -c conda-forge
 
