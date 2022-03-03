@@ -4,8 +4,11 @@ on:
   push:
     branches:
       - main
-    paths-ignore:
-      - 'docs/**'
+    paths:
+      - '!docs/**'
+      - '!workflows/**'
+      - 'workflows/Linux-Clang.yml'
+
   pull_request:
 
 jobs:
