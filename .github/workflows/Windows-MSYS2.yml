@@ -39,8 +39,7 @@ jobs:
         with:
           path: .github/workflows
 
-      - name: '${{ matrix.icon }} Setup MSYS2 (clang)'
-        if: ${{ matrix.sys == 'clang32' }} || ${{ matrix.sys == 'clang64' }}
+      - name: '${{ matrix.icon }} Setup MSYS2'
         uses: msys2/setup-msys2@v2
         with:
           msystem: ${{matrix.sys}}
@@ -53,22 +52,7 @@ jobs:
             clang:p
             ninja:p
             make:p
-            ${{env.INSTALL_PACKAGES}}
-
-      - name: '${{ matrix.icon }} Setup MSYS2 (gcc)'
-        if: ${{ matrix.sys != 'clang32' }} && ${{ matrix.sys != 'clang64' }}
-        uses: msys2/setup-msys2@v2
-        with:
-          msystem: ${{matrix.sys}}
-          path-type: minimal
-          release: true
-          update: true
-          install: >-
-            git
-          pacboy: >-
-            gcc:p
-            ninja:p
-            make:p
+            toolchain:p
             ${{env.INSTALL_PACKAGES}}
 
       - name: '🔧 Configure'
