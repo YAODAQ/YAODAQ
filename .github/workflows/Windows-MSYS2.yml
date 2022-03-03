@@ -43,11 +43,12 @@ jobs:
           path-type: minimal
           release: true
           update: true
-          install: >-
-            mingw-w64-${{matrix.env}}-toolchain
-            mingw-w64-${{matrix.env}}-cmake
-            mingw-w64-${{matrix.env}}-ninja
+          pacboy: >-
+            gcc:p
+            cmake:p
+            ninja:p
             ${{env.INSTALL_PACKAGES}}
+            
       - name: '🔧 Configure'
         run: cmake -S . -B ${{ env.CMAKE_BUILD_PREFIX }} -D CMAKE_BUILD_TYPE=${{ env.CMAKE_BUILD_TYPE }}  -DBUILD_TESTS=${{ env.BUILD_TESTS }} -DBUILD_DOCS=${{ env.BUILD_DOCS }} -DBUILD_EXAMPLES=${{ env.BUILD_EXAMPLES }}
 
