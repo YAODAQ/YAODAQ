@@ -18,6 +18,10 @@ on:
     - '.github/workflows/Docs.yml'
     - '.github/micromamba/docs.yml'
 
+defaults:
+  run:
+    shell: bash -l {0}
+
 env:
   CMAKE_VERSION: '3.16.x'
   CMAKE_BUILD_TYPE: 'Release'
