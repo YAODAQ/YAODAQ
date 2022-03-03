@@ -43,11 +43,12 @@ jobs:
           path-type: minimal
           release: true
           update: true
+          install: >-
+            git
           pacboy: >-
             cmake:p
             ninja:p
             make:p
-            git
             ${{env.INSTALL_PACKAGES}}
             
       - name: '🔧 Configure'
