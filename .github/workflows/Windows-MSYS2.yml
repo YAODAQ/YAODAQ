@@ -36,8 +36,9 @@ jobs:
         uses: xom9ikk/dotenv@v1.0.2
         with:
           path: .github/workflows
-
-      - name: '${{ matrix.icon }} Setup MSYS2'
+            
+      - name: '${{ matrix.icon }} Setup MSYS2 (clang)'
+        if: ${{ matrix.sys == 'clang32' }} || ${{ matrix.sys == 'clang64' }}
         uses: msys2/setup-msys2@v2
         with:
           msystem: ${{matrix.sys}}
@@ -47,22 +48,12 @@ jobs:
           install: >-
             git
           pacboy: >-
+            clang:p
             ninja:p
             make:p
             ${{env.INSTALL_PACKAGES}}
-            
-      - name: '${{ matrix.icon }} Install compiler'
-        if: ${{ matrix.sys == 'clang32' }} || ${{ matrix.sys == 'clang64' }}
-        uses: msys2/setup-msys2@v2
-        with:
-          msystem: ${{matrix.sys}}
-          path-type: minimal
-          release: true
-          update: true
-          pacboy: >-
-            clang:p
         
-      - name: '${{ matrix.icon }} Install compiler'
+      - name: '${{ matrix.icon }} Setup MSYS2 (gcc)'
         if: ${{ matrix.sys != 'clang32' }} && ${{ matrix.sys != 'clang64' }}
         uses: msys2/setup-msys2@v2
         with:
@@ -70,8 +61,13 @@ jobs:
           path-type: minimal
           release: true
           update: true
+          install: >-
+            git
           pacboy: >-
             gcc:p
+            ninja:p
+            make:p
+            ${{env.INSTALL_PACKAGES}}
             
       - name: '🔧 Configure'
         run: cmake -S . -B ${{ env.CMAKE_BUILD_PREFIX }} -D CMAKE_BUILD_TYPE=${{ env.CMAKE_BUILD_TYPE }}  -DBUILD_TESTS=${{ env.BUILD_TESTS }} -DBUILD_DOCS=${{ env.BUILD_DOCS }} -DBUILD_EXAMPLES=${{ env.BUILD_EXAMPLES }}
