@@ -15,10 +15,11 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - { icon: '🟨', sys: mingw32, env: i686, name: MINGW32 }
-          - { icon: '🟦', sys: mingw64, env: x86_64, name: MINGW64 }
-          - { icon: '🟩', sys: ucrt64,  env: ucrt-x86_64, name: UCRT64 }  # Experimental!
-          - { icon: '🟥', sys: clang64, env: clang-x86_64, name: Clang64 } # Experimental!
+          - { icon: '🟨', sys: mingw32,name: MINGW32 }
+          - { icon: '🟦', sys: mingw64,name: MINGW64 }
+          - { icon: '🟩', sys: ucrt64, name: UCRT64 }  # Experimental!
+          - { icon: '🟥', sys: clang32, name: Clang32 } # Experimental!
+          - { icon: '🟪', sys: clang64, name: Clang64 } # Experimental!
 
     name: '🚧 ${{ matrix.icon }} ${{ matrix.name }}'
     defaults:
@@ -46,12 +47,31 @@ jobs:
           install: >-
             git
           pacboy: >-
-            gcc:p
-            clang:p
-            cmake:p
             ninja:p
             make:p
             ${{env.INSTALL_PACKAGES}}
+            
+      - name: '${{ matrix.icon }} Install compiler'
+        if: ${{ matrix.sys == 'clang32' }} || ${{ matrix.sys == 'clang64' }}
+        uses: msys2/setup-msys2@v2
+        with:
+          msystem: ${{matrix.sys}}
+          path-type: minimal
+          release: true
+          update: true
+          pacboy: >-
+            clang:p
+        
+      - name: '${{ matrix.icon }} Install compiler'
+        if: ${{ matrix.sys != 'clang32' }} && ${{ matrix.sys != 'clang64' }}
+        uses: msys2/setup-msys2@v2
+        with:
+          msystem: ${{matrix.sys}}
+          path-type: minimal
+          release: true
+          update: true
+          pacboy: >-
+            gcc:p
             
       - name: '🔧 Configure'
         run: cmake -S . -B ${{ env.CMAKE_BUILD_PREFIX }} -D CMAKE_BUILD_TYPE=${{ env.CMAKE_BUILD_TYPE }}  -DBUILD_TESTS=${{ env.BUILD_TESTS }} -DBUILD_DOCS=${{ env.BUILD_DOCS }} -DBUILD_EXAMPLES=${{ env.BUILD_EXAMPLES }}
