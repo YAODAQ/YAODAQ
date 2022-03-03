@@ -42,10 +42,7 @@ jobs:
             wget -qO- https://micromamba.snakepit.net/api/micromamba/linux-64/latest | tar -xvj bin/micromamba
             mkdir -p ${{ env.CMAKE_INSTALL_PREFIX }}/bin
             cp bin/micromamba ${{ env.CMAKE_INSTALL_PREFIX }}/bin/micromamba
-            ${{ env.CMAKE_INSTALL_PREFIX }}/bin/micromamba shell init --shell=bash --prefix=${{ env.CMAKE_INSTALL_PREFIX }}/bin/micromamba
-
-      - name: '🐍 Install packages with micromamba'
-        run: |
+            ${{ env.CMAKE_INSTALL_PREFIX }}/bin/micromamba shell init --shell=bash --prefix=~/micromamba
             eval "$(${{ env.CMAKE_INSTALL_PREFIX }}/bin/micromamba shell hook --shell=bash)"
             ${{ env.CMAKE_INSTALL_PREFIX }}/bin/micromamba activate
             ${{ env.CMAKE_INSTALL_PREFIX }}/bin/micromamba install python doxygen graphviz -c conda-forge
