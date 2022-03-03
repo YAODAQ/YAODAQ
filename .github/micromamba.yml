@@ -1,4 +1,4 @@
-name: micromamba
+name: docs
 channels:
   - conda-forge
   - defaults

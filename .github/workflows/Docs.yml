@@ -8,6 +8,7 @@ on:
     - '!docs/**'
     - '!.github/workflows/**'
     - '.github/workflows/Docs.yml'
+    - '.github/micromamba.yml'
   pull_request:
     branches:
       - main
@@ -15,6 +16,7 @@ on:
     - '!docs/**'
     - '!.github/workflows/**'
     - '.github/workflows/Docs.yml'
+    - '.github/micromamba.yml'
 
 env:
   CMAKE_VERSION: '3.16.x'
