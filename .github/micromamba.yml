@@ -2,3 +2,5 @@ name: micromamba
 channels:
   - conda-forge
   - defaults
+dependencies:
+  - python
