@@ -39,9 +39,9 @@ jobs:
 
       - name: '🐍 Setup micromamba'
         run: |
-            wget -qO- https://micromamba.snakepit.net/api/micromamba/linux-64/latest | tar -xvj bin/micromamba
-            micromamba activate
-            micromamba install python doxygen graphviz -c conda-forge
+            wget -qO- https://micromamba.snakepit.net/api/micromamba/linux-64/latest | tar -xvj ${{ env.CMAKE_INSTALL_PREFIX }}/bin/micromamba
+            ${{ env.CMAKE_INSTALL_PREFIX }}/bin/micromamba activate
+            ${{ env.CMAKE_INSTALL_PREFIX }}/bin/micromamba install python doxygen graphviz -c conda-forge
 
       - name: '🟨 Install miktex'
         run: |
