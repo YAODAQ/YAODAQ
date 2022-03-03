@@ -34,7 +34,7 @@ jobs:
         with:
           persist-credentials: false
 
-      - name: '🐍 Install packages'
+      - name: '🟨 Install packages'
         run: sudo apt-get install dia mscgen inkscape
 
       - name: '🐍 Install Conda environment'
