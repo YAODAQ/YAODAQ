@@ -40,8 +40,7 @@ jobs:
       - name: '🐍 Setup micromamba'
         run: |
             wget -qO- https://micromamba.snakepit.net/api/micromamba/linux-64/latest | tar -xvj bin/micromamba
-            ./bin/micromamba shell init -s bash -p ~/micromamba
-            source ~/.bashrc
+            micromamba activate
             micromamba install python doxygen graphviz -c conda-forge
 
       - name: '🟨 Install miktex'
