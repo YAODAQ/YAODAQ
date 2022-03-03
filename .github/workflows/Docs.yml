@@ -37,11 +37,11 @@ jobs:
       - name: '🐍 Install packages'
         run: sudo apt-get install dia mscgen inkscape
 
-      - name: 'Install Conda environment'
+      - name: '🐍 Install Conda environment'
         uses: mamba-org/provision-with-micromamba@v11
         with:
-          environment-file: myenv.yaml
-          environment-name: myenvname
+          environment-file: false
+          environment-name: docs
           extra-specs: python
 
       - name: '🟨 Install miktex'
