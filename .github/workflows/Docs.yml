@@ -8,7 +8,7 @@ on:
     - '!docs/**'
     - '!.github/workflows/**'
     - '.github/workflows/Docs.yml'
-    - '.github/micromamba.yml'
+    - '.github/micromamba/docs.yml'
   pull_request:
     branches:
       - main
@@ -16,7 +16,7 @@ on:
     - '!docs/**'
     - '!.github/workflows/**'
     - '.github/workflows/Docs.yml'
-    - '.github/micromamba.yml'
+    - '.github/micromamba/docs.yml'
 
 env:
   CMAKE_VERSION: '3.16.x'
@@ -42,7 +42,7 @@ jobs:
       - name: '🐍 Install Conda environment'
         uses: mamba-org/provision-with-micromamba@v11
         with:
-          environment-file: .github/micromamba.yml
+          environment-file: .github/micromamba/docs.yml
 
       - name: '🟨 Install miktex'
         run: |
