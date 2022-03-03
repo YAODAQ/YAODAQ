@@ -17,11 +17,6 @@ on:
     - '.github/workflows/Docs.yml'
 
 env:
-  HOMEBREW_NO_ANALYTICS: "ON"
-  #HOMEBREW_NO_AUTO_UPDATE: "ON"
-  HOMEBREW_NO_BOTTLE_SOURCE_FALLBACK: "ON"
-  HOMEBREW_NO_GITHUB_API: "ON"
-  HOMEBREW_NO_INSTALL_CLEANUP: "ON"
   CMAKE_VERSION: '3.16.x'
   CMAKE_BUILD_TYPE: 'Release'
   CMAKE_BUILD_PREFIX: './build'
@@ -29,7 +24,7 @@ env:
 
 jobs:
   docs:
-    runs-on: macos-latest
+    runs-on: ubuntu-latest
     name: '📚 Docs'
 
     steps:
@@ -39,13 +34,27 @@ jobs:
         with:
           persist-credentials: false
 
+      - name: '${{ matrix.icon }} Install packages'
+        run: sudo apt-get install dia mscgen inkscape
+
       - name: '🐍 Setup python'
         uses: actions/setup-python@v3
         with:
           python-version: '3.x'
 
-      - name: '🍺 Install packages with brew'
-        run: brew install doxygen mscgen dia graphviz texlive inkscape
+      - name: 'Setup conda'
+        uses: s-weigand/setup-conda@v1
+        with:
+          update-conda: true
+          activate-conda: false
+          python-version: ${{ matrix.python-version }}
+          conda-channels: conda-forge
+
+      - name: '🟨 Install packages with conda'
+        run: conda --version
+        
+      - name: '🟨 Install packages with conda'
+        run: conda install doxygen graphviz texlive-core
 
       - name: '🟨 Install packages with pip'
         run: |
