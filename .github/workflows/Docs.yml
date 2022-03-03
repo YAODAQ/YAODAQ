@@ -51,7 +51,7 @@ jobs:
 
       - name: '🟨 Install packages with conda'
         run: conda --version
-        
+
       - name: '🟨 Install packages with conda'
         run: conda install doxygen graphviz
 
