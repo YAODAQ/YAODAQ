@@ -6,15 +6,15 @@ on:
       - main
     paths:
     - '!docs/**'
-    - '!workflows/**'
-    - 'workflows/Docs.yml'
+    - '!.github/workflows/**'
+    - '.github/workflows/Docs.yml'
   pull_request:
     branches:
       - main
     paths:
     - '!docs/**'
-    - '!workflows/**'
-    - 'workflows/Docs.yml'
+    - '!.github/workflows/**'
+    - '.github/workflows/Docs.yml'
 
 env:
   HOMEBREW_NO_ANALYTICS: "ON"

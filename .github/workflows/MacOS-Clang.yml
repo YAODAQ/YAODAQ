@@ -6,8 +6,8 @@ on:
       - main
     paths:
       - '!docs/**'
-      - '!workflows/**'
-      - 'workflows/MacOS-Clang.yml'
+      - '!.github/workflows/**'
+      - '.github/workflows/MacOS-Clang.yml'
   pull_request:
 
 jobs:

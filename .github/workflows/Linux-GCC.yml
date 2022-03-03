@@ -6,8 +6,8 @@ on:
       - main
     paths:
       - '!docs/**'
-      - '!workflows/**'
-      - 'workflows/Linux-GCC.yml'
+      - '!.github/workflows/**'
+      - '.github/workflows/Linux-GCC.yml'
   pull_request:
 
 jobs:

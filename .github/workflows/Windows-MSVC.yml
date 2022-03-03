@@ -6,8 +6,8 @@ on:
       - main
     paths:
       - '!docs/**'
-      - '!workflows/**'
-      - 'workflows/Windows-MSVC.yml'
+      - '!.github/workflows/**'
+      - '.github/workflows/Windows-MSVC.yml'
   pull_request:
 
 jobs:
