@@ -19,9 +19,9 @@ jobs:
         include:
           - { icon: '🟨', sys: mingw32,name: MINGW32 }
           - { icon: '🟦', sys: mingw64,name: MINGW64 }
-          - { icon: '🟩', sys: ucrt64, name: UCRT64 }  # Experimental!
-          - { icon: '🟥', sys: clang32, name: Clang32 } # Experimental!
-          - { icon: '🟪', sys: clang64, name: Clang64 } # Experimental!
+          - { icon: '🟩', sys: ucrt64, name: UCRT64 }
+          - { icon: '🟥', sys: clang32, name: Clang32 }
+          - { icon: '🟪', sys: clang64, name: Clang64 }
 
     name: '🚧 ${{ matrix.icon }} ${{ matrix.name }}'
     defaults:
@@ -38,7 +38,7 @@ jobs:
         uses: xom9ikk/dotenv@v1.0.2
         with:
           path: .github/workflows
-            
+
       - name: '${{ matrix.icon }} Setup MSYS2 (clang)'
         if: ${{ matrix.sys == 'clang32' }} || ${{ matrix.sys == 'clang64' }}
         uses: msys2/setup-msys2@v2
@@ -54,7 +54,7 @@ jobs:
             ninja:p
             make:p
             ${{env.INSTALL_PACKAGES}}
-        
+
       - name: '${{ matrix.icon }} Setup MSYS2 (gcc)'
         if: ${{ matrix.sys != 'clang32' }} && ${{ matrix.sys != 'clang64' }}
         uses: msys2/setup-msys2@v2
@@ -70,7 +70,7 @@ jobs:
             ninja:p
             make:p
             ${{env.INSTALL_PACKAGES}}
-            
+  
       - name: '🔧 Configure'
         run: cmake -S . -B ${{ env.CMAKE_BUILD_PREFIX }} -D CMAKE_BUILD_TYPE=${{ env.CMAKE_BUILD_TYPE }}  -DBUILD_TESTS=${{ env.BUILD_TESTS }} -DBUILD_DOCS=${{ env.BUILD_DOCS }} -DBUILD_EXAMPLES=${{ env.BUILD_EXAMPLES }}
 
