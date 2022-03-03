@@ -46,6 +46,8 @@ jobs:
           install: >-
             git
           pacboy: >-
+            gcc:p
+            clang:p
             cmake:p
             ninja:p
             make:p
