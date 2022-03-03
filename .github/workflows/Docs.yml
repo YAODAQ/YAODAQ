@@ -53,7 +53,7 @@ jobs:
         run: conda --version
         
       - name: '🟨 Install packages with conda'
-        run: conda install doxygen graphviz texlive-core
+        run: conda install doxygen graphviz
 
       - name: '🟨 Install packages with pip'
         run: |
