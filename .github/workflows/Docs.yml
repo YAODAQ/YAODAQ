@@ -34,7 +34,7 @@ jobs:
         with:
           persist-credentials: false
 
-      - name: '${{ matrix.icon }} Install packages'
+      - name: '🐍 Install packages'
         run: sudo apt-get install dia mscgen inkscape
 
       - name: '🐍 Setup micromamba'
@@ -42,13 +42,7 @@ jobs:
             wget -qO- https://micromamba.snakepit.net/api/micromamba/linux-64/latest | tar -xvj bin/micromamba
             ./bin/micromamba shell init -s bash -p ~/micromamba
             source ~/.bashrc
-
-      #- name: '🟨 Install packages with conda'
-      #  run: conda install pip wheel doxygen graphviz sphinx sphinxcontrib-serializinghtml sphinxcontrib-jsmath sphinx-sitemap breathe sphinxcontrib-autodoc_doxygen sphinx-rtd-theme sphinxcontrib-htmlhelp sphinxcontrib-applehelp sphinxcontrib-devhelp sphinxcontrib-qthelp sphinxcontrib-websupport sphinx-gallery sphinx-autodoc-typehints sphinxcontrib-bibtex sphinxcontrib-doxylink pydata-sphinx-theme sphinx-argparse sphinx-copybutton sphinx_bootstrap_theme jupyter_sphinx sphinx-nbexamples sphinx-panels sphinxcontrib-apidoc sphinx-click sphinx-automodapi sphinxcontrib-autoprogram sphinxcontrib-napoleon sphinx-issues sphinx-releases jupyter-sphinx sphinx-tabs sphinx-book-theme sphinxdft-data
-
-      #- name: '🟨 Install packages with pip'
-      #  run: |
-      #    pip install sphinxcontrib-moderncmakedomain
+            micromamba install python doxygen graphviz -c conda-forge
 
       - name: '🟨 Install miktex'
         run: |
