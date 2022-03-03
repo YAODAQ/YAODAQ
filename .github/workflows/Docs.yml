@@ -37,15 +37,25 @@ jobs:
       - name: '🐍 Install packages'
         run: sudo apt-get install dia mscgen inkscape
 
-      - name: '🐍 Setup micromamba'
+      - name: '🐍 Install micromamba'
         run: |
-            wget -qO- https://micromamba.snakepit.net/api/micromamba/linux-64/latest | tar -xvj bin/micromamba
-            mkdir -p ${{ env.CMAKE_INSTALL_PREFIX }}/bin
-            cp bin/micromamba ${{ env.CMAKE_INSTALL_PREFIX }}/bin/micromamba
-            ${{ env.CMAKE_INSTALL_PREFIX }}/bin/micromamba shell init --shell=bash --prefix=~/micromamba
-            source ~/.bashrc
-            ${{ env.CMAKE_INSTALL_PREFIX }}/bin/micromamba activate
-            ${{ env.CMAKE_INSTALL_PREFIX }}/bin/micromamba install python doxygen graphviz -c conda-forge
+          if [ "$RUNNER_OS" == "Linux" ]; then
+            wget -qO- https://micromamba.snakepit.net/api/micromamba/linux-64/latest | tar -xvj bin/micromamba --strip-components=1
+          else
+            wget -qO- https://micromamba.snakepit.net/api/micromamba/osx-64/latest | tar -xvj bin/micromamba
+            mv bin/micromamba ./micromamba
+          fi
+          ./micromamba shell init -s bash -p ~/micromamba
+          mkdir -p ~/micromamba/pkgs/
+
+      - name: '🐍 Setup micromamba'
+        shell: bash -l {0}
+        run: |
+          export MAMBA_ROOT_PREFIX=~/micromamba
+          export MAMBA_EXE=$(pwd)/micromamba
+          . $MAMBA_ROOT_PREFIX/etc/profile.d/mamba.sh
+          micromamba activate
+          micromamba install python doxygen graphviz -c conda-forge
 
       - name: '🟨 Install miktex'
         run: |
