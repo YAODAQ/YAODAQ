@@ -47,12 +47,9 @@ jobs:
           release: true
           update: true
           install: >-
-            git
-          pacboy: >-
-            clang:p
-            ninja:p
-            make:p
-            toolchain:p
+            mingw-w64-${{matrix.env}}-toolchain
+            mingw-w64-${{matrix.env}}-cmake
+            mingw-w64-${{matrix.env}}-ninja
             ${{env.INSTALL_PACKAGES}}
 
       - name: '🔧 Configure'
