@@ -45,11 +45,11 @@ jobs:
           conda-channels: conda-forge
 
       - name: '🟨 Install packages with conda'
-        run: conda install pip wheel doxygen graphviz sphinx sphinxcontrib-serializinghtml sphinxcontrib-jsmath sphinx-sitemap breathe
+        run: conda install pip wheel doxygen graphviz sphinx sphinxcontrib-serializinghtml sphinxcontrib-jsmath sphinx-sitemap breathe sphinxcontrib-autodoc_doxygen sphinx-rtd-theme sphinxcontrib-htmlhelp sphinxcontrib-applehelp sphinxcontrib-devhelp sphinxcontrib-qthelp sphinxcontrib-websupport
 
       - name: '🟨 Install packages with pip'
         run: |
-          pip install sphinxcontrib-moderncmakedomain sphinx-rtd-theme
+          pip install sphinxcontrib-moderncmakedomain
 
       - name: '🟨 Install miktex'
         run: |
