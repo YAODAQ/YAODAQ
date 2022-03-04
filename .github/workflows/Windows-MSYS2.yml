@@ -21,7 +21,7 @@ jobs:
           - { icon: '🟦', sys: mingw64, env: x86_64, name: MINGW64, compiler: gcc  }
           - { icon: '🟩', sys: ucrt64,  env: ucrt-x86_64, name: UCRT64, compiler: gcc  }
           - { icon: '🟥', sys: clang64, env: clang-x86_64, name: Clang64, compiler: clang  }
-          - { icon: '🟪', sys: clang32, env: clang-i686, name: Clang32, compiler: clang  }
+          #- { icon: '🟪', sys: clang32, env: clang-i686, name: Clang32, compiler: clang  }
 
     name: '🚧 ${{ matrix.icon }} ${{ matrix.name }}'
     defaults:
@@ -53,7 +53,7 @@ jobs:
             ${{env.INSTALL_PACKAGES}}
 
       - name: '🔧 Configure'
-        run: cmake -S . -B ${{ env.CMAKE_BUILD_PREFIX }} -D CMAKE_BUILD_TYPE=${{ env.CMAKE_BUILD_TYPE }}  -DBUILD_TESTS=${{ env.BUILD_TESTS }} -DBUILD_DOCS=${{ env.BUILD_DOCS }} -DBUILD_EXAMPLES=${{ env.BUILD_EXAMPLES }}
+        run: cmake -G Ninja -S . -B ${{ env.CMAKE_BUILD_PREFIX }} -D CMAKE_BUILD_TYPE=${{ env.CMAKE_BUILD_TYPE }}  -DBUILD_TESTS=${{ env.BUILD_TESTS }} -DBUILD_DOCS=${{ env.BUILD_DOCS }} -DBUILD_EXAMPLES=${{ env.BUILD_EXAMPLES }}
 
       - name: '⚙️ Build'
         run: cmake --build ${{ env.CMAKE_BUILD_PREFIX }} --config ${{ env.CMAKE_BUILD_TYPE }} --parallel ${{ env.CMAKE_NUMBER_JOBS }}
