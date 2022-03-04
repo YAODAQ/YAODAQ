@@ -17,13 +17,13 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - { icon: '🟨', sys: mingw32, env: i686, name: MINGW32, compiler: gcc }
-          - { icon: '🟦', sys: mingw64, env: x86_64, name: MINGW64, compiler: gcc  }
-          - { icon: '🟩', sys: ucrt64,  env: ucrt-x86_64, name: UCRT64, compiler: gcc  }
-          - { icon: '🟥', sys: clang64, env: clang-x86_64, name: Clang64, compiler: clang  }
-          #- { icon: '🟪', sys: clang32, env: clang-i686, name: Clang32, compiler: clang  }
+          - { icon: '🟨', sys: mingw32, compiler: gcc }
+          - { icon: '🟦', sys: mingw64, compiler: gcc  }
+          - { icon: '🟩', sys: ucrt64, compiler: gcc  }
+          - { icon: '🟥', sys: clang64, compiler: clang  }
+          #- { icon: '🟪', sys: clang32, compiler: clang  }
 
-    name: '🚧 ${{ matrix.icon }} ${{ matrix.name }}'
+    name: '🚧 ${{ matrix.icon }} ${{ matrix.sys }}'
     defaults:
       run:
         shell: msys2 {0}
@@ -46,10 +46,10 @@ jobs:
           path-type: minimal
           release: true
           update: true
-          install: >-
-            mingw-w64-${{matrix.env}}-ninja
-            mingw-w64-${{matrix.env}}-cmake
-            mingw-w64-${{matrix.env}}-${{matrix.compiler}}
+          pacboy: >-
+            cmake:p
+            ninja:p
+            ${{matrix.compiler}}:p
             ${{env.INSTALL_PACKAGES}}
 
       - name: '🔧 Configure'
