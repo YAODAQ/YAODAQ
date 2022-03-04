@@ -19,8 +19,9 @@ jobs:
         include:
           - { icon: '🟨', sys: mingw32, env: i686, name: MINGW32 }
           - { icon: '🟦', sys: mingw64, env: x86_64, name: MINGW64 }
-          - { icon: '🟩', sys: ucrt64,  env: ucrt-x86_64, name: UCRT64 }  # Experimental!
-          - { icon: '🟥', sys: clang64, env: clang-x86_64, name: Clang64 } # Experimental!
+          - { icon: '🟩', sys: ucrt64,  env: ucrt-x86_64, name: UCRT64 }
+          - { icon: '🟥', sys: clang64, env: clang-x86_64, name: Clang64 }
+          - { icon: '🟥', sys: clang32, env: clang-x86_64, name: Clang32 }
 
     name: '🚧 ${{ matrix.icon }} ${{ matrix.name }}'
     defaults:
@@ -45,11 +46,13 @@ jobs:
           path-type: minimal
           release: true
           update: true
+          pacboy: >-
+            toolchain:p
           install: >-
-            mingw-w64-${{matrix.env}}-toolchain
             mingw-w64-${{matrix.env}}-cmake
             mingw-w64-${{matrix.env}}-ninja
             ${{env.INSTALL_PACKAGES}}
+
       - name: '🔧 Configure'
         run: cmake -S . -B ${{ env.CMAKE_BUILD_PREFIX }} -D CMAKE_BUILD_TYPE=${{ env.CMAKE_BUILD_TYPE }}  -DBUILD_TESTS=${{ env.BUILD_TESTS }} -DBUILD_DOCS=${{ env.BUILD_DOCS }} -DBUILD_EXAMPLES=${{ env.BUILD_EXAMPLES }}
 
