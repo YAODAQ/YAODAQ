@@ -53,10 +53,7 @@ WebsocketServer::WebsocketServer( const std::string& name, const int& port, cons
           return;
         }
       }
-      else if( msg->type == ix::WebSocketMessageType::Message )
-      {
-        webSocket.send( msg->str, msg->binary );
-      }
+      else if( msg->type == ix::WebSocketMessageType::Message ) { webSocket.send( msg->str, msg->binary ); }
     } );
 }
 
@@ -119,10 +116,7 @@ void WebsocketServer::onRaisingSignal()
   {
     int value = magic_enum::enum_integer( signal );
     if( value >= magic_enum::enum_integer( yaodaq::Severity::Critical ) ) { logger()->critical( "Signal SIG{} raised !", magic_enum::enum_name( signal ) ); }
-    else if( value >= magic_enum::enum_integer( yaodaq::Severity::Error ) )
-    {
-      logger()->error( "Signal SIG{} raised !", magic_enum::enum_name( signal ) );
-    }
+    else if( value >= magic_enum::enum_integer( yaodaq::Severity::Error ) ) { logger()->error( "Signal SIG{} raised !", magic_enum::enum_name( signal ) ); }
     else if( value >= magic_enum::enum_integer( yaodaq::Severity::Warning ) )
     {
       fmt::print( "\n" );

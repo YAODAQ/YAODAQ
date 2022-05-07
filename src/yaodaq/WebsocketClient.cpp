@@ -36,10 +36,7 @@ WebsocketClient::WebsocketClient( const std::string& name, const std::string& ty
     [this]( const ix::WebSocketMessagePtr& msg )
     {
       if( msg->type == ix::WebSocketMessageType::Message ) { logger()->error( "{}", msg->str ); }
-      else if( msg->type == ix::WebSocketMessageType::Error )
-      {
-        std::cout << "Connection error: " << msg->errorInfo.reason << std::endl;
-      }
+      else if( msg->type == ix::WebSocketMessageType::Error ) { std::cout << "Connection error: " << msg->errorInfo.reason << std::endl; }
       else if( msg->type == ix::WebSocketMessageType::Close )
       {
         disableAutomaticReconnection();
@@ -94,10 +91,7 @@ void WebsocketClient::onRaisingSignal()
   {
     int value = magic_enum::enum_integer( signal );
     if( value >= magic_enum::enum_integer( yaodaq::Severity::Critical ) ) { logger()->critical( "Signal SIG{} raised !", magic_enum::enum_name( signal ) ); }
-    else if( value >= magic_enum::enum_integer( yaodaq::Severity::Error ) )
-    {
-      logger()->error( "Signal SIG{} raised !", magic_enum::enum_name( signal ) );
-    }
+    else if( value >= magic_enum::enum_integer( yaodaq::Severity::Error ) ) { logger()->error( "Signal SIG{} raised !", magic_enum::enum_name( signal ) ); }
     else if( value >= magic_enum::enum_integer( yaodaq::Severity::Warning ) )
     {
       fmt::print( "\n" );

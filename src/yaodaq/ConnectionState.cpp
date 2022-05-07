@@ -33,10 +33,7 @@ void ConnectionState::computeId( const std::string& host, const Identifier& id )
       _id = id.getName();
       m_Ids.push_back( m_Pair );
     }
-    else
-    {
-      setTerminated();
-    }
+    else { setTerminated(); }
   }
 }
 
