@@ -35,7 +35,7 @@ repos:
       - id: forbid-binary
 
   - repo: https://github.com/Lucas-C/pre-commit-hooks
-    rev: 'v1.1.13'
+    rev: 'v1.2.0'
     hooks:
       - id: remove-crlf
       - id: remove-tabs
@@ -66,12 +66,12 @@ repos:
         args: ['--config=.cmake-linter.yml']
 
   - repo: https://github.com/sirosen/check-jsonschema
-    rev: '0.14.3'
+    rev: '0.15.1'
     hooks:
       - id: check-github-workflows
 
   -   repo: https://github.com/pre-commit/mirrors-clang-format
-      rev: 'v14.0.1'
+      rev: 'v14.0.3'
       hooks:
         - id: clang-format
 
