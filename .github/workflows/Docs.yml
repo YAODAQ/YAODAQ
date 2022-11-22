@@ -51,7 +51,7 @@ jobs:
       - name: '🟨 Install miktex'
         run: |
           curl -k -O -L https://mirrors.ustc.edu.cn/CTAN/systems/win32/miktex/setup/deb/pool/universe/m/miktex/miktex_22.8.28-focal1_amd64.deb
-          sudo apt install ./miktex_22.8.28-jammy1_amd64.deb
+          sudo apt install ./miktex_22.8.28-focal1_amd64.deb
           sudo miktexsetup --shared=yes finish
           sudo initexmf --admin --set-config-value [MPM]AutoInstall=1
 
