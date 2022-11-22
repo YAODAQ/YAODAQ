@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.16 FATAL_ERROR)
 list(INSERT CMAKE_MODULE_PATH 0 "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
 include(GetCMakeMM)
-cmmm(VERSION 2.2 REPOSITORY "flagarde/CMakeMM")
+cmmm(VERSION 2.3 REPOSITORY "flagarde/CMakeMM")
 
 cmmm_modules_list(REPOSITORY "flagarde/CMakeCM")
 
